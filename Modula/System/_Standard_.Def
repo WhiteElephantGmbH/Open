@@ -1,0 +1,87 @@
+DEFINITION MODULE Standard;
+
+(*****************************************************************************
+ *        (c) 2008 .. 2013 by Soudronic AG, Bergdietikon, Switzerland        *
+ *   Developed by White Elephant GmbH, Switzerland (www.white-elephant.ch)   *
+ *****************************************************************************)
+
+TYPE
+  BOOLEAN = (FALSE, TRUE);
+
+  BITSET = SET OF [0..15];
+
+  CHAR = [0C .. 200C];
+
+  SHORTCARD = [  0  .. 0FFH];
+  SHORTINT  = [-80H .. 07FH];
+
+  CARDINAL = [    0  .. 0FFFFH];
+  INTEGER  = [-8000H .. 07FFFH];
+
+  LONGCARD = [        0  .. 0FFFFFFFFH];
+  LONGINT  = [-80000000H .. 07FFFFFFFH];
+
+  PROC = PROCEDURE;
+
+  _Type_;
+
+
+CONST
+  NIL = 0;
+
+
+  PROCEDURE ABS (X : _Type_) : _Type_;
+
+  PROCEDURE ASH (X : _Type_;
+                 N : INTEGER) : _Type_;
+
+  PROCEDURE ASSERT (    X : _Type_;
+                    SEQ N : _Type_); (* n optional *)
+
+  PROCEDURE CAP (X : CHAR) : CHAR;
+
+  PROCEDURE CHR (X : _Type_) : CHAR;
+
+  PROCEDURE COPY (X : _Type_;
+                  V : _Type_);
+
+  PROCEDURE DEC (    V : _Type_;
+                 SEQ N : _Type_); (* N optional *)
+
+  PROCEDURE DISPOSE (V : _Type_);
+
+  PROCEDURE EXCL (V : _Type_;
+                  N : _Type_);
+
+  PROCEDURE HALT;
+
+  PROCEDURE HIGH (A : _Type_) : LONGCARD;
+
+  PROCEDURE INC (V     : _Type_;
+                 SEQ N : _Type_); (* N optional *)
+
+  PROCEDURE INCL (V : _Type_;
+                  N : _Type_);
+
+  PROCEDURE LENGTH (S : ARRAY OF CHAR) : CARDINAL;
+
+  PROCEDURE LEN (    V : _Type_;
+                 SEQ N : _Type_) : LONGCARD; (* N optional *)
+
+  PROCEDURE MAX (: _Type_) : _Type_;
+
+  PROCEDURE MIN (: _Type_) : _Type_;
+
+  PROCEDURE NEW (V : _Type_);
+
+  PROCEDURE ODD (X : _Type_) : BOOLEAN;
+
+  PROCEDURE ORD (X : _Type_) : CARDINAL;
+
+  PROCEDURE SIZE (: _Type_) : LONGCARD;
+
+  PROCEDURE VAL (  : _Type_;
+                 X : _Type_) : _Type_;
+
+END Standard.
+

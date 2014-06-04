@@ -1,0 +1,94 @@
+DEFINITION MODULE SYSTEM;
+
+(*****************************************************************************
+ *        (c) 2008 .. 2013 by Soudronic AG, Bergdietikon, Switzerland        *
+ *   Developed by White Elephant GmbH, Switzerland (www.white-elephant.ch)   *
+ *****************************************************************************)
+
+CONST
+  BITSPERLOC  = 8;
+  LOCSPERBYTE = 1;
+
+TYPE
+  ADDRESS;
+
+  LOC; (* A system basic type. Values are the uninterpreted
+          contents of the smallest addressable unit of storage *)
+
+  BYTE = LOC;
+
+  _Type_;            (* used to represent any type *)
+  _Pointer_To_Type_; (* used to represent any pointer type *)
+
+  INT8  = [-80H               .. 7FH];
+  INT16 = [-8000H             .. 7FFFH];
+  INT32 = [-80000000H         .. 7FFFFFFFH];
+  INT64 = [-8000000000000000H .. 7FFFFFFFFFFFFFFFH];
+
+  CARD8  = [0 .. 0FFH];
+  CARD16 = [0 .. 0FFFFH];
+  CARD32 = [0 .. 0FFFFFFFFH];
+  CARD64 = [0 .. 0FFFFFFFFFFFFFFFFH];
+
+  BOOL8;  (* boolean 8-bits type *)
+  BOOL16; (* boolean 16-bits type *)
+  BOOL32; (* boolean 32-bits type *)
+
+  SET8  = SET OF [0..7];
+  SET16 = SET OF [0..15];
+  SET32 = SET OF [0..31];
+  SET64 = SET OF [0..63];
+
+  _Set_;  (* used to represent any set type *)
+
+  INDEX; (* type of index *)
+
+  DIFADR_TYPE; (* type that DIFADR function returns *)
+
+  _Simple_Type_; (* used to represent any simple type *)
+
+PROCEDURE ADDADR (Addr   : ADDRESS;
+                  Offset : CARD32) : ADDRESS;
+
+PROCEDURE SUBADR (Addr   : ADDRESS;
+                  Offset : CARD32) : ADDRESS;
+
+PROCEDURE SUCC (Val : _Simple_Type_) : _Simple_Type_;
+
+PROCEDURE PRED (Val : _Simple_Type_) : _Simple_Type_;
+
+PROCEDURE DIFADR (Addr1, Addr2 : ADDRESS) : INT32;
+
+PROCEDURE MAKEADR (Val : _Type_) : ADDRESS;
+
+PROCEDURE ADR (VAR Val : _Type_) : ADDRESS;
+
+PROCEDURE VALID (VAR [NIL] Val : _Type_) : BOOLEAN;
+
+PROCEDURE ROTATE (Val : _Set_;
+                  Num : INT32) : _Set_;
+
+PROCEDURE SHIFT (Val : _Set_;
+                 Num : INT32) : _Set_;
+
+PROCEDURE CAST (    : _Type_;
+                Val : _Type_) : _Type_;
+
+PROCEDURE TSIZE (: _Type_) : CARD32;
+
+PROCEDURE CODE (Str : ARRAY OF CHAR);
+
+PROCEDURE MOVE (Src, Dest : ADDRESS;
+                Size      : CARD32);
+
+PROCEDURE FILL (Adr  : ADDRESS;
+                Val  : BYTE;
+                Size : CARD32);
+
+PROCEDURE GET (    Adr : ADDRESS;
+               VAR Val : _Simple_Type_);
+
+PROCEDURE PUT (Adr : ADDRESS;
+               Val : _Simple_Type_);
+
+END SYSTEM.
