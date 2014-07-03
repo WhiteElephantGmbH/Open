@@ -1,0 +1,241 @@
+/****************************************************************************
+ * ETPU auto function set 2                    COPYRIGHT (c) Freescale 2008 *
+ * FILE NAME: $RCSfile: etpuc_set2.c,v $            All Rights Reserved     *
+ * DESCRIPTION:                                                             *
+ * This file builds the automotive set2 eTPU functions and exports the data *
+ * to a file for the host CPU to use. eTPU function set 2 provides an       *
+ * example set of functions for automotive applications.                    *
+ *==========================================================================*
+ * History:                                                                 *
+ * Original Author: Geoff Emerson [r47354]                                  *
+ * Revision 1.6  2009/09/04 09:11:53  r47354
+ * Added comment to explain #define for NO_ERRATTA_2477.
+ *
+ * Revision 1.5  2008/06/20 08:56:04  r47354
+ * Fix issue with globals export.
+ *
+ * Revision 1.4  2008/05/23 13:21:17  r47354
+ * Revert to standard set1 QOM.
+ *
+ * Revision 1.3  2008/05/21 14:15:36  r47354
+ * Add  #def NO_ERRATTA_2477 
+ *
+ * Revision 1.2  2008/05/01 15:39:06  r47354
+ * Add some set1 functions
+ *
+ ****************************************************************************/
+
+#ifdef __ETEC__  // ASH WARE
+#pragma verify_version GE,  "1.20C", "this build requires ETEC version 1.20C or newer"
+#pragma verify_code_size	Cam				67 words
+#pragma verify_code_size	Crank			449 words
+#pragma verify_code_size	Fuel			214 words
+#pragma verify_code_size	knock_window	60 words
+#pragma verify_code_size	Spark			162 words
+#pragma verify_code_size	TOOTHGEN		138 words
+#pragma verify_code_size	IC				57 words
+#pragma verify_code_size	QOM				157 words
+#pragma verify_code_size	PWM				69 words
+#pragma verify_code_size	SM				153 words
+#pragma verify_code_size	FPM				37 words
+#pragma verify_code_size	Global_Error_Func 14 words
+#pragma verify_code_size	Link4			5 words
+#include <ETpu_Std.h>
+#endif
+
+#ifndef __ETEC__ // ETEC provides below with linker command options
+/* Define a 12k memory map for compatibility with all versions of eTPU module */
+/* in pertarin application*/
+/* The code memory should start at 0 with the entry table at 0 and the */
+/*   functions starting at 0x400. This allows for 16 functions if more */
+/*   are needed then the ORG should be increased or removed to have it */
+/*   assigned automatically.                                           */
+#pragma memory ROM[(12 * (1024))] @ 0;
+#pragma memory ORG @ 0x400;
+#pragma entryaddr 0x0000;
+#define _eTPU_fragment void
+#endif
+
+int24 Global_Error = 0xFF;
+
+int24  Eng_Pos_Sync_Status_g ; 
+
+union Link_t {
+	int32 Chans;
+	int8  Chan[3];
+};
+
+#define GLOBAL_ERROR_FUNC
+/* #define NO_ERRATTA_2477 */
+/* uncomment line above to exclude code for errata 2477 */
+
+_eTPU_fragment Global_Error_Func();
+
+#define REGISTER_PASSING
+
+#ifndef REGISTER_PASSING
+void Link4( union Link_t Link  );
+#else
+void Link4( );
+#endif
+
+register_p7_0 p7_0;
+register_p15_8 p15_8;
+register_p23_16 p23_16;
+register_p31_24 p31_24;
+
+/*************************/
+/* Include the functions */
+/*************************/
+
+/* CAM function */
+#define CAM_FUNCTION_NUMBER 0
+#include "etpuc_cam.c"
+
+/* CRANK function */
+#define CRANK_FUNCTION_NUMBER 1
+#include "etpuc_crank.c"
+
+/* Fuel function */
+#define FUEL_FUNCTION_NUMBER 2
+#include "etpuc_fuel.c"
+
+/* Knock Window function */
+#define KNOCK_WINDOW_FUNCTION_NUMBER 3
+#include "etpuc_knock_window.c"
+
+/* Spark function */
+#define SPARK_FUNCTION_NUMBER 4
+#include "etpuc_spark.c"
+
+/* Tooth generation function */
+#define TOOTHGEN_FUNCTION_NUMBER 5
+#include "etpuc_toothgen.c"
+
+/* set1 functions */
+
+/* IC Input Capture function */
+#define IC_FUNCTION_NUMBER 6
+#include "etpu_set1\etpuc_ic.c"
+
+/* QOM (Queued Output Match) function */
+#define QOM_FUNCTION_NUMBER 7
+#include "etpu_set1\etpuc_qom.c"
+
+/* PWM (Pulse Width Modulation) function */
+#define PWM_FUNCTION_NUMBER 8
+#include "etpu_set1\etpuc_pwm.c"
+
+/* SM (Stepper Motor) function */
+#define SM_FUNCTION_NUMBER 9
+#include "etpu_set1\etpuc_sm.c"
+
+/* PFM (Frequency and Period Measurement) function */
+#define FPM_FUNCTION_NUMBER 10
+#include "etpu_set1\etpuc_fpm.c"
+
+_eTPU_fragment Global_Error_Func()
+{
+	ertb = chan;
+
+	if (LinkServiceRequest == 1) ertb+=0x0100;
+
+	if (MatchALatch == 1)  ertb+=0x0200;
+
+	if (MatchBLatch == 1)  ertb+=0x0400;
+
+	if (TransitionALatch == 1)  ertb+=0x0800;
+
+	if (TransitionBLatch == 1)  ertb+=0x1000;
+
+	Global_Error = ertb;
+
+	ClearAllLatches();
+}
+
+#ifndef REGISTER_PASSING
+void Link4(union Link_t Link ){
+
+	link = Link.Chan[0];
+	link = Link.Chan[1];
+	link = Link.Chan[2];
+	link = Link.Chan[3];
+}
+#else
+void Link4( ){
+
+	link = p7_0;
+	link = p15_8;
+	link = p23_16;
+	link = p31_24;
+}
+#endif
+
+/* output eTPU code image and information for CPU */
+#pragma write h, (::ETPUfilename (etpu_set2.h));
+#pragma write h, (/****************************************************************);
+#pragma write h, ( * WARNING this file is automatically generated DO NOT EDIT IT! *);
+#pragma write h, ( *                                                              *);
+#pragma write h, ( * FILE NAME: etpu_set2.h          COPYRIGHT (c) Freescale 2007 *);
+#pragma write h, ( *                                      All Rights Reserved     *);
+#pragma write h, ( *                                                              *);
+#pragma write h, ( ****************************************************************/);
+#pragma write h, (#ifndef _ETPU_SET2_H_ );
+#pragma write h, (#define _ETPU_SET2_H_ );
+#pragma write h, ( );
+#pragma write h, (/* eTPU standard function set1 */ );
+#pragma write h, (#define FS_ETPU_ENTRY_TABLE 0x0000);
+#pragma write h, ( );
+#pragma write h, (#define FS_ETPU_MISC ::ETPUmisc);
+#pragma write h, ( );
+#pragma write h, (const uint32_t etpu_globals[] = { ::ETPUglobalimage32 }; );
+#pragma write h, ();
+#pragma write h, (const uint32_t etpu_code[] = { ::ETPUcode32 }; );
+#pragma write h, (/* List of functions: );
+#pragma write h, (::ETPUnames);
+#pragma write h, (*/);
+#pragma write h, ( );
+#pragma write h, (#endif /* _ETPU_SET2_H_ */ );
+#pragma write h, ( );
+
+
+/*********************************************************************
+ *
+ * Copyright:
+ *	Freescale Semiconductor, INC. All Rights Reserved.
+ *  You are hereby granted a copyright license to use, modify, and
+ *  distribute the SOFTWARE so long as this entire notice is
+ *  retained without alteration in any modified and/or redistributed
+ *  versions, and that such modified versions are clearly identified
+ *  as such. No licenses are granted by implication, estoppel or
+ *  otherwise under any patents or trademarks of Freescale
+ *  Semiconductor, Inc. This software is provided on an "AS IS"
+ *  basis and without warranty.
+ *
+ *  To the maximum extent permitted by applicable law, Freescale
+ *  Semiconductor DISCLAIMS ALL WARRANTIES WHETHER EXPRESS OR IMPLIED,
+ *  INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A
+ *  PARTICULAR PURPOSE AND ANY WARRANTY AGAINST INFRINGEMENT WITH
+ *  REGARD TO THE SOFTWARE (INCLUDING ANY MODIFIED VERSIONS THEREOF)
+ *  AND ANY ACCOMPANYING WRITTEN MATERIALS.
+ *
+ *  To the maximum extent permitted by applicable law, IN NO EVENT
+ *  SHALL Freescale Semiconductor BE LIABLE FOR ANY DAMAGES WHATSOEVER
+ *  (INCLUDING WITHOUT LIMITATION, DAMAGES FOR LOSS OF BUSINESS PROFITS,
+ *  BUSINESS INTERRUPTION, LOSS OF BUSINESS INFORMATION, OR OTHER
+ *  PECUNIARY LOSS) ARISING OF THE USE OR INABILITY TO USE THE SOFTWARE.
+ *
+ *  Freescale Semiconductor assumes no responsibility for the
+ *  maintenance and support of this software
+ *
+ ********************************************************************/
+
+/*********************************************************************
+ *
+ * ASH WARE Inc. has modified this file so that it compiles under the
+ * ETEC eTPU C Compiler Toolkit.  The source has been modified such that
+ * it also maintains compatibility with other code generation tools.  This
+ * source also compiles with Byte Craft eTPU-C 1.0.7.30 and the binary code
+ * image output is bit-for-bit the same as the original Freescale release.
+ *
+ ********************************************************************/
