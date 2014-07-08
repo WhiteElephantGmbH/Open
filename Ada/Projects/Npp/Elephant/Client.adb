@@ -436,6 +436,8 @@ package body Client is
   -- Notifications
   ------------------
 
+  The_Known_Extensions : Text.String;
+
   procedure Open_Project is
   begin
     if No_Buffer then
@@ -444,6 +446,7 @@ package body Client is
     Project_Is_Open := Server.Project_Opened (Buffer_Name);
     if Project_Is_Open then
       Show (Server.Message);
+      The_Known_Extensions := Text.String_Of (Server.Known_Extensions);
     else
       Show_Error (Server.Message);
     end if;
@@ -457,6 +460,7 @@ package body Client is
         return;
       end if;
       Project_Is_Open := False;
+      Text.Clear (The_Known_Extensions);
       Server.Close_Project;
       Show ("Project closed");
     end if;
@@ -465,19 +469,20 @@ package body Client is
 
 
   procedure Update is
-    Editor : Scintilla.Object;
   begin
     if Project_Is_Open then
       if Error_Is_Set then
         Error_Is_Set := False;
       else
         declare
-          Extension : constant String := Strings.File_Extension_Of (Buffer_Name);
+          Editor    : Scintilla.Object;
+          Filename  : constant String := Buffer_Name;
+          Extension : constant String := "|" & Strings.File_Extension_Of (Filename) & "|";
         begin
-          if (Extension = "mod") or (Extension = "def") then
+          if Text.Location_Of (Extension, The_Known_Extensions) /= Text.Not_Found then
             Scintilla.Create (Editor, Npp.Plugin.Edit_View);
             Scintilla.Define_Styles (Editor);
-            Update_Style (Buffer_Name, Editor);
+            Update_Style (Filename, Editor);
           end if;
         end;
       end if;

@@ -8,7 +8,7 @@ with Strings;
 
 package Server is
 
-  Pipe_Name : constant String := "Cw_Modula_Pipe_V_2.0";
+  Project_File : constant String := "Project.ini";
 
   subtype Source_Buffer is String(1 .. 2**20);
 
@@ -27,6 +27,7 @@ package Server is
 
   type Command is (Open_Project,
                    Close_Project,
+                   Get_Extensions,
                    Is_In_Project,
                    Updates_For,
                    Referenced,
@@ -104,6 +105,8 @@ package Server is
   function Project_Opened (Name : String) return Boolean;
 
   procedure Close_Project;
+
+  function Known_Extensions return String;
 
   function Updates_For (Filename   : String;
                         First_Line : Line_Number;

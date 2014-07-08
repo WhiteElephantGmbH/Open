@@ -8,7 +8,9 @@ with Ada.Unchecked_Conversion;
 with Log;
 with Text;
 with Unsigned;
+with String_List;
 with System;
+with Windows.Files;
 with Windows.Pipe;
 
 package body Server is
@@ -78,19 +80,48 @@ package body Server is
   end Set_Message;
 
 
+  function Language_Of (Name : String) return String is
+    Last : Natural := Natural'first;
+  begin
+    for Index in reverse Name'range loop
+      case Name(Index) is
+      when '\' | '/' =>
+        if Last = Natural'first then
+          if Windows.Files.File_Exists (Name(Name'first .. Index) & Project_File) then
+            Last := Index - 1;
+          end if;
+        else
+          return Name(Index + 1 .. Last);
+        end if;
+      when others =>
+        null;
+      end case;
+    end loop;
+    return "";
+  end Language_Of;
+
+
   function Project_Opened (Name : String) return Boolean is
+
+    Language        : constant String := Language_Of (Name);
+    Pipe_Name       : constant String := "Npp_" & Language & "_Pipe_V_1.0";
+    Language_Server : constant String := Language & "_Server.exe";
 
     Project_Not_Opened : constant String := "Project containing " & Name & " not opened - ";
     Termination_Time   : constant Duration := 0.2;
 
   begin
+    if Language = "" then
+      Set_Message (Project_Not_Opened & "unknown project! ( no " & Project_File & ")");
+      return False;
+    end if;
     begin
-      Windows.Create_Process (Windows.Origin_Folder & "\MS.exe", Server.Pipe_Name);
+      Windows.Create_Process (Windows.Origin_Folder & '\' & Language_Server, Pipe_Name);
       delay 0.5;  -- Wait for server to start
       for Try in 1..4 loop --> UD: just count
         begin  -- Attempt to connect to server
           Windows.Pipe.Open (Pipe => The_Pipe,
-                             Name => Server.Pipe_Name,
+                             Name => Pipe_Name,
                              Kind => Windows.Pipe.Client,
                              Mode => Windows.Pipe.Duplex,
                              Size => Server.Source_Buffer'length);
@@ -101,7 +132,7 @@ package body Server is
             Set_Message (The_Data(The_Data'first + 1 .. The_Data'first + The_Length - 1));
             if The_Data(The_Data'first) = Confirmation then
               Log.Write ("+ Project Opened using: " & Name);
-              --Is_Open := True;
+              Send (Get_Extensions);
               return True;
             elsif The_Data(The_Data'first) = Not_Confirmed then
               Log.Write ("- Project not Opened using: " & Name);
@@ -112,16 +143,17 @@ package body Server is
           exit;
         exception
         when Windows.Pipe.No_Server =>
-          Log.Write ("Server.Project_Opened - retry");
+          Log.Write ("Server.Project_Opened - retry for " & Language_Server);
           delay 1.0;
         end;
       end loop;
       delay Termination_Time;
+      Set_Message (Project_Not_Opened & Language_Server & " not connected!");
     exception
     when Windows.Process_Creation_Failure =>
-      Set_Message (Project_Not_Opened & "MS.exe missing!");
+      Set_Message (Project_Not_Opened & Language_Server & " missing!");
     when Windows.Pipe.Name_In_Use =>
-      Set_Message (Project_Not_Opened & "MS in use!");
+      Set_Message (Project_Not_Opened & Language_Server & " in use!");
     when Occurence: others =>
       Set_Message (Project_Not_Opened & "internal error");
       Log.Write ("! " & Project_Not_Opened, Occurence);
@@ -138,6 +170,13 @@ package body Server is
   when others =>
     null;
   end Close_Project;
+
+
+  function Known_Extensions return String is
+  begin
+    Send (Get_Extensions);
+    return Data_String;
+  end Known_Extensions;
 
 
   function Updates_For (Filename   : String;
