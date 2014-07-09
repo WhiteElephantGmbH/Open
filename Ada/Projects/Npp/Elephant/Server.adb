@@ -8,7 +8,6 @@ with Ada.Unchecked_Conversion;
 with Log;
 with Text;
 with Unsigned;
-with String_List;
 with System;
 with Windows.Files;
 with Windows.Pipe;
@@ -136,6 +135,7 @@ package body Server is
               return True;
             elsif The_Data(The_Data'first) = Not_Confirmed then
               Log.Write ("- Project not Opened using: " & Name);
+              return False;
             else
               Set_Message (Project_Not_Opened & "protocol error (wrong Confirmation)");
             end if;

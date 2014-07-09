@@ -15,13 +15,13 @@
 -- *********************************************************************************************************************
 -->Style: White_Elephant
 
-package Semaphore is
+package Process is
 
-  protected type Binary is
-    entry Wait;
-    procedure Signal;
-  private
-    Is_Signaled : Boolean := False;
-  end Binary;
+  Execution_Failed : exception;
 
-end Semaphore;
+  function Execution_Of (Executable     : String;
+                         Parameters     : String;
+                         Environment    : String := "";
+                         Current_Folder : String := "") return String;
+end Process;
+

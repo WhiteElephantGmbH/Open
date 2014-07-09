@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2013 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -15,13 +15,38 @@
 -- *********************************************************************************************************************
 -->Style: White_Elephant
 
-package Semaphore is
+with Server;
 
-  protected type Binary is
-    entry Wait;
-    procedure Signal;
-  private
-    Is_Signaled : Boolean := False;
-  end Binary;
+package Promotion is
 
-end Semaphore;
+  Error : exception;
+
+  procedure Start (Promote_All : Boolean;
+                   Name        : String);
+
+  type Color is (Black, Blue, Green, Red);
+
+  procedure Define_Next_Message_Color (Item : Color);
+
+  procedure Set_Message (Item : String);
+
+  procedure Set_Error (Item   : String;
+                       File   : String := "";
+                       Line   : Server.Line_Number := Server.Line_Number'first;
+                       Column : Server.Column_Range := Server.Column_Range'first);
+
+  procedure Complete;
+
+  function Message_Ready return Boolean; -- awaits result
+
+  function Error_Message_Ready return Boolean; -- awaits result
+
+  function Message return String;
+
+  function Filename return String;
+
+  function Line return Server.Line_Number;
+
+  function Column return Server.Column_Range;
+
+end Promotion;

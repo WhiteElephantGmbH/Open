@@ -1,8 +1,8 @@
 -- *********************************************************************************************************************
 -- *                                  Windows.Files.Io - File handling routines                                        *
 -- *                           Supports File open and creation using Wide_String filenames                             *
--- *                                          Revision 1.2 22-Jan-2011                                                 *
--- *                       (c) 2007 .. 2011 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *********************************************************************************************************************
+-- *                       (c) 2007 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                           www.white-elephant.ch                                                   *
 -- *                                                                                                                   *
 -- * This is free software; you can redistribute it and/or modify it under terms of the  GNU General Public License as *
@@ -62,7 +62,7 @@ package Windows.Files.Io is
                       Mode     : Open_Mode := Read_Only) return Handle;
 
   function Is_Open (File : Handle) return Boolean;
-    
+
   procedure Reset (File : Handle);
 
   function At_End_Of (File : Handle) return Boolean;

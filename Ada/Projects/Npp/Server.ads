@@ -1,6 +1,17 @@
 -- *********************************************************************************************************************
--- *                           (c) 2008 .. 2014 by Soudronic AG, Bergdietikon, Switzerland                             *
--- *                      Developed by White Elephant GmbH, Switzerland (www.white-elephant.ch)                        *
+-- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                                               www.white-elephant.ch                                               *
+-- *                                                                                                                   *
+-- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
+-- *    Public License as published by the Free Software Foundation; either version 2 of the License, or               *
+-- *    (at your option) any later version.                                                                            *
+-- *                                                                                                                   *
+-- *    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the     *
+-- *    implied warranty of MERCHANTABILITY or FITNESS for A PARTICULAR PURPOSE. See the GNU General Public License    *
+-- *    for more details.                                                                                              *
+-- *                                                                                                                   *
+-- *    You should have received a copy of the GNU General Public License along with this program; if not, write to    *
+-- *    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.                *
 -- *********************************************************************************************************************
 -->Style: White_Elephant
 
@@ -48,8 +59,11 @@ package Server is
     Line   : Line_Number;
   end record;
 
-  Not_Referenced : constant Location := (Column   => Column_Range'last,
-                                         Line     => Line_Number'last);
+  Unknown_Column : constant Column_Range := Column_Range'last;
+  Unknown_Line   : constant Line_Number := Line_Number'last;
+
+  Not_Referenced : constant Location := (Column   => Unknown_Column,
+                                         Line     => Unknown_Line);
 
   type File_Reference is record
     Cursor      : Location;
@@ -99,6 +113,7 @@ package Server is
   type Tokens is array (Positive range <>) of Token_Info;
   pragma Pack (Tokens);
 
+  No_Tokens : constant Tokens(1..0) := (others => (1, 1, 1, 1, Is_Others));
 
   function Is_In_Project (Name : String) return Boolean;
 

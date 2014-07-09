@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                           (c) 2014 by White Elephant GmbH, Schaffhausen, Switzerland                              *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -15,13 +15,8 @@
 -- *********************************************************************************************************************
 -->Style: White_Elephant
 
-package Semaphore is
+package Command is
 
-  protected type Binary is
-    entry Wait;
-    procedure Signal;
-  private
-    Is_Signaled : Boolean := False;
-  end Binary;
+  procedure Execute;
 
-end Semaphore;
+end Command;
