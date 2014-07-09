@@ -134,32 +134,39 @@ package body C is
                                  "-verbSuppress=BANNER " &
                                  "-verbSuppress=SUMMARY " &
                                  "-msgStyle=MSDV";
+
+    Output : constant String := Project.Object_Of (Filename);
+
   begin
-    declare
-      Parameters : constant String
-                 := Options &
-                    Project.Include_Path_Of (Filename) & Space &
-                    "-out=" & Project.Object_Of (Filename) & Space &
-                    Filename;
-    begin
-      Promotion.Set_Message ("Compile " & Filename);
-      --TEST---------------------------------------------------
-      Log.Write ("    -> C.Compile   : " & Filename);
-      Log.Write ("       - Parameters: " & Parameters);
-      ---------------------------------------------------------
-      Handle_For (Filename   => Filename,
-                  Parameters => Parameters,
-                  Text_Mark  => " CC ",
-                  Action     => Compiler'access);
-    exception
-    when Promotion.Error =>
-      raise;
-    when Process.Execution_Failed =>
-      Promotion.Set_Error (Project.Compiler & " not executed");
-    when Item: others =>
-      Log.Write ("C.Compile", Item);
-      Promotion.Set_Error ("Unknown compilation result", Filename);
-    end;
+    if Project.Is_Uptodate (Output, Filename) then
+      Log.Write ("    -> " & Filename & " is up to date");
+    else
+      declare
+        Parameters : constant String
+                   := Options &
+                      Project.Include_Path_Of (Filename) & Space &
+                      "-out=" & Output & Space &
+                      Filename;
+      begin
+        Promotion.Set_Message ("Compile " & Filename);
+        --TEST---------------------------------------------------
+        Log.Write ("    -> C.Compile   : " & Filename);
+        Log.Write ("       - Parameters: " & Parameters);
+        ---------------------------------------------------------
+        Handle_For (Filename   => Filename,
+                    Parameters => Parameters,
+                    Text_Mark  => " CC ",
+                    Action     => Compiler'access);
+      exception
+      when Promotion.Error =>
+        raise;
+      when Process.Execution_Failed =>
+        Promotion.Set_Error (Project.Compiler & " not executed");
+      when Item: others =>
+        Log.Write ("C.Compile", Item);
+        Promotion.Set_Error ("Unknown compilation result", Filename);
+      end;
+    end if;
   end Compile;
 
 

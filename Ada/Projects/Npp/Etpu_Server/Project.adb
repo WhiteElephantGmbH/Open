@@ -441,8 +441,12 @@ package body Project is
 
   function Include_Path_Of (Filename : String) return String is
     Include_Prefix : constant String := " -I=";
+    Directory      : constant String := Directory_Of (Filename);
   begin
-    return Include_Prefix & Directory_Of (Filename);
+    if (Directory & Separator) = Area_Folder then
+      return "";
+    end if;
+    return Include_Prefix & Directory & Include_Path_Of (Directory);
   end Include_Path_Of;
 
 
@@ -493,5 +497,34 @@ package body Project is
   begin
     return Linker_Folder & Module_Of (Filename) & ".map";
   end Link_Map_Of;
+
+
+  procedure Delete (Filename : String) is
+  begin
+    Windows.Files.Delete_File (Filename);
+  exception
+  when others =>
+    null;
+  end Delete;
+
+
+  function Is_Newer (Filename      : String;
+                     Than_Filename : String) return Boolean renames Windows.Files.Is_Newer;
+
+
+  function Is_Uptodate (Generated_Filename : String;
+                        From_Filename      : String) return Boolean is
+  begin
+    begin
+      if not Is_Newer (From_Filename, Generated_Filename) then
+        return True;
+      end if;
+    exception
+    when others =>
+      null;
+    end;
+    Delete (Generated_Filename);
+    return False;
+  end Is_Uptodate;
 
 end Project;

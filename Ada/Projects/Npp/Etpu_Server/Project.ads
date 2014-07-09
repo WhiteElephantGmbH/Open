@@ -45,4 +45,6 @@ package Project is
 
   function Link_Map_Of (Filename : String) return String;
 
+  function Is_Uptodate (Generated_Filename : String;
+                        From_Filename      : String) return Boolean;
 end Project;
