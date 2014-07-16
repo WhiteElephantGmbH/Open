@@ -23,18 +23,23 @@ package Scintilla is
   type Object is tagged private;
 
   type Style is (Default,
-                 Directive,
+                 Attributes,
                  Comment,
-                 Numeric_Literal,
+                 Special_Comment,
+                 Directive,
                  Reserved_Word,
+                 Character_Literal,
+                 Numeric_Literal,
                  String_Literal,
                  Types,
                  Unused_Declaration,
                  Unused_Type_Declaration,
+                 Unknown_Identifier,
                  Style_Error,
                  Syntax_Error,
-                 Compilation_Error,
-                 Unknown_Identifier);
+                 Compilation_Error);
+
+  No_Edge_Column : constant := 0;
 
   function Buffer_Content (Handle : Object) return String with Inline;
 
@@ -49,6 +54,9 @@ package Scintilla is
 
   procedure Define_Styles (Handle : Object);
 
+  procedure Define (Handle      : Object;
+                    Edge_Column : Natural);
+
   procedure Set_Cursor (Handle : Object;
                         Line   : Positive;
                         Column : Positive := 1);
@@ -56,6 +64,10 @@ package Scintilla is
   procedure Hide_Cursor_Line (Handle : Object);
 
   procedure Show_Cursor_Line (Handle : Object);
+
+  procedure Change_Case (Handle : Object;
+                         Line   : Positive;
+                         Column : Positive);
 
   Last : constant := Positive'last;
 

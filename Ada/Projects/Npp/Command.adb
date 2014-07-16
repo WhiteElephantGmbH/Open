@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                           (c) 2014 by White Elephant GmbH, Schaffhausen, Switzerland                              *
+-- *                       (c) 2008 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -50,19 +50,6 @@ package body Command is
     begin
       Windows.Pipe.Read (The_Pipe, The_Data'address, The_Length);
     end Read_Data;
-
-    function Read_Marks return Server.Tokens is
-    begin
-      Read_Data;
-      declare
-        subtype Marks is Server.Tokens(1 .. The_Length * 8 / Server.Tokens'component_size);
-        Actual_Marks : Marks;
-        for Actual_Marks'address use The_Data'address;
-      begin
-        Write_Confirmation;
-        return Actual_Marks;
-      end;
-    end Read_Marks;
 
     function Read_Buffer return String is
     begin
@@ -115,6 +102,11 @@ package body Command is
       Windows.Pipe.Write (The_Pipe, Item'address, Item'length);
     end Write;
 
+    procedure Write (Item : Server.Column_Position) is
+    begin
+      Windows.Pipe.Write (The_Pipe, Item'address, Item'size / Unsigned.Byte'size);
+    end Write;
+
     procedure Write_Reference is
       Reference : aliased constant Server.Location := (Column => Server.Column,
                                                        Line   => Server.Line);
@@ -149,6 +141,8 @@ package body Command is
         case Read_Command is
         when Server.Open_Project =>
           raise Program_Error;
+        when Server.Get_Edge_Column =>
+          Write (Server.Edge_Column);
         when Server.Get_Extensions =>
           Write (Server.Known_Extensions);
         when Server.Is_In_Project =>
@@ -161,13 +155,18 @@ package body Command is
               Write ("");
             end if;
           end;
+        when Server.Case_Updates =>
+          declare
+            Results  : constant Server.Case_Data := Server.Case_Updates;
+          begin
+            Windows.Pipe.Write (The_Pipe, Results'address, Results'size / Unsigned.Byte'size);
+          end;
         when Server.Updates_For =>
           declare
             Filename : constant String := Confirmed_Name;
             From     : constant Server.Line_Number := Read_Line_Number;
             To       : constant Server.Line_Number := Read_Line_Number;
-            Marks    : constant Server.Tokens := Read_Marks;
-            Results  : constant Server.Tokens := Server.Updates_For (Filename, From, To, Marks, Read_Buffer);
+            Results  : constant Server.Tokens := Server.Updates_For (Filename, From, To, Read_Buffer);
           begin
             Windows.Pipe.Write (The_Pipe, Results'address, Results'size / Unsigned.Byte'size);
           end;

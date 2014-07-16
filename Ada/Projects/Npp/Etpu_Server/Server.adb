@@ -51,10 +51,21 @@ package body Server is
   end Known_Extensions;
 
 
+  function Edge_Column return Server.Column_Position is
+  begin
+    return 0;
+  end Edge_Column;
+
+
+  function Case_Updates return Case_Data is
+  begin
+    return No_Case_Data;
+  end Case_Updates;
+
+
   function Updates_For (Filename   : String;                  --> UP: not implemented
                         First_Line : Line_Number;             --> UP: not implemented
                         Last_Line  : Line_Number;             --> UP: not implemented
-                        Marks      : Tokens;                  --> UP: not implemented
                         Content    : String) return Tokens is --> UP: not implemented
   begin
     return No_Tokens;

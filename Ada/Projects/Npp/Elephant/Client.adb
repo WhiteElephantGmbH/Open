@@ -119,12 +119,18 @@ package body Client is
     function Token_Style_For (Token_Kind : Server.Token_Kind) return Scintilla.Style is
     begin
       case Token_Kind is
+      when Server.Is_Attribute =>
+        return Scintilla.Attributes;
       when Server.Is_Comment =>
         return Scintilla.Comment;
+      when Server.Is_Special_Comment =>
+        return Scintilla.Special_Comment;
       when Server.Is_Directive =>
         return Scintilla.Directive;
       when Server.Is_Reserved_Word =>
         return Scintilla.Reserved_Word;
+      when Server.Is_Character_Literal =>
+        return Scintilla.Character_Literal;
       when Server.Is_Numeric_Literal =>
         return Scintilla.Numeric_Literal;
       when Server.Is_String_Literal =>
@@ -158,21 +164,49 @@ package body Client is
                      To_Style     => Token_Style_For (Info.Kind));
     end Set_Style_For;
 
-    No_Tokens : constant Server.Tokens (1..0) := (others => (1,1,1,1,Server.Token_Kind'first));
+    procedure Change_Case_For (Info : Server.Case_Info) is
+    begin
+      --TEST--------------------------------------------------------------
+      --Log.Write ("&&& Change Case");
+      --Log.Write ("      Line   :" & Line_Number'image (Info.Line));
+      --Log.Write ("      Column :" & Column_Range'image (Info.Column));
+      --Log.Write ("      Mask   :" & Server.Case_Mask'image (Info.Mask));
+      --------------------------------------------------------------------
+      declare
+        The_Column : Long_Integer     := Long_Integer(Info.Column);
+        The_Mask   : Server.Case_Mask := Info.Mask;
+        use type Server.Case_Mask;
+      begin
+        loop
+          if (The_Mask and 1) = 1 then
+            Scintilla.Change_Case (Handle => Handle,
+                                   Line   => Positive(Info.Line),
+                                   Column => Positive(The_Column));
+          end if;
+          The_Column := The_Column + 1;
+          The_Mask := The_Mask / 2;
+          exit when The_Mask = 0;
+        end loop;
+      end;
+    end Change_Case_For;
 
   begin -- Update_Style
     declare
       Results : constant Server.Tokens := Server.Updates_For (Filename   => Filename,
                                                               First_Line => Line_Number'first,
                                                               Last_Line  => Line_Number'last,
-                                                              Marks      => No_Tokens,
                                                               Content    => Buffer_Content(Handle));
     begin
-      if Results'first <= Results'last then
-        for Index in Results'range loop
-          Set_Style_For (Results(Index));
-        end loop;
-      end if;
+      for Result of Results loop
+        Set_Style_For (Result);
+      end loop;
+    end;
+    declare
+      Case_Data : constant Server.Case_Data := Server.Case_Updates;
+    begin
+      for Case_Info of Case_Data loop
+        Change_Case_For (Case_Info);
+      end loop;
     end;
   end Update_Style;
 
@@ -447,6 +481,12 @@ package body Client is
     if Project_Is_Open then
       Show (Server.Message);
       The_Known_Extensions := Text.String_Of (Server.Known_Extensions);
+      declare
+        Editor : Scintilla.Object;
+      begin
+        Scintilla.Create (Editor, Npp.Plugin.Edit_View);
+        Scintilla.Define(Editor, Natural(Server.Edge_Column));
+      end;
     else
       Show_Error (Server.Message);
     end if;

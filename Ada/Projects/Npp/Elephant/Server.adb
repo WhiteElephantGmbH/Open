@@ -7,7 +7,6 @@
 with Ada.Unchecked_Conversion;
 with Log;
 with Text;
-with Unsigned;
 with System;
 with Windows.Files;
 with Windows.Pipe;
@@ -58,19 +57,11 @@ package body Server is
   end Send;
 
 
-  procedure Send (Item : Tokens) is
-  begin
-    Windows.Pipe.Write (The_Pipe, Item'address, Item'size / Unsigned.Byte'size);
-    Read_Data;
-  end Send;
-
-
   function Is_In_Project (Name : String) return Boolean is
   begin
     Send (Is_In_Project, Name);
     return Data_String = "" & Confirmation;
   end Is_In_Project;
-
 
 
   procedure Set_Message (Item : String) is
@@ -179,16 +170,36 @@ package body Server is
   end Known_Extensions;
 
 
+  function Edge_Column return Server.Column_Position is
+    The_Edge_Column : Server.Column_Position;
+    for The_Edge_Column'address use The_Data'address;
+  begin
+    Send (Get_Edge_Column);
+    return The_Edge_Column;
+  end Edge_Column;
+
+
+  function Case_Updates return Case_Data is
+  begin
+    Send (Case_Updates);
+    declare
+      subtype Actual_Results is Case_Data(1 .. The_Length * 8 / Case_Data'component_size);
+      Updates : Actual_Results;
+      for Updates'address use The_Data'address;
+    begin
+      return Updates;
+    end;
+  end Case_Updates;
+
+
   function Updates_For (Filename   : String;
                         First_Line : Line_Number;
                         Last_Line  : Line_Number;
-                        Marks      : Tokens;
                         Content    : String) return Tokens is
   begin
     Send (Updates_For, Filename);
     Send (Natural(First_Line));
     Send (Natural(Last_Line));
-    Send (Marks);
     Send (Content);
     declare
       subtype Actual_Results is Tokens(1 .. The_Length * 8 / Tokens'component_size);

@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2008 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -38,8 +38,10 @@ package Server is
 
   type Command is (Open_Project,
                    Close_Project,
+                   Get_Edge_Column,
                    Get_Extensions,
                    Is_In_Project,
+                   Case_Updates,
                    Updates_For,
                    Referenced,
                    Promote,
@@ -87,9 +89,12 @@ package Server is
 
   No_References : constant References := (0, 0, 0, 0, 0, others => <>);
 
-  type Token_Kind is (Is_Comment,
+  type Token_Kind is (Is_Attribute,
+                      Is_Comment,
+                      Is_Special_Comment,
                       Is_Directive,
                       Is_Reserved_Word,
+                      Is_Character_Literal,
                       Is_Numeric_Literal,
                       Is_String_Literal,
                       Is_Type,
@@ -115,18 +120,38 @@ package Server is
 
   No_Tokens : constant Tokens(1..0) := (others => (1, 1, 1, 1, Is_Others));
 
+  type Case_Change is (No_Change, Change);
+  for Case_Change'size use 1;
+
+  type Case_Mask is mod 2**32;
+
+  type Case_Info is record
+    Line   : Line_Number;
+    Column : Column_Range;
+    Mask   : Case_Mask;
+  end record;
+  pragma Pack (Case_Info);
+
+  type Case_Data is array (Positive range <>) of Case_Info;
+  pragma Pack (Case_Data);
+
+  No_Case_Data : constant Case_Data(1..0) := (others => (1, 1, 0));
+
   function Is_In_Project (Name : String) return Boolean;
 
   function Project_Opened (Name : String) return Boolean;
 
   procedure Close_Project;
 
+  function Edge_Column return Server.Column_Position;
+
   function Known_Extensions return String;
+
+  function Case_Updates return Case_Data;
 
   function Updates_For (Filename   : String;
                         First_Line : Line_Number;
                         Last_Line  : Line_Number;
-                        Marks      : Tokens;
                         Content    : String) return Tokens;
 
   function Referenced (Filename : String;

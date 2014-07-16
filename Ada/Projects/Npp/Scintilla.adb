@@ -15,6 +15,7 @@
 -- *********************************************************************************************************************
 -->Style: White_Elephant
 
+with Ada.Characters.Handling;
 with Ada.Unchecked_Conversion;
 
 package body Scintilla is
@@ -66,8 +67,8 @@ package body Scintilla is
   SCI_GETCOLUMN                 : constant := 2129;
   SCI_GETCURRENTPOS             : constant := 2008;
   SCI_GETLENGTH                 : constant := 2006;
-  SCI_GETLINEENDPOSITION        : constant := 2136;
   SCI_GETMODIFY                 : constant := 2159;
+  SCI_GETRANGEPOINTER           : constant := 2643;
   SCI_GETTEXT                   : constant := 2182;
   SCI_GOTOPOS                   : constant := 2025;
   SCI_LINEFROMPOSITION          : constant := 2166;
@@ -139,6 +140,25 @@ package body Scintilla is
   end Show_Cursor_Line;
 
 
+  procedure Change_Case (Handle : Object;
+                         Line   : Positive;
+                         Column : Positive) is
+    type Cell_Pointer is access all Character;
+    The_Pointer  : Cell_Pointer;
+    The_Position : Win.LRESULT;
+    function Convert is new Ada.Unchecked_Conversion (Win.LRESULT, Cell_Pointer);
+  begin
+    Execute (Handle, SCI_ENSUREVISIBLE, Win.WPARAM(Line - 1));
+    The_Position := Execution_Of (Handle, SCI_FINDCOLUMN, Win.WPARAM(Line - 1), Win.LPARAM(Column - 1));
+    The_Pointer := Convert (Execution_Of (Handle, SCI_GETRANGEPOINTER, Win.WPARAM(The_Position), 1));
+    if Ada.Characters.Handling.Is_Lower (The_Pointer.all) then
+      The_Pointer.all := Ada.Characters.Handling.To_Upper (The_Pointer.all);
+    else
+      The_Pointer.all := Ada.Characters.Handling.To_Lower (The_Pointer.all);
+    end if;
+  end Change_Case;
+
+
   Default_Font  : constant String := "Fixedsys" & Ascii.Nul;
 
   procedure Define_Styles (Handle : Object) is
@@ -174,7 +194,6 @@ package body Scintilla is
     end Set_Undeline_For;
 
   begin -- Define_Styles
-    Execute (Handle, SCI_SETEDGECOLUMN, 79);
     Execute (Handle, SCI_STYLESETFONT, Style_Default, Convert(Default_Font'address));
     Execute (Handle, SCI_STYLESETSIZE, Style_Default, Win.LPARAM(11));
     Set_Background_For (Default, Win.RGB (Red => 255, Green => 255, Blue => 255));
@@ -184,14 +203,20 @@ package body Scintilla is
     Set_Undeline_For (Default, SCI_FALSE);
     Execute (Handle, SCI_STYLECLEARALL);
 
-    Set_Foreground_For (Directive,
-                        Win.RGB (Red => 192, Green => 192, Blue => 0));   -- Olive
+    Set_Foreground_For (Attributes,
+                        Win.RGB (Red => 180, Green => 180, Blue => 0));   -- Olive
     Set_Foreground_For (Comment,
                         Win.RGB (Red => 128, Green => 128, Blue => 128)); -- Gray
-    Set_Foreground_For (Numeric_Literal,
-                        Win.RGB (Red => 255, Green =>   0, Blue =>   0)); -- Light_Red
+    Set_Foreground_For (Special_Comment,
+                        Win.RGB (Red => 180, Green => 180, Blue => 0));   -- Olive
+    Set_Foreground_For (Directive,
+                        Win.RGB (Red => 180, Green => 180, Blue => 0));   -- Olive
     Set_Foreground_For (Reserved_Word,
                         Win.RGB (Red =>   0, Green =>   0, Blue => 255)); -- Light_Blue
+    Set_Foreground_For (Character_Literal,
+                        Win.RGB (Red => 255, Green => 128, Blue => 64));  -- Orange
+    Set_Foreground_For (Numeric_Literal,
+                        Win.RGB (Red => 255, Green =>   0, Blue =>   0)); -- Light_Red
     Set_Foreground_For (String_Literal,
                         Win.RGB (Red => 128, Green =>   0, Blue => 128)); -- Purple
     Set_Foreground_For (Types,
@@ -216,6 +241,13 @@ package body Scintilla is
   end Define_Styles;
 
 
+  procedure Define (Handle      : Object;
+                    Edge_Column : Natural) is
+  begin
+    Execute (Handle, SCI_SETEDGECOLUMN, Win.WPARAM(Edge_Column));
+  end Define;
+
+
   procedure Set (Handle       : Object;
                  First_Line   : Positive := Positive'first;
                  Last_Line    : Positive := Last;
@@ -227,22 +259,10 @@ package body Scintilla is
 
     First_Position  : Win.LRESULT;
     Last_Position   : Win.LRESULT;
-    The_Last_Line   : Win.WPARAM;
-    The_Last_Column : Win.LPARAM;
 
   begin
-    if Last_Line = Last then
-      The_Last_Line := Win.WPARAM(Execution_Of (Handle, SCI_GETLENGTH) - 1);
-    else
-      The_Last_Line := Win.WPARAM(Last_Line - 1);
-    end if;
-    if Last_Column = Last then
-      The_Last_Column := Execution_Of (Handle, SCI_GETLINEENDPOSITION, The_Last_Line);
-    else
-      The_Last_Column := Win.LPARAM(Last_Column - 1);
-    end if;
     First_Position := Execution_Of (Handle, SCI_FINDCOLUMN, Win.WPARAM(First_Line - 1), Win.LPARAM(First_Column - 1));
-    Last_Position := Execution_Of (Handle, SCI_FINDCOLUMN, The_Last_Line, The_Last_Column);
+    Last_Position := Execution_Of (Handle, SCI_FINDCOLUMN, Win.WPARAM(Last_Line - 1), Win.LPARAM(Last_Column - 1));
     Execute (Handle, SCI_STARTSTYLING, Win.WPARAM(First_Position), Style_Mask);
     Execute (Handle, SCI_SETSTYLING, Win.WPARAM(Last_Position - First_Position + 1), Style'pos(To_Style));
   end Set;

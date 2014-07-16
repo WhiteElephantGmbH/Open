@@ -36,6 +36,9 @@ package Indefinite_Doubly_Linked_Lists is
   function "+" (Left  : Element;
                 Right : Item) return Item with Inline;
 
+  function "+" (Left  : Item;
+                Right : Item) return Item with Inline;
+
   function "-" (Left  : Item;
                 Right : Element) return Item with Inline;
 

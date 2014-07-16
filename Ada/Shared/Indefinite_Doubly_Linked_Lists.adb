@@ -40,6 +40,17 @@ package body Indefinite_Doubly_Linked_Lists is
     return The_List;
   end "+";
 
+  function "+" (Left  : Item;
+                Right : Item) return Item is
+    The_List   : Item := Right;
+    The_Source : Item := Left;
+  begin
+    Splice (Target => The_List,
+            Before => Private_Lists.No_Element,
+            Source => The_Source);
+    return The_List;
+  end "+";
+
   function "-" (Left  : Item;
                 Right : Element) return Item is
     The_List   : Item := Left;
