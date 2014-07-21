@@ -389,14 +389,14 @@ package body Windows is
   end Origin_Folder;
 
 
-  procedure Create_Process (Executable      : String;
-                            Parameters      : String := "";
-                            Environment     : String := "";
-                            Current_Folder  : String := "";
-                            Std_Input       : Nt.HANDLE := System.Null_Address;
-                            Std_Output      : Nt.HANDLE := System.Null_Address;
-                            Std_Error       : Nt.HANDLE := System.Null_Address;
-                            Create_Detached : Boolean := False) is
+  procedure Create_Process (Executable     : String;
+                            Parameters     : String := "";
+                            Environment    : String := "";
+                            Current_Folder : String := "";
+                            Std_Input      : Nt.HANDLE := System.Null_Address;
+                            Std_Output     : Nt.HANDLE := System.Null_Address;
+                            Std_Error      : Nt.HANDLE := System.Null_Address;
+                            Console        : Console_Type := Normal) is
 
     Startup_Info        : aliased Win32.Winbase.STARTUPINFOA;
     Process_Information : aliased Win32.Winbase.PROCESS_INFORMATION;
@@ -451,16 +451,20 @@ package body Windows is
         Startup_Info.hStdError  := Base.GetStdHandle (Base.STD_ERROR_HANDLE);
       end if;
     end if;
-
     if Environment /= "" then
       Environment_Ptr := Environment_Block(Environment_Block'first)'address;
     end if;
     if Current_Folder /= "" then
       Directory_Ptr := Win32.Addr (Current_Directory);
     end if;
-    if Create_Detached then
+    case Console is
+    when None =>
       The_Creation_Flags := The_Creation_Flags + Base.DETACHED_PROCESS;
-    end if;
+    when Invisible =>
+      The_Creation_Flags := The_Creation_Flags + Base.CREATE_NO_WINDOW;
+    when Normal =>
+      null;
+    end case;
     if Parameters = "" then
       declare
         Executable_Name : aliased constant String := Executable & Ascii.Nul;

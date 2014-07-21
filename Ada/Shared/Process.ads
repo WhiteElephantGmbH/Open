@@ -21,7 +21,9 @@ package Process is
 
   function Execution_Of (Executable     : String;
                          Parameters     : String;
-                         Environment    : String := "";
-                         Current_Folder : String := "") return String;
+                         Environment    : String  := "";
+                         Current_Folder : String  := "";
+                         Handle_Output  : Boolean := True;
+                         Handle_Errors  : Boolean := True) return String;
 end Process;
 

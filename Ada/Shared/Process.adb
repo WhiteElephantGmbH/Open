@@ -31,8 +31,10 @@ package body Process is
 
   function Execution_Of (Executable     : String;
                          Parameters     : String;
-                         Environment    : String := "";
-                         Current_Folder : String := "") return String
+                         Environment    : String  := "";
+                         Current_Folder : String  := "";
+                         Handle_Output  : Boolean := True;
+                         Handle_Errors  : Boolean := True) return String
   is
     In_Temp      : aliased Nt.HANDLE;
     Inbound      : aliased Nt.HANDLE;
@@ -43,8 +45,28 @@ package body Process is
     The_Length   : aliased Win32.DWORD;
     Temp         : Win32.BOOL;
     The_Result   : Text.String;
+
     use type Win32.BOOL;
     use type Win32.DWORD;
+
+    function Error_Output return Nt.HANDLE is
+    begin
+      if Handle_Errors then
+        return Outbound;
+      else
+        return System.Null_Address;
+      end if;
+    end Error_Output;
+
+    function Standard_Output return Nt.HANDLE is
+    begin
+      if Handle_Output then
+        return Outbound;
+      else
+        return System.Null_Address;
+      end if;
+    end Standard_Output;
+
   begin
     Security.nLength             := Win32.DWORD (Base.SECURITY_ATTRIBUTES'size / 8);
     Security.lpSecurityDescriptor:= System.Null_Address;
@@ -71,13 +93,13 @@ package body Process is
     end if;
     Temp := Base.CloseHandle (In_Temp); -- No longer used
 
-    Windows.Create_Process (Executable      => Executable,
-                            Parameters      => Parameters,
-                            Environment     => Environment,
-                            Current_Folder  => Current_Folder,
-                            Std_Error       => Outbound,
-                            Std_Output      => Outbound,
-                            Create_Detached => True);
+    Windows.Create_Process (Executable     => Executable,
+                            Parameters     => Parameters,
+                            Environment    => Environment,
+                            Current_Folder => Current_Folder,
+                            Std_Error      => Error_Output,
+                            Std_Output     => Standard_Output,
+                            Console        => Windows.Invisible);
     Temp := Base.CloseHandle (Outbound); -- No longer used, child has a copy
     loop
       if Base.ReadFile (Inbound,

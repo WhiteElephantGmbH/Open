@@ -186,14 +186,16 @@ package Windows is
   -- NB: The folder name is terminated with a '\'
   --
 
-  procedure Create_Process (Executable      : String;
-                            Parameters      : String := "";
-                            Environment     : String := "";
-                            Current_Folder  : String := "";
-                            Std_Input       : Nt.HANDLE := System.Null_Address;
-                            Std_Output      : Nt.HANDLE := System.Null_Address;
-                            Std_Error       : Nt.HANDLE := System.Null_Address;
-                            Create_Detached : Boolean := False);
+  type Console_Type is (None, Normal, Invisible);
+
+  procedure Create_Process (Executable     : String;
+                            Parameters     : String := "";
+                            Environment    : String := "";
+                            Current_Folder : String := "";
+                            Std_Input      : Nt.HANDLE := System.Null_Address;
+                            Std_Output     : Nt.HANDLE := System.Null_Address;
+                            Std_Error      : Nt.HANDLE := System.Null_Address;
+                            Console        : Console_Type := Normal);
   --
   -- Procedure to create a detached process.
   --
@@ -203,9 +205,6 @@ package Windows is
   --
   -- Note: If the current folder is set to the null string then the current folder of new process
   --       is set to equal the current folder of the parent (creating process)
-  --
-  -- Note: If Create_Detached is set to True, the new process does not have access to the console
-  --       of the parent process.
   --
 
   function Executing_As_Service return Boolean;
