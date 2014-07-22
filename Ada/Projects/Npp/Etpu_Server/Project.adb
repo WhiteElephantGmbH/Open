@@ -173,8 +173,8 @@ package body Project is
   The_Area_Folder         : Text.String;
   The_Binary_Root         : Text.String;
   The_Binary_Library_Area : Text.String;
-  The_Linker_Area         : Text.String;
-  The_Linker_Extension    : Text.String;
+  The_Product_Area        : Text.String;
+  The_Product_Extension   : Text.String;
   The_Tools_Location      : Text.String;
   The_Work_Path           : String_List.Item;
 
@@ -187,8 +187,8 @@ package body Project is
     Text.Clear (The_Area_Folder);
     Text.Clear (The_Binary_Root);
     Text.Clear (The_Binary_Library_Area);
-    Text.Clear (The_Linker_Area);
-    Text.Clear (The_Linker_Extension);
+    Text.Clear (The_Product_Area);
+    Text.Clear (The_Product_Extension);
     Text.Clear (The_Tools_Location);
     String_List.Clear (The_Work_Path);
     Project_Is_Defined := False;
@@ -226,16 +226,16 @@ package body Project is
   end Binary_Folder;
 
 
-  function Linker_Folder return String is
+  function Product_Folder return String is
   begin
-    return Text.String_Of (The_Linker_Area) & Separator;
-  end Linker_Folder;
+    return Text.String_Of (The_Product_Area) & Separator;
+  end Product_Folder;
 
 
-  function Linker_Extension return String is
+  function Product_Extension return String is
   begin
-    return '.' & Text.String_Of (The_Linker_Extension);
-  end Linker_Extension;
+    return '.' & Text.String_Of (The_Product_Extension);
+  end Product_Extension;
 
 
   procedure Create_Work_Area_For (Project_Parts :     Strings.Item;
@@ -324,8 +324,8 @@ package body Project is
     Create_Work_Area_For (Project_Parts, The_Work_Path);
     Define_Directory (The_Tools_Location, Key => "Location", Application => "Tools");
     Define_Directory (The_Binary_Root, Key => "Root", Application => "Binary");
-    Define_Directory (The_Linker_Area, Key => "Directory", Application => "Linker");
-    Define (The_Linker_Extension, Key => "Extension", Application => "Linker");
+    Define_Directory (The_Product_Area, Key => "Directory", Application => "Product");
+    Define (The_Product_Extension, Key => "Extension", Application => "Product");
     ----------------------------------------
     for Folder of The_Work_Path loop
       Log.Write ("||| Folder: " & Folder);
@@ -489,13 +489,13 @@ package body Project is
 
   function Linker_Output_Of (Filename : String) return String is
   begin
-    return Linker_Folder & Module_Of (Filename) & Linker_Extension;
+    return Product_Folder & Module_Of (Filename) & Product_Extension;
   end Linker_Output_Of;
 
 
   function Link_Map_Of (Filename : String) return String is
   begin
-    return Linker_Folder & Module_Of (Filename) & ".map";
+    return Product_Folder & Module_Of (Filename) & ".map";
   end Link_Map_Of;
 
 
