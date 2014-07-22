@@ -1,0 +1,40 @@
+with "win32ada";
+
+project Elephant is
+
+   for Library_Name use "Npp_Elephant";
+   for Shared_Library_Prefix use "";
+
+   for Source_Dirs use ("W:\Source\Open\Ada\Projects\Npp\Elephant",
+                        "W:\Source\Open\Ada\Projects\Npp",
+                        "W:\Source\Open\Ada\Shared");
+
+   for Library_Interface use ("Elephant_Dll");
+
+   for Object_Dir use "Objects";
+
+   for Library_Options use ("resources.o");
+   for Library_Dir use "W:\Product\Open\Windows";
+   for Library_Kind use "dynamic";
+   for Shared_Library_Prefix use "";
+   for Library_Standalone use "encapsulated";
+
+   package Pretty_Printer is
+      for Default_Switches ("ada") use ("-i2", "-M120", "-aL", "-A1", "-A4");
+   end Pretty_Printer;
+
+   package Builder is
+      for Default_Switches ("ada") use ("-s", "-g");
+   end Builder;
+
+   package Compiler is
+      for Default_Switches ("ada") use ("-O1", "-gnatQ", "-gnato", "-g", "-gnat12",
+                                        "-gnatwceijkoprvz.w.x", "-gnatykmpM120");
+   end Compiler;
+
+   package Binder is
+      for Default_Switches ("ada") use ("-E");
+   end Binder;
+
+end Elephant;
+
