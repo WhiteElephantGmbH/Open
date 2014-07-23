@@ -232,11 +232,9 @@ package body Scintilla is
     Set_Background_For (Compilation_Error,
                         Win.RGB (Red =>   0, Green => 255, Blue => 255)); -- Light_Blue_Green
 
-    Set_Italic_For (Comment);
-    Set_Italic_For (Style_Error);
-    Set_Italic_For (Unused_Declaration);
-    Set_Italic_For (Unused_Type_Declaration);
-
+    Set_Undeline_For (Unused_Declaration);
+    Set_Undeline_For (Unused_Type_Declaration);
+    Set_Undeline_For (Style_Error);
     Set_Undeline_For (Unknown_Identifier);
   end Define_Styles;
 
