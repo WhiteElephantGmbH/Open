@@ -242,6 +242,9 @@ package Windows.Files is
   -- (including the default ::$Data)
 
 
+  function Is_On_Network (Drive : Character) return Boolean;
+  
+  
   function Unc_Of (Name : String) return String;
   --
   -- Converts the specified fully qualified name into UNC (Uniform Naming Convention)

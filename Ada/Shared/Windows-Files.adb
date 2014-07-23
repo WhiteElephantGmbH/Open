@@ -1342,6 +1342,19 @@ package body Windows.Files is
     end if;
     return "";
   end Path_Of;
+  
+  
+  function Is_On_Network (Drive : Character) return Boolean is
+    Name   : aliased constant String := Drive & ":" & Nul;
+    Length : aliased Win32.DWORD := 0;
+    function Convert is new Ada.Unchecked_Conversion (System.Address, Win32.LPSTR);
+    use type Win32.DWORD;
+  begin
+    return Win32.Winnetwk.WNETGETCONNECTIONA (Win32.Addr (Name),
+                                                          Convert (System.Null_Address),
+                                                          Length'unchecked_access)
+           = Win32.Winerror.ERROR_MORE_DATA;
+  end Is_On_Network;
 
 
   function Unc_Of (Name : String) return String is
