@@ -1,8 +1,8 @@
 Etpu_Server Icon Etpu_Server.Ico
 
 1 VersionInfo
-  FileVersion 1,3
-  ProductVersion 1,3
+  FileVersion 2,1
+  ProductVersion 2,1
   FileFlagsMask 0x3FL
   FileFlags 0x0L
   FileOs 0x4L
@@ -15,12 +15,12 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "White-Elephant GmbH\0"
       VALUE "FileDescription", "eTpu Server\0"
-      VALUE "FileVersion", "1.3\0"
+      VALUE "FileVersion", "2.1\0"
       VALUE "InternalName", "Etpu_Server\0"
       VALUE "LegalCopyright", "Copyright \251 White Elephant GmbH 2014\0"
       VALUE "OriginalName", "eTpu_Server.Exe\0"
       VALUE "ProductName", "eTpu_Server\0"
-      VALUE "ProductVersion", "1.3\0"
+      VALUE "ProductVersion", "2.1\0"
       VALUE "Compiler", "GNAT Version 7.3.0\0"
     END
   END

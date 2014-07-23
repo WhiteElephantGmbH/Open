@@ -2,21 +2,20 @@ with "win32ada";
 
 project Elephant is
 
-   for Library_Name use "Npp_Elephant";
+   for Library_Name use "npp_elephant";
    for Shared_Library_Prefix use "";
 
-   for Source_Dirs use ("W:\Source\Open\Ada\Projects\Npp\Elephant",
-                        "W:\Source\Open\Ada\Projects\Npp",
-                        "W:\Source\Open\Ada\Shared");
+   for Source_Dirs use ("w:\source\open\ada\projects\npp\elephant",
+                        "w:\source\open\ada\projects\npp",
+                        "w:\source\open\ada\shared");
 
    for Library_Interface use ("Elephant_Dll");
 
-   for Object_Dir use "Objects";
+   for Object_Dir use "objects";
 
    for Library_Options use ("resources.o");
-   for Library_Dir use "W:\Product\Open\Windows";
+   for Library_Dir use "w:\product\open\windows";
    for Library_Kind use "dynamic";
-   for Shared_Library_Prefix use "";
    for Library_Standalone use "encapsulated";
 
    package Pretty_Printer is

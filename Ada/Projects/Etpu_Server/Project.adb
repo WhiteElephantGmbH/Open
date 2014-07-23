@@ -324,7 +324,7 @@ package body Project is
     Create_Work_Area_For (Project_Parts, The_Work_Path);
     Define_Directory (The_Tools_Location, Key => "Location", Application => "Tools");
     Define_Directory (The_Binary_Root, Key => "Root", Application => "Binary");
-    Define_Directory (The_Product_Area, Key => "Directory", Application => "Product");
+    Define_Directory (The_Product_Area, Key => "Location", Application => "Product");
     Define (The_Product_Extension, Key => "Extension", Application => "Product");
     ----------------------------------------
     for Folder of The_Work_Path loop

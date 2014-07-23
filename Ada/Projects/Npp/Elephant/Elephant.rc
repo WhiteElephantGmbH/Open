@@ -6,8 +6,8 @@ ShowUsageBmp     Bitmap ShowUsage.Bmp
 ShowUnusedBmp    Bitmap ShowUnused.Bmp
 
 1 VersionInfo
-  FileVersion 0,2
-  ProductVersion 0,2
+  FileVersion 2,1
+  ProductVersion 2,1
   FileFlagsMask 0x3FL
   FileFlags 0x0L
   FileOs 0x4L
@@ -20,12 +20,12 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "White Elephant GmbH\0"
       VALUE "FileDescription", "White Elephant Nodepad++ DLL\0"
-      VALUE "FileVersion", "0.1\0"
+      VALUE "FileVersion", "2.1\0"
       VALUE "InternalName", "Npp_Elephant\0"
       VALUE "LegalCopyright", "Copyright \251 White Elephant GmbH 2014\0"
       VALUE "OriginalName", "Npp_Elephant.dll\0"
       VALUE "ProductName", "Npp_Elephant\0"
-      VALUE "ProductVersion", "0.2\0"
+      VALUE "ProductVersion", "2.1\0"
       VALUE "Compiler", "GNAT Version 7.3.0\0"
       VALUE "Developed By", "White Elephant GmbH"
     END
