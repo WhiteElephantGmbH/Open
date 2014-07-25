@@ -15,6 +15,7 @@ project Elephant is
 
    for Library_Options use ("resources.o");
    for Library_Dir use "w:\product\open\windows";
+   for Library_Ali_Dir use "w:\binary\open\ada\projects\npp\elephant";
    for Library_Kind use "dynamic";
    for Library_Standalone use "encapsulated";
 
