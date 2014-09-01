@@ -1,0 +1,96 @@
+with GNATCOM.Interface;
+
+with GNATCOM.Errors;
+
+package body winword.TaskPane_Interface is
+
+   procedure Initialize (This : in out TaskPane_Type) is
+   begin
+      Set_IID (This, IID_TaskPane);
+   end Initialize;
+
+   function Pointer (This : TaskPane_Type)
+     return Pointer_To_TaskPane
+   is
+   begin
+      return To_Pointer_To_TaskPane (Address (This));
+   end Pointer;
+
+   procedure Attach (This    : in out TaskPane_Type;
+                     Pointer : in     Pointer_To_TaskPane)
+   is
+   begin
+      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+              (Pointer.all'Address));
+   end Attach;
+
+   function Get_Application
+     (This : TaskPane_Type)
+     return Pointer_To_uApplication
+   is
+       RetVal : aliased Pointer_To_uApplication;
+   begin
+      GNATCOM.Errors.Error_Check
+        (Pointer (This).Vtbl.Get_Application
+         (Pointer (This),
+          RetVal'Unchecked_Access));
+
+      return RetVal;
+   end Get_Application;
+
+   function Get_Creator
+     (This : TaskPane_Type)
+     return Interfaces.C.long
+   is
+       RetVal : aliased Interfaces.C.long;
+   begin
+      GNATCOM.Errors.Error_Check
+        (Pointer (This).Vtbl.Get_Creator
+         (Pointer (This),
+          RetVal'Unchecked_Access));
+
+      return RetVal;
+   end Get_Creator;
+
+   function Get_Parent
+     (This : TaskPane_Type)
+     return GNATCOM.Types.Pointer_To_IDispatch
+   is
+       RetVal : aliased GNATCOM.Types.Pointer_To_IDispatch;
+   begin
+      GNATCOM.Errors.Error_Check
+        (Pointer (This).Vtbl.Get_Parent
+         (Pointer (This),
+          RetVal'Unchecked_Access));
+
+      return RetVal;
+   end Get_Parent;
+
+   function Get_Visible
+     (This : TaskPane_Type)
+     return GNATCOM.Types.VARIANT_BOOL
+   is
+       RetVal : aliased GNATCOM.Types.VARIANT_BOOL;
+   begin
+      GNATCOM.Errors.Error_Check
+        (Pointer (This).Vtbl.Get_Visible
+         (Pointer (This),
+          RetVal'Unchecked_Access));
+
+      return RetVal;
+   end Get_Visible;
+
+   procedure Put_Visible
+     (This : TaskPane_Type;
+      prop : GNATCOM.Types.VARIANT_BOOL)
+   is
+   begin
+      GNATCOM.Errors.Error_Check
+        (Pointer (This).Vtbl.Put_Visible
+         (Pointer (This),
+          prop));
+
+   end Put_Visible;
+
+end winword.TaskPane_Interface;
+
