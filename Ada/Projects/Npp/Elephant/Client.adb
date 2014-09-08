@@ -220,6 +220,7 @@ package body Client is
   procedure Promote (All_Projects : Boolean := False) is
     Editor : Scintilla.Object;
   begin
+    Npp.Plugin.Disable;
     Npp.Message.Clear;
     if No_Project or else not All_Saved then
       return;
@@ -246,6 +247,7 @@ package body Client is
         end if;
       end if;
     end if;
+    Npp.Plugin.Enable;
   end Promote;
 
 

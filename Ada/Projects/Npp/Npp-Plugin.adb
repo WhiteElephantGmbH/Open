@@ -330,6 +330,28 @@ package body Npp.Plugin is
   end All_Files_Saved;
 
 
+  procedure Set (Msg    : Win.UINT;
+                 Switch : Win.BOOL) is
+  begin
+    Win.Send_Message (Handle => The_Info.Npp_Handle,
+                      Msg    => Msg,
+                      Wpar   => 0,
+                      Lpar   => Win.LPARAM(Switch));
+  end Set;
+
+
+  procedure Disable is
+  begin
+    Set (Npp.M_HIDETOOLBAR, Win.TRUE);
+  end Disable;
+
+
+  procedure Enable is
+  begin
+    Set (Npp.M_HIDETOOLBAR, Win.FALSE);
+  end Enable;
+
+
   function Is_Unicode return Win.BOOL is
   begin
     return Win.TRUE;

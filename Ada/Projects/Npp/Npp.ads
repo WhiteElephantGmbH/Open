@@ -68,6 +68,12 @@ package Npp with Pure => True is
   M_RELOADFILE : constant := MSG + 36;
   -- BOOL NPPM_RELOADFILE(BOOL withAlert, TCHAR *filePathName2Reload)
 
+  M_HIDETOOLBAR : constant := MSG + 70;
+  -- BOOL NPPM_HIDETOOLBAR(0, BOOL hideOrNot)
+  -- if hideOrNot is set as TRUE then tool bar will be hidden
+  -- otherwise it'll be shown.
+  -- return value : the old status value
+
   M_DOOPEN : constant := MSG + 77;
   -- BOOL NPPM_DOOPEN(0, const TCHAR *fullPathName2Open)
   -- fullPathName2Open indicates the full file path name to be opened.

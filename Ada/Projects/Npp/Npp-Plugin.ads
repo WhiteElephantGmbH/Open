@@ -49,5 +49,9 @@ package Npp.Plugin is
   function Edit_View return Win.HWND;
 
   function All_Files_Saved return Boolean;
+  
+  procedure Disable;
+
+  procedure Enable;
 
 end Npp.Plugin;
