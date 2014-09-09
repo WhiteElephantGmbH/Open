@@ -50,8 +50,4 @@ package Npp.Plugin is
 
   function All_Files_Saved return Boolean;
   
-  procedure Disable;
-
-  procedure Enable;
-
 end Npp.Plugin;

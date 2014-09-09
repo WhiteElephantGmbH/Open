@@ -220,7 +220,6 @@ package body Client is
   procedure Promote (All_Projects : Boolean := False) is
     Editor : Scintilla.Object;
   begin
-    Npp.Plugin.Disable;
     Npp.Message.Clear;
     if No_Project or else not All_Saved then
       return;
@@ -247,7 +246,6 @@ package body Client is
         end if;
       end if;
     end if;
-    Npp.Plugin.Enable;
   end Promote;
 
 
@@ -456,7 +454,6 @@ package body Client is
 
   procedure Show_Unused is
   begin
-    Npp.Plugin.Disable;
     Npp.Message.Clear;
     if No_Project or No_Buffer then
       return;
@@ -466,7 +463,6 @@ package body Client is
     end if;
     The_References := new Server.References'(Server.Unused);
     Show (The_References, "No unused declarations");
-    Npp.Plugin.Enable;
   end Show_Unused;
 
 
