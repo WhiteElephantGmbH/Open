@@ -115,7 +115,7 @@ package Strings is
     Last  : Element_Count;
   end record;
 
-  subtype Data_Length is Natural range 0 .. Max_Count;
+  subtype Data_Length is Natural range 0 .. Max_Data_Length;
 
   type Item (Count  : Element_Count;
              Length : Data_Length) is private; --String of 'Standard.STRING'
