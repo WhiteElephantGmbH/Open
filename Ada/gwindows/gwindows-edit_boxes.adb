@@ -687,7 +687,7 @@ package body GWindows.Edit_Boxes is
       Text     : in     GString;
       Can_Undo : in     Boolean       := True)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Text);
 
       procedure SendMessage
         (hwnd   : Interfaces.C.long := Handle (Edit);
@@ -758,7 +758,7 @@ package body GWindows.Edit_Boxes is
       function To_PINT is new Ada.Unchecked_Conversion (Pointer_To_GChar_C,
                                                         Pointer_To_Integer);
 
-      Length : Integer := Line_Length (Edit, Line);
+      Length : constant Integer := Line_Length (Edit, Line);
    begin
       if Length = 0 then
          return "";
@@ -795,7 +795,7 @@ package body GWindows.Edit_Boxes is
                          Line : Positive)
                         return Natural
    is
-      Position : Integer := Position_From_Line (Edit, Line);
+      Position : constant Integer := Position_From_Line (Edit, Line);
 
       function SendMessage
         (hwnd   : Interfaces.C.long := Handle (Edit);

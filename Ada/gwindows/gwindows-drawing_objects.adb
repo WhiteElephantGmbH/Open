@@ -259,7 +259,7 @@ package body GWindows.Drawing_Objects is
                           Underline  : in     Boolean          := False;
                           Strike_Out : in     Boolean          := False)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Name);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Name);
 
       function CreateFont
         (nHeight            : Integer                 := Size;
@@ -426,7 +426,7 @@ package body GWindows.Drawing_Objects is
                           Name       : in     GString;
                           Conversion : in     Bitmap_Conversion_Type := None)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Name);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Name);
 
       IMAGE_BITMAP       : constant := 0;
       LR_DEFAULTCOLOR    : constant := 16#0000#;
@@ -477,7 +477,7 @@ package body GWindows.Drawing_Objects is
       File_Name  : in     GString;
       Conversion : in     Bitmap_Conversion_Type := None)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (File_Name);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (File_Name);
 
       IMAGE_BITMAP       : constant := 0;
       LR_LOADFROMFILE    : constant := 16;
@@ -569,7 +569,7 @@ package body GWindows.Drawing_Objects is
    procedure Load_Icon (Icon : in out Icon_Type;
                         Name : in     GString)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Name);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Name);
 
       function LoadIcon
         (hInst   : Interfaces.C.long := GWindows.Internal.Current_hInstance;
@@ -590,7 +590,7 @@ package body GWindows.Drawing_Objects is
    procedure Load_Icon_From_File (Icon      : in out Icon_Type;
                                   File_Name : in     GString)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (File_Name);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (File_Name);
 
       IMAGE_ICON      : constant := 1;
       LR_LOADFROMFILE : constant := 16;
@@ -619,7 +619,7 @@ package body GWindows.Drawing_Objects is
                                      File_Name : in     GString;
                                      Index     : in     Integer   := 0)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (File_Name);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (File_Name);
 
       function ExtractAssociatedIcon
         (hInst    : Interfaces.C.long  := GWindows.Internal.Current_hInstance;

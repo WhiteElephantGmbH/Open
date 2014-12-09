@@ -144,8 +144,8 @@ package body GWindows.Drawing_Panels is
      (Window : in out Drawing_Panel_Type;
       Copy   : in     Boolean            := True)
    is
-      New_Width    : Integer := Client_Area_Width (Window);
-      New_Height   : Integer := Client_Area_Height (Window);
+      New_Width    : constant Integer := Client_Area_Width (Window);
+      New_Height   : constant Integer := Client_Area_Height (Window);
    begin
       Resize_Canvas (Window, New_Width, New_Height, Copy);
    end Resize_Canvas;

@@ -183,7 +183,7 @@ package body GWindows.Drawing is
       X, Y   : in     Integer;
       Text   : in     GString)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Text);
 
       procedure TextOut
         (HDC  : GWindows.Types.Handle := Canvas.HDC;
@@ -206,7 +206,7 @@ package body GWindows.Drawing is
                   Text      : in     GString;
                   Clip_Area : in     GWindows.Types.Rectangle_Type)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Text);
       ETO_CLIPPED : constant := 4;
 
       procedure ExtTextOut
@@ -232,7 +232,7 @@ package body GWindows.Drawing is
                               Text   : in GString)
                              return GWindows.Types.Size_Type
    is
-      C_Text    : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Text    : constant GString_C := GWindows.GStrings.To_GString_C (Text);
       Text_Size : GWindows.Types.Size_Type := (0, 0);
 
       procedure GetTextExtentPoint32
@@ -275,7 +275,7 @@ package body GWindows.Drawing is
    is
       use type Interfaces.C.unsigned;
 
-      Mode : Interfaces.C.unsigned := GetTextAlign (Canvas.HDC);
+      Mode : constant Interfaces.C.unsigned := GetTextAlign (Canvas.HDC);
    begin
       if (Mode and TA_BASELINE) = TA_BASELINE then
          return Base_Line;
@@ -313,7 +313,7 @@ package body GWindows.Drawing is
    is
       use type Interfaces.C.unsigned;
 
-      Mode : Interfaces.C.unsigned := GetTextAlign (Canvas.HDC);
+      Mode : constant Interfaces.C.unsigned := GetTextAlign (Canvas.HDC);
    begin
       if (Mode and TA_CENTER) = TA_CENTER then
          return Center;
@@ -1035,7 +1035,7 @@ package body GWindows.Drawing is
                                   Left, Top, Right, Bottom : in Integer)
                                  return Boolean
    is
-      Rect : GWindows.Types.Rectangle_Type := (Left, Top, Right, Bottom);
+      Rect : constant GWindows.Types.Rectangle_Type := (Left, Top, Right, Bottom);
 
       function RectVisible
         (DC : GWindows.Types.Handle         := Canvas.HDC;

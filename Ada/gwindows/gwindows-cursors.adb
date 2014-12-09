@@ -64,7 +64,7 @@ package body GWindows.Cursors is
 
    function Load_Cursor_From_File (File_Name : GString) return Cursor_Type
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (File_Name);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (File_Name);
 
       function LoadCursorFromFile
         (Name : GString_C := C_Text)
@@ -81,7 +81,7 @@ package body GWindows.Cursors is
 
    function Load_Cursor (Name : GString) return Cursor_Type
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Name);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Name);
 
       function LoadCursor
         (hInst : Interfaces.C.long := GWindows.Internal.Current_hInstance;
@@ -152,7 +152,7 @@ package body GWindows.Cursors is
 
    procedure Clip_Cursor (Area : GWindows.Types.Rectangle_Type)
    is
-      NArea : GWindows.Types.Rectangle_Type := Area;
+      NArea : constant GWindows.Types.Rectangle_Type := Area;
 
       procedure ClipCursor (Area : GWindows.Types.Rectangle_Type := NArea);
       pragma Import (StdCall, ClipCursor, "ClipCursor");

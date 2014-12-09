@@ -98,7 +98,7 @@ package body GWindows.Menus is
    ---------------
 
    function Load_Menu (Name : in GString) return Menu_Type is
-      C_Name : GString_C := GWindows.GStrings.To_GString_C (Name);
+      C_Name : constant GString_C := GWindows.GStrings.To_GString_C (Name);
 
       function LoadMenu
         (hInst    : Interfaces.C.long := GWindows.Internal.Current_hInstance;
@@ -136,11 +136,11 @@ package body GWindows.Menus is
    -- Append_Menu --
    -----------------
 
-   procedure Append_Menu (Menu     : in out Menu_Type;
-                          Text     : in     GString;
-                          Add_Menu : in     Menu_Type)
+   procedure Append_Menu (Menu     : in Menu_Type;
+                          Text     : in GString;
+                          Add_Menu : in Menu_Type)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Text);
 
       procedure AppendMenu
         (hmenu  : Menu_Type             := Menu;
@@ -157,11 +157,11 @@ package body GWindows.Menus is
    -- Append_Item --
    -----------------
 
-   procedure Append_Item (Menu    : in out Menu_Type;
-                          Text    : in     GString;
-                          Command : in     Positive)
+   procedure Append_Item (Menu    : in Menu_Type;
+                          Text    : in GString;
+                          Command : in Positive)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Text);
 
       procedure AppendMenu
         (hmenu  : Menu_Type               := Menu;
@@ -178,7 +178,7 @@ package body GWindows.Menus is
    -- Append_Separator --
    ----------------------
 
-   procedure Append_Separator (Menu : in out Menu_Type) is
+   procedure Append_Separator (Menu : in Menu_Type) is
       procedure AppendMenu
         (hmenu  : Menu_Type             := Menu;
          uflags : Interfaces.C.unsigned := MF_SEPARATOR;
@@ -194,13 +194,13 @@ package body GWindows.Menus is
    -- Insert_Menu --
    -----------------
 
-   procedure Insert_Menu (Menu      : in out Menu_Type;
-                          Locate_By : in     Location_Type;
-                          Locate_At : in     Positive;
-                          Text      : in     GString;
-                          Add_Menu  : in     Menu_Type)
+   procedure Insert_Menu (Menu      : in Menu_Type;
+                          Locate_By : in Location_Type;
+                          Locate_At : in Positive;
+                          Text      : in GString;
+                          Add_Menu  : in Menu_Type)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Text);
       procedure InsertMenu
         (hMenu   : Menu_Type               := Menu;
          idItem  : Natural;
@@ -223,13 +223,13 @@ package body GWindows.Menus is
    -- Insert_Item --
    -----------------
 
-   procedure Insert_Item (Menu      : in out Menu_Type;
-                          Locate_By : in     Location_Type;
-                          Locate_At : in     Positive;
-                          Text      : in     GString;
-                          Command   : in     Positive)
+   procedure Insert_Item (Menu      : in Menu_Type;
+                          Locate_By : in Location_Type;
+                          Locate_At : in Positive;
+                          Text      : in GString;
+                          Command   : in Positive)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Text);
       procedure InsertMenu
         (hMenu   : Menu_Type               := Menu;
          idItem  : Natural;
@@ -252,9 +252,9 @@ package body GWindows.Menus is
    -- Insert_Separator --
    ----------------------
 
-   procedure Insert_Separator (Menu : in out Menu_Type;
-                               Locate_By : in     Location_Type;
-                               Locate_At : in     Positive)
+   procedure Insert_Separator (Menu      : in Menu_Type;
+                               Locate_By : in Location_Type;
+                               Locate_At : in Positive)
    is
       procedure InsertMenu
         (hMenu   : Menu_Type        := Menu;
@@ -295,9 +295,9 @@ package body GWindows.Menus is
    -- Delete_Item --
    -----------------
 
-   procedure Delete_Item (Menu      : in out Menu_Type;
-                          Locate_By : in     Location_Type;
-                          Locate_At : in     Positive)
+   procedure Delete_Item (Menu      : in Menu_Type;
+                          Locate_By : in Location_Type;
+                          Locate_At : in Positive)
    is
       procedure DeleteMenu
         (hMenu   : Menu_Type        := Menu;
@@ -339,10 +339,10 @@ package body GWindows.Menus is
    -- State --
    -----------
 
-   procedure State (Menu      : in out Menu_Type;
-                    Locate_By : in     Location_Type;
-                    Locate_At : in     Positive;
-                    State     : in     State_Type)
+   procedure State (Menu      : in Menu_Type;
+                    Locate_By : in Location_Type;
+                    Locate_At : in Positive;
+                    State     : in State_Type)
    is
       procedure EnableMenuItem
         (hMenu   : Menu_Type        := Menu;
@@ -405,10 +405,10 @@ package body GWindows.Menus is
    -- Check --
    -----------
 
-   procedure Check (Menu      : in out Menu_Type;
-                    Locate_By : in     Location_Type;
-                    Locate_At : in     Positive;
-                    State     : in     Boolean)
+   procedure Check (Menu      : in Menu_Type;
+                    Locate_By : in Location_Type;
+                    Locate_At : in Positive;
+                    State     : in Boolean)
    is
       procedure CheckMenuItem
         (hMenu   : Menu_Type        := Menu;
@@ -467,12 +467,11 @@ package body GWindows.Menus is
    -- Hilite --
    ------------
 
-   procedure Hilite (Menu      : in out Menu_Type;
-                     Window    : in
-                       GWindows.Base.Base_Window_Type'Class;
-                     Locate_By : in     Location_Type;
-                     Locate_At : in     Positive;
-                     State     : in     Boolean)
+   procedure Hilite (Menu      : in Menu_Type;
+                     Window    : in GWindows.Base.Base_Window_Type'Class;
+                     Locate_By : in Location_Type;
+                     Locate_At : in Positive;
+                     State     : in Boolean)
    is
       procedure HiliteMenuItem
         (hwnd    : Interfaces.C.long := GWindows.Base.Handle (Window);
@@ -537,7 +536,7 @@ package body GWindows.Menus is
                                 return Integer;
       pragma Import (StdCall,  GetMenuItemCount, "GetMenuItemCount");
 
-      Pre_Count : Integer := GetMenuItemCount;
+      Pre_Count : constant Integer := GetMenuItemCount;
    begin
       if Pre_Count > 0 then
          return Pre_Count;
@@ -559,7 +558,7 @@ package body GWindows.Menus is
                              return Integer;
       pragma Import (StdCall,  GetMenuItemID, "GetMenuItemID");
 
-      Pre_ID : Integer := GetMenuItemID;
+      Pre_ID : constant Integer := GetMenuItemID;
    begin
       if Pre_ID > 0 then
          return Pre_ID;
@@ -577,13 +576,13 @@ package body GWindows.Menus is
                   Locate_At : in Positive)
                  return GString
    is
-      Length : Natural := Text_Length (Menu, Locate_By, Locate_At);
+      Length : constant Natural := Text_Length (Menu, Locate_By, Locate_At);
    begin
       if Length = 0 then
          return "";
       else
          declare
-            C_Text : GString_C
+            C_Text : constant GString_C
               (0 .. Interfaces.C.size_t (Length + 1)) := (others => ' ');
 
             procedure GetMenuString

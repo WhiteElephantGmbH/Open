@@ -121,7 +121,7 @@ package body GWindows.Application is
       Max_Size : in Integer := 256)
       return GString
    is
-      C_Text : GString_C (0 .. Interfaces.C.size_t (Max_Size))
+      C_Text : constant GString_C (0 .. Interfaces.C.size_t (Max_Size))
         := (others => GString_C_Null);
 
       function LoadString
@@ -133,7 +133,7 @@ package body GWindows.Application is
       pragma Import (StdCall, LoadString,
                        "LoadString" & Character_Mode_Identifier);
 
-      Result : Integer := LoadString;
+      Result : constant Integer := LoadString;
    begin
       if Result = 0 then
          return "";
@@ -173,7 +173,7 @@ package body GWindows.Application is
                        "PeekMessage" & Character_Mode_Identifier);
 
       tMSG        : aliased MSG;
-      pMSG        : Pointer_To_MSG := tMSG'Unchecked_Access;
+      pMSG        : constant Pointer_To_MSG := tMSG'Unchecked_Access;
       Null_Window : GWindows.Base.Base_Window_Type;
    begin
       if PeekMessage (pMSG, 0, 0, 0) /= 0 then
@@ -199,7 +199,7 @@ package body GWindows.Application is
                        "GetMessage" & Character_Mode_Identifier);
 
       tMSG : aliased MSG;
-      pMSG : Pointer_To_MSG := tMSG'Unchecked_Access;
+      pMSG : constant Pointer_To_MSG := tMSG'Unchecked_Access;
    begin
       while GetMessage (pMSG, 0, 0, 0) /= 0 loop
          Process_Message (pMSG, Window);
@@ -273,7 +273,7 @@ package body GWindows.Application is
         return GWindows.Types.Handle;
       pragma Import (StdCall, WindowFromPoint, "WindowFromPoint");
 
-      Win_Ptr : GWindows.Base.Pointer_To_Base_Window_Class :=
+      Win_Ptr : constant GWindows.Base.Pointer_To_Base_Window_Class :=
         GWindows.Base.Window_From_Handle (WindowFromPoint);
    begin
       return Win_Ptr;
@@ -289,7 +289,7 @@ package body GWindows.Application is
       function GetActiveWindow return Interfaces.C.long;
       pragma Import (StdCall, GetActiveWindow, "GetActiveWindow");
 
-      Win_Ptr : GWindows.Base.Pointer_To_Base_Window_Class :=
+      Win_Ptr : constant GWindows.Base.Pointer_To_Base_Window_Class :=
         GWindows.Base.Window_From_Handle (GetActiveWindow);
    begin
       return Win_Ptr;
@@ -306,7 +306,7 @@ package body GWindows.Application is
    is
       use GWindows.Windows;
 
-      Win_Ptr : GWindows.Base.Pointer_To_Base_Window_Class :=
+      Win_Ptr : constant GWindows.Base.Pointer_To_Base_Window_Class :=
         GWindows.Base.Window_From_Handle (GWindows.Base.Handle (Parent));
 
       Dialog : GWindows.Windows.Window_Type;
@@ -442,10 +442,10 @@ package body GWindows.Application is
    is
       use GWindows.Base;
 
-      Win_Ptr    : Pointer_To_Base_Window_Class :=
+      Win_Ptr    : constant Pointer_To_Base_Window_Class :=
         Window_From_Handle (Handle (Window));
 
-      Parent_Ptr : Pointer_To_Base_Window_Class :=
+      Parent_Ptr : constant Pointer_To_Base_Window_Class :=
         Window_From_Handle (Handle (Parent));
    begin
       Show_Dialog (Win_Ptr.all, Parent_Ptr.all);
@@ -461,7 +461,7 @@ package body GWindows.Application is
    is
       use GWindows.Base;
 
-      Win_Ptr    : Pointer_To_Base_Window_Class :=
+      Win_Ptr    : constant Pointer_To_Base_Window_Class :=
         Window_From_Handle (Handle (Window));
    begin
       Show_Dialog (Win_Ptr.all);

@@ -51,7 +51,7 @@ package body GWindows.Key_States is
    is
       use type Interfaces.C.unsigned;
 
-      State : Interfaces.C.unsigned :=
+      State : constant Interfaces.C.unsigned :=
         Interfaces.C.unsigned (GetKeyState (Virtual_Key_Code));
    begin
       return (State and 128) = 128;
@@ -67,7 +67,7 @@ package body GWindows.Key_States is
    is
       use type Interfaces.C.unsigned;
 
-      State : Interfaces.C.unsigned :=
+      State : constant Interfaces.C.unsigned :=
         Interfaces.C.unsigned (GetKeyState (Virtual_Key_Code));
    begin
       return (State and 1) = 1;

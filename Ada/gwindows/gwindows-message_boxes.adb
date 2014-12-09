@@ -84,8 +84,8 @@ package body GWindows.Message_Boxes is
       pragma Import (StdCall, MessageBox,
                        "MessageBox" & Character_Mode_Identifier);
 
-      BoxTitle   : GString_C := GWindows.GStrings.To_GString_C (Title);
-      BoxMessage : GString_C := GWindows.GStrings.To_GString_C (Text);
+      BoxTitle   : constant GString_C := GWindows.GStrings.To_GString_C (Title);
+      BoxMessage : constant GString_C := GWindows.GStrings.To_GString_C (Text);
 
       MIcon      : Interfaces.C.unsigned := 0;
       MStyle     : Interfaces.C.unsigned := 0;

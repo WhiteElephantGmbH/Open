@@ -215,7 +215,7 @@ package body GWindows.List_Boxes is
    procedure Add (List  : in out List_Box_Type;
                   Value : in     GString)
    is
-      C_Value : GString_C := GWindows.GStrings.To_GString_C (Value);
+      C_Value : constant GString_C := GWindows.GStrings.To_GString_C (Value);
       procedure SendMessage
         (hwnd   : Interfaces.C.long := Handle (List);
          uMsg   : Interfaces.C.int  := LB_ADDSTRING;
@@ -231,7 +231,7 @@ package body GWindows.List_Boxes is
                   After : in     Positive;
                   Value : in     GString)
    is
-      C_Value : GString_C := GWindows.GStrings.To_GString_C (Value);
+      C_Value : constant GString_C := GWindows.GStrings.To_GString_C (Value);
       procedure SendMessage
         (hwnd   : Interfaces.C.long := Handle (List);
          uMsg   : Interfaces.C.int  := LB_INSERTSTRING;
@@ -287,7 +287,7 @@ package body GWindows.List_Boxes is
                   Start_Item : in Natural       := 0)
                  return Natural
    is
-      C_Value : GString_C := GWindows.GStrings.To_GString_C (Value);
+      C_Value : constant GString_C := GWindows.GStrings.To_GString_C (Value);
       function SendMessage
         (hwnd   : Interfaces.C.long := Handle (List);
          uMsg   : Interfaces.C.int  := LB_FINDSTRING;
@@ -309,7 +309,7 @@ package body GWindows.List_Boxes is
                         Start_Item : in Natural       := 0)
                        return Natural
    is
-      C_Value : GString_C := GWindows.GStrings.To_GString_C (Value);
+      C_Value : constant GString_C := GWindows.GStrings.To_GString_C (Value);
       function SendMessage
         (hwnd   : Interfaces.C.long := Handle (List);
          uMsg   : Interfaces.C.int  := LB_FINDSTRINGEXACT;
@@ -400,7 +400,7 @@ package body GWindows.List_Boxes is
    is
       use type Interfaces.C.size_t;
 
-      Buffer : GString_C
+      Buffer : constant GString_C
         (1 .. Interfaces.C.size_t (Value_Length (List, Item)) + 1) :=
         (others => GString_C_Null);
 
@@ -582,7 +582,7 @@ package body GWindows.List_Boxes is
    procedure Text (Window : in out List_Box_Type;
                    Text   : in     GString)
    is
-      C_Value : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Value : constant GString_C := GWindows.GStrings.To_GString_C (Text);
       procedure SendMessage
         (hwnd   : Interfaces.C.long := Handle (Window);
          uMsg   : Interfaces.C.int  := LB_SELECTSTRING;
@@ -597,7 +597,7 @@ package body GWindows.List_Boxes is
    function Text  (Window : in List_Box_Type)
                   return GString
    is
-      Selection : Natural := Current (Window);
+      Selection : constant Natural := Current (Window);
    begin
       if Selection > 0 then
          return Value (Window, Selection);

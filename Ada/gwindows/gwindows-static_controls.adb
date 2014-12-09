@@ -143,7 +143,7 @@ package body GWindows.Static_Controls is
       ID         : in     Integer                              := 0;
       Show       : in     Boolean                              := True)
    is
-      Temp_Label : Label_Access := new Label_Type;
+      Temp_Label : constant Label_Access := new Label_Type;
    begin
       Create (Temp_Label.all,
               Parent, Text, Left, Top, Width, Height, Alignment, ID, Show,
@@ -214,7 +214,7 @@ package body GWindows.Static_Controls is
       ID         : in     Integer                              := 0;
       Show       : in     Boolean                              := True)
    is
-      Temp_Icon : Icon_Access := new Icon_Type;
+      Temp_Icon : constant Icon_Access := new Icon_Type;
    begin
       Create (Temp_Icon.all,
               Parent, Text, Left, Top, Width, Height, Alignment, ID, Show,
@@ -285,7 +285,7 @@ package body GWindows.Static_Controls is
       ID         : in     Integer                              := 0;
       Show       : in     Boolean                              := True)
    is
-      Temp_Bitmap : Bitmap_Access := new Bitmap_Type;
+      Temp_Bitmap : constant Bitmap_Access := new Bitmap_Type;
    begin
       Create (Temp_Bitmap.all,
               Parent, Text, Left, Top, Width, Height, Alignment, ID, Show,
@@ -374,7 +374,7 @@ package body GWindows.Static_Controls is
       ID         : in     Integer                              := 0;
       Show       : in     Boolean                              := True)
    is
-      Temp_Meta_File : Meta_File_Access := new Meta_File_Type;
+      Temp_Meta_File : constant Meta_File_Access := new Meta_File_Type;
    begin
       Create (Temp_Meta_File.all,
               Parent, Text, Left, Top, Width, Height, Alignment, ID, Show,

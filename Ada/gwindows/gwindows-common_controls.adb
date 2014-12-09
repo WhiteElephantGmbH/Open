@@ -863,7 +863,7 @@ package body Gwindows.Common_Controls is
    procedure Open (
          Control : in out Animation_Control_Type;
          Name    : in     Gstring                 ) is
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Name);
+      C_Text : constant Gstring_C := Gwindows.Gstrings.To_Gstring_C (Name);
 
       procedure Sendmessagea (
             Hwnd   : Interfaces.C.Long := Handle (Control);
@@ -1178,7 +1178,7 @@ package body Gwindows.Common_Controls is
          Control : in out Date_Time_Picker_Type;
          Format  : in     Gstring                ) is
 
-      C_Text : Interfaces.C.Char_Array := Interfaces.C.To_C (Gwindows.Gstrings.To_String
+      C_Text : constant Interfaces.C.Char_Array := Interfaces.C.To_C (Gwindows.Gstrings.To_String
         (Format));
 
       procedure Sendmessage (
@@ -1206,7 +1206,7 @@ package body Gwindows.Common_Controls is
             End_Range   : Systemtime;
          end record;
 
-      The_Range : Range_Type := (Calendar_To_Systemtime (Range_Start), Calendar_To_Systemtime
+      The_Range : constant Range_Type := (Calendar_To_Systemtime (Range_Start), Calendar_To_Systemtime
         (Range_End));
 
       procedure Sendmessage (
@@ -1235,7 +1235,7 @@ package body Gwindows.Common_Controls is
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
 
-      C_Time : Systemtime := Calendar_To_Systemtime (Date_Time);
+      C_Time : constant Systemtime := Calendar_To_Systemtime (Date_Time);
    begin
       Sendmessage (Lparam => C_Time);
    end Date_Time;
@@ -1342,7 +1342,7 @@ package body Gwindows.Common_Controls is
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
 
-      C_Time : Systemtime := (0, 0, 0, 0, 0, 0, 0, 0);
+      C_Time : constant Systemtime := (0, 0, 0, 0, 0, 0, 0, 0);
    begin
       return (Sendmessage (Lparam => C_Time) = Gdt_None);
    end None_Date_Time;
@@ -2285,7 +2285,7 @@ package body Gwindows.Common_Controls is
 
       type Where_Value is array (Tree_View_List_Location_Type) of Tree_Item_Node;
 
-      Values : Where_Value := (First => Tvi_First, Last => Tvi_Last, Sort
+      Values : constant Where_Value := (First => Tvi_First, Last => Tvi_Last, Sort
         => Tvi_Sort, As_A_Root => Tvi_Root);
    begin
       Insert_Item (Control, Text, Parent_Node, New_Node, Values (Where));
@@ -2920,7 +2920,7 @@ package body Gwindows.Common_Controls is
       case Message.Code is
          when Udn_Deltapos =>
             declare
-               Nm : Pnmupdown := To_Pnmupdown (Message);
+               Nm : constant Pnmupdown := To_Pnmupdown (Message);
             begin
                On_Position_Changing (Up_Down_Control_Type'Class (Window),
                   Nm.Pos,
@@ -3428,7 +3428,7 @@ package body Gwindows.Common_Controls is
          Control : in out Tab_Window_Control_Type ) is
       use Gwindows.Base;
 
-      Current : Pointer_To_Base_Window_Class := Tab_Window (Control, Selected_Tab
+      Current : constant Pointer_To_Base_Window_Class := Tab_Window (Control, Selected_Tab
         (Control));
    begin
       if Current /= null then
@@ -3444,9 +3444,9 @@ package body Gwindows.Common_Controls is
          Control : in out Tab_Window_Control_Type ) is
       use Gwindows.Base;
 
-      Current : Pointer_To_Base_Window_Class  := Tab_Window (Control, Selected_Tab
+      Current : constant Pointer_To_Base_Window_Class  := Tab_Window (Control, Selected_Tab
         (Control));
-      Area    : Gwindows.Types.Rectangle_Type := Display_Area (Control);
+      Area    : constant Gwindows.Types.Rectangle_Type := Display_Area (Control);
    begin
       if Current /= null then
          Left (Current.All, Area.Left);
@@ -3470,7 +3470,7 @@ package body Gwindows.Common_Controls is
          Height     : in     Integer;
          Show       : in     Boolean                              := True;
          Is_Dynamic : in     Boolean                              := False ) is
-      Styles : Interfaces.C.Unsigned := 0;
+      Styles : constant Interfaces.C.Unsigned := 0;
    begin
       Create_Control (Control, Parent,
          "ToolbarWindow32",

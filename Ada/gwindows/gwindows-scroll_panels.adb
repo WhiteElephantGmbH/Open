@@ -48,7 +48,7 @@ package body GWindows.Scroll_Panels is
    procedure On_Destroy (Window : in out Inside_Panel_Type) is
       use GWindows.Base;
 
-      Parent_Win : Pointer_To_Base_Window_Class := Parent (Window);
+      Parent_Win : constant Pointer_To_Base_Window_Class := Parent (Window);
    begin
       if Parent_Win /= null then
          Close (Parent_Win.all);

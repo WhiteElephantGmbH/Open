@@ -74,7 +74,7 @@ package body GWindows.Utilities is
                        High : in Interfaces.C.short)
                       return Integer
    is
-      Result : Integer := To_Integer (SDouble_Word'(Low, High));
+      Result : constant Integer := To_Integer (SDouble_Word'(Low, High));
    begin
       return Result;
    end Make_Long;
@@ -85,7 +85,7 @@ package body GWindows.Utilities is
 
    function Low_Word (DWORD : in Interfaces.C.int) return Integer
    is
-      Result : SDouble_Word := To_SDWORD (DWORD);
+      Result : constant SDouble_Word := To_SDWORD (DWORD);
    begin
       return Integer (Result.Low);
    end Low_Word;
@@ -96,7 +96,7 @@ package body GWindows.Utilities is
 
    function High_Word (DWORD : in Interfaces.C.int) return Integer
    is
-      Result : SDouble_Word := To_SDWORD (DWORD);
+      Result : constant SDouble_Word := To_SDWORD (DWORD);
    begin
       return Integer (Result.High);
    end High_Word;
@@ -108,7 +108,7 @@ package body GWindows.Utilities is
    function Unsigned_Low_Word (DWORD : in Interfaces.C.int)
                      return Interfaces.C.unsigned
    is
-      Result : Double_Word := To_DWORD (DWORD);
+      Result : constant Double_Word := To_DWORD (DWORD);
    begin
       return Interfaces.C.unsigned (Result.Low);
    end Unsigned_Low_Word;
@@ -120,7 +120,7 @@ package body GWindows.Utilities is
    function Unsigned_High_Word (DWORD : in Interfaces.C.int)
                       return Interfaces.C.unsigned
    is
-      Result : Double_Word := To_DWORD (DWORD);
+      Result : constant Double_Word := To_DWORD (DWORD);
    begin
       return Interfaces.C.unsigned (Result.High);
    end Unsigned_High_Word;

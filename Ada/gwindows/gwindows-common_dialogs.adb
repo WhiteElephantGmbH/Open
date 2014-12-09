@@ -320,7 +320,7 @@ package body GWindows.Common_Dialogs is
 
       if File_Name /= "" then
          declare
-            SFile_Name  : char_array :=
+            SFile_Name  : constant char_array :=
               To_C (To_String (To_GString_From_Unbounded (File_Name)));
          begin
             C_File_Name (SFile_Name'Range) := SFile_Name;
@@ -403,7 +403,7 @@ package body GWindows.Common_Dialogs is
 
       if File_Name /= "" then
          declare
-            SFile_Name  : char_array :=
+            SFile_Name  : constant char_array :=
               To_C (To_String (To_GString_From_Unbounded (File_Name)));
          begin
             C_File_Name (SFile_Name'Range) := SFile_Name;

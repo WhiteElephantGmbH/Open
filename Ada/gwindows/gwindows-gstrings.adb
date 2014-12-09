@@ -76,7 +76,7 @@ package body GWindows.GStrings is
    begin
       if Value'Length = 0 then
          declare
-            Empty_GString : GString_C (0 .. 0) := (others => GString_C_Null);
+            Empty_GString : constant GString_C (0 .. 0) := (others => GString_C_Null);
          begin
             return Empty_GString;
          end;
@@ -231,7 +231,7 @@ package body GWindows.GStrings is
 
    function Resource_ID (ID : Integer) return GString
    is
-      X : GString := Image (ID);
+      X : constant GString := Image (ID);
    begin
       if X'Length > 1 then
          return "#" & X (X'First + 1 .. X'Last);

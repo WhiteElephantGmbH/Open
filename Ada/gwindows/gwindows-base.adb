@@ -299,9 +299,9 @@ package body GWindows.Base is
          Set_GWindow_Object (Window.HWND, Window'Unchecked_Access);
       end Link;
 
-      C_Text  : GString_C := GWindows.GStrings.To_GString_C (Text);
-      C_Class : GString_C := GWindows.GStrings.To_GString_C (Win_Class);
-      PHWND   : Interfaces.C.long       := Parent.HWND;
+      C_Text  : constant GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Class : constant GString_C := GWindows.GStrings.To_GString_C (Win_Class);
+      PHWND   : constant Interfaces.C.long       := Parent.HWND;
       Style   : Interfaces.C.unsigned;
       ExStyle : Interfaces.C.unsigned := 0;
 
@@ -472,7 +472,7 @@ package body GWindows.Base is
       (Window  : in out Base_Window_Type;
        Name    : in     GString)
    is
-      C_Name : GString_C := GWindows.GStrings.To_GString_C (Name);
+      C_Name : constant GString_C := GWindows.GStrings.To_GString_C (Name);
 
       function LoadAccelerators
         (hInst    : Interfaces.C.long := GWindows.Internal.Current_hInstance;
@@ -495,7 +495,7 @@ package body GWindows.Base is
       function GetFocus return GWindows.Types.Handle;
       pragma Import (StdCall, GetFocus, "GetFocus");
 
-      Focused_Win : GWindows.Types.Handle := GetFocus;
+      Focused_Win : constant GWindows.Types.Handle := GetFocus;
    begin
       if Focused_Win /= 0 then
          return Window_From_Handle (GetFocus);
@@ -685,7 +685,7 @@ package body GWindows.Base is
    procedure Order (Window   : in out Base_Window_Type;
                     Position : in     Order_Position_Type)
    is
-      Values : array (Order_Position_Type) of Interfaces.C.long :=
+      Values : constant array (Order_Position_Type) of Interfaces.C.long :=
         (Top               => HWND_TOP,
          Bottom            => HWND_BOTTOM,
          Always_On_Top     => HWND_TOPMOST,
@@ -832,9 +832,9 @@ package body GWindows.Base is
                                Width  : in     Natural;
                                Height : in     Natural)
    is
-      DX : Natural :=
+      DX : constant Natural :=
         GWindows.Base.Width (Window) - Client_Area_Width (Window);
-      DY : Natural :=
+      DY : constant Natural :=
         GWindows.Base.Height (Window) - Client_Area_Height (Window);
    begin
       Size (Window, Width + DX, Height + DY);
@@ -908,7 +908,7 @@ package body GWindows.Base is
    procedure Text (Window : in out Base_Window_Type;
                    Text   : in     GString)
    is
-      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Text);
 
       procedure SetWindowText
         (hwnd : GWindows.Types.Handle := Window.HWND;
@@ -926,7 +926,7 @@ package body GWindows.Base is
    function Text (Window : in Base_Window_Type)
                  return GString
    is
-      Buf : GString_C (1 .. Interfaces.C.size_t
+      Buf : constant GString_C (1 .. Interfaces.C.size_t
                        (Text_Length (Window) + 1)) :=
         (others => GString_C_Null);
 
@@ -1405,7 +1405,7 @@ package body GWindows.Base is
                          return GWindows.Types.Handle;
       pragma Import (StdCall, GetParent, "GetParent");
 
-      PHWND : GWindows.Types.Handle := GetParent (Window.HWND);
+      PHWND : constant GWindows.Types.Handle := GetParent (Window.HWND);
    begin
       return Window_From_Handle (PHWND);
    end Parent;
@@ -1620,7 +1620,7 @@ package body GWindows.Base is
         return GWindows.Types.Handle;
       pragma Import (StdCall, GetNextDlgTabItem, "GetNextDlgTabItem");
 
-      Result : Pointer_To_Base_Window_Class :=
+      Result : constant Pointer_To_Base_Window_Class :=
         Window_From_Handle (GetNextDlgTabItem);
    begin
       return Result;
@@ -1641,7 +1641,7 @@ package body GWindows.Base is
         return GWindows.Types.Handle;
       pragma Import (StdCall, GetNextDlgTabItem, "GetNextDlgTabItem");
 
-      Result : Pointer_To_Base_Window_Class :=
+      Result : constant Pointer_To_Base_Window_Class :=
         Window_From_Handle (GetNextDlgTabItem);
    begin
       return Result;
@@ -1660,7 +1660,7 @@ package body GWindows.Base is
                        lparam : Enumerate_Function)
                       return Boolean
    is
-      Win_Ptr : Pointer_To_Base_Window_Class :=
+      Win_Ptr : constant Pointer_To_Base_Window_Class :=
         Window_From_Handle (hwnd);
    begin
       if Win_Ptr /= null then
@@ -2200,7 +2200,7 @@ package body GWindows.Base is
       SB_BOTTOM                  : constant := 7;
       SB_RIGHT                   : constant := 7;
 
-      Win_Ptr : Pointer_To_Base_Window_Class := Window_From_Handle (hwnd);
+      Win_Ptr : constant Pointer_To_Base_Window_Class := Window_From_Handle (hwnd);
    begin
 
       if Win_Ptr = null then
@@ -2229,7 +2229,7 @@ package body GWindows.Base is
       case message is
          when WM_COMMAND =>
             declare
-               Control : Pointer_To_Base_Window_Class :=
+               Control : constant Pointer_To_Base_Window_Class :=
                  Window_From_Handle (GWindows.Types.Handle (lParam));
             begin
                On_Command (Win_Ptr.all,
@@ -2250,10 +2250,10 @@ package body GWindows.Base is
                   new Ada.Unchecked_Conversion (Interfaces.C.int,
                                                 LPDRAWITEMSTRUCT);
 
-               LPD        : LPDRAWITEMSTRUCT :=
+               LPD        : constant LPDRAWITEMSTRUCT :=
                  To_LPDRAWITEMSTRUCT (lParam);
                Canvas     : GWindows.Drawing.Canvas_Type;
-               Control    : Pointer_To_Base_Window_Class :=
+               Control    : constant Pointer_To_Base_Window_Class :=
                  Window_From_Handle (GWindows.Types.Handle (LPD.hwndItem));
             begin
                GWindows.Drawing.Handle (Canvas, LPD.hDC);
@@ -2276,9 +2276,9 @@ package body GWindows.Base is
                   new Ada.Unchecked_Conversion
                     (Interfaces.C.int, Pointer_To_Notification);
 
-               PNMHDR  : Pointer_To_Notification :=
+               PNMHDR  : constant Pointer_To_Notification :=
                  To_Pointer_To_NMHDR (lParam);
-               Control : Pointer_To_Base_Window_Class :=
+               Control : constant Pointer_To_Base_Window_Class :=
                  Window_From_Handle (PNMHDR.Handle);
 
                Return_Value : Interfaces.C.long := 0;
@@ -2294,7 +2294,7 @@ package body GWindows.Base is
          when WM_HSCROLL =>
             declare
                Request : Scroll_Request_Type;
-               Control      : Pointer_To_Base_Window_Class :=
+               Control : constant Pointer_To_Base_Window_Class :=
                  Window_From_Handle (GWindows.Types.Handle (lParam));
             begin
                case GWindows.Utilities.Low_Word (wParam) is
@@ -2328,7 +2328,7 @@ package body GWindows.Base is
          when WM_VSCROLL =>
             declare
                Request : Scroll_Request_Type;
-               Control      : Pointer_To_Base_Window_Class :=
+               Control : constant Pointer_To_Base_Window_Class :=
                  Window_From_Handle (GWindows.Types.Handle (lParam));
             begin
                case GWindows.Utilities.Low_Word (wParam) is
@@ -2361,7 +2361,7 @@ package body GWindows.Base is
 
          when WM_SETFOCUS =>
             declare
-               Father : Pointer_To_Base_Window_Class :=
+               Father : constant Pointer_To_Base_Window_Class :=
                  Controlling_Parent (Win_Ptr.all);
             begin
                if Father /= null then
@@ -2437,7 +2437,7 @@ package body GWindows.Base is
       WM_DESTROY                 : constant := 2;
       WM_SETFOCUS                : constant := 7;
 
-      Win_Ptr : Pointer_To_Base_Window_Class := Window_From_Handle (hwnd);
+      Win_Ptr : constant Pointer_To_Base_Window_Class := Window_From_Handle (hwnd);
    begin
       if Win_Ptr = null then
          return DefWindowProc (hwnd,
@@ -2478,7 +2478,7 @@ package body GWindows.Base is
 
          when WM_SETFOCUS =>
             declare
-               Father : Pointer_To_Base_Window_Class :=
+               Father : constant Pointer_To_Base_Window_Class :=
                  Controlling_Parent (Win_Ptr.all);
             begin
                if Father /= null then

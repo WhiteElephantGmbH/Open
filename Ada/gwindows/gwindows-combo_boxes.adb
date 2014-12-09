@@ -387,7 +387,7 @@ package body GWindows.Combo_Boxes is
    procedure Add (Combo : in out Combo_Box_Type;
                   Value : in     GString)
    is
-      C_Value : GString_C := GWindows.GStrings.To_GString_C (Value);
+      C_Value : constant GString_C := GWindows.GStrings.To_GString_C (Value);
 
       procedure SendMessage
         (hwnd   : Interfaces.C.long := Handle (Combo);
@@ -404,7 +404,7 @@ package body GWindows.Combo_Boxes is
                   After : in     Positive;
                   Value : in     GString)
    is
-      C_Value : GString_C := GWindows.GStrings.To_GString_C (Value);
+      C_Value : constant GString_C := GWindows.GStrings.To_GString_C (Value);
       procedure SendMessage
         (hwnd   : Interfaces.C.long := Handle (Combo);
          uMsg   : Interfaces.C.int  := CB_INSERTSTRING;
@@ -524,7 +524,7 @@ package body GWindows.Combo_Boxes is
                   Start_Item : in Natural        := 0)
                  return Natural
    is
-      C_Value : GString_C := GWindows.GStrings.To_GString_C (Value);
+      C_Value : constant GString_C := GWindows.GStrings.To_GString_C (Value);
 
       function SendMessage
         (hwnd   : Interfaces.C.long := Handle (Combo);
@@ -547,7 +547,7 @@ package body GWindows.Combo_Boxes is
                         Start_Item : in Natural        := 0)
                        return Natural
    is
-      C_Value : GString_C := GWindows.GStrings.To_GString_C (Value);
+      C_Value : constant GString_C := GWindows.GStrings.To_GString_C (Value);
       function SendMessage
         (hwnd   : Interfaces.C.long := Handle (Combo);
          uMsg   : Interfaces.C.int  := CB_FINDSTRINGEXACT;
@@ -692,7 +692,7 @@ package body GWindows.Combo_Boxes is
    procedure Text (Window : in out Drop_Down_List_Box_Type;
                    Text   : in     GString)
    is
-      C_Value : GString_C := GWindows.GStrings.To_GString_C (Text);
+      C_Value : constant GString_C := GWindows.GStrings.To_GString_C (Text);
 
       procedure SendMessage
         (hwnd   : Interfaces.C.long := Handle (Window);
@@ -708,7 +708,7 @@ package body GWindows.Combo_Boxes is
    function Text  (Window : in Drop_Down_List_Box_Type)
                   return GString
    is
-      Selection : Natural := Current (Window);
+      Selection : constant Natural := Current (Window);
    begin
       if Selection > 0 then
          return Value (Window, Selection);

@@ -264,11 +264,11 @@ package body GWindows.Windows is
       Is_Dynamic : in     Boolean     := False;
       CClass     : in     GString     := "")
    is
-      C_Title  : GString_C := GWindows.GStrings.To_GString_C (Title);
+      C_Title  : constant GString_C := GWindows.GStrings.To_GString_C (Title);
       Win_HWND : GWindows.Types.Handle;
       Style    : Interfaces.C.unsigned := WS_OVERLAPPEDWINDOW;
       ExStyle  : Interfaces.C.unsigned := 0;
-      CClass_C : GString_C := GWindows.GStrings.To_GString_C (CClass);
+      CClass_C : constant GString_C := GWindows.GStrings.To_GString_C (CClass);
    begin
       On_Pre_Create (Window_Type'Class (Window), Style, ExStyle);
 
@@ -315,12 +315,12 @@ package body GWindows.Windows is
         False;
       CClass     : in     GString                              := "")
    is
-      C_Title : GString_C := GWindows.GStrings.To_GString_C (Title);
-      PHWND   : GWindows.Types.Handle   := GWindows.Base.Handle (Parent);
+      C_Title : constant GString_C := GWindows.GStrings.To_GString_C (Title);
+      PHWND   : constant GWindows.Types.Handle   := GWindows.Base.Handle (Parent);
       Win_HWND : GWindows.Types.Handle;
       Style    : Interfaces.C.unsigned := WS_OVERLAPPEDWINDOW;
       ExStyle  : Interfaces.C.unsigned := 0;
-      CClass_C : GString_C := GWindows.GStrings.To_GString_C (CClass);
+      CClass_C : constant GString_C := GWindows.GStrings.To_GString_C (CClass);
    begin
       On_Pre_Create (Window_Type'Class (Window), Style, ExStyle);
 
@@ -368,8 +368,8 @@ package body GWindows.Windows is
       Help_Button : in     Boolean                              := False;
       Is_Dynamic  : in     Boolean                              := False)
    is
-      C_Title  : GString_C := GWindows.GStrings.To_GString_C (Title);
-      PHWND    : GWindows.Types.Handle   := GWindows.Base.Handle (Parent);
+      C_Title  : constant GString_C := GWindows.GStrings.To_GString_C (Title);
+      PHWND    : constant GWindows.Types.Handle   := GWindows.Base.Handle (Parent);
       Win_HWND : GWindows.Types.Handle;
       Style    : Interfaces.C.unsigned := WS_DLGFRAME or WS_SYSMENU;
       ExStyle  : Interfaces.C.unsigned := 0;
@@ -435,8 +435,8 @@ package body GWindows.Windows is
         GWindows.Constants.Use_Default;
       Is_Dynamic : in     Boolean                              := False)
    is
-      C_Title  : GString_C := GWindows.GStrings.To_GString_C (Title);
-      PHWND    : GWindows.Types.Handle   := GWindows.Base.Handle (Parent);
+      C_Title  : constant GString_C := GWindows.GStrings.To_GString_C (Title);
+      PHWND    : constant GWindows.Types.Handle   := GWindows.Base.Handle (Parent);
       Win_HWND : GWindows.Types.Handle;
       Style    : Interfaces.C.unsigned := WS_OVERLAPPEDWINDOW;
       ExStyle  : Interfaces.C.unsigned := WS_EX_TOOLWINDOW;
@@ -477,8 +477,8 @@ package body GWindows.Windows is
    is
       use GWindows.Drawing_Objects;
 
-      C_Title     : GString_C := GWindows.GStrings.To_GString_C (Title);
-      PHWND       : GWindows.Types.Handle := GWindows.Base.Handle (Parent);
+      C_Title     : constant GString_C := GWindows.GStrings.To_GString_C (Title);
+      PHWND       : constant GWindows.Types.Handle := GWindows.Base.Handle (Parent);
       Win_HWND    : GWindows.Types.Handle;
       Parent_Font : Font_Type;
       Style       : Interfaces.C.unsigned := WS_CHILDWINDOW or Styles;
@@ -532,7 +532,7 @@ package body GWindows.Windows is
       Height     : in     Integer     := GWindows.Constants.Use_Default;
       Is_Dynamic : in     Boolean     := False)
    is
-      C_Title     : GString_C := GWindows.GStrings.To_GString_C (Title);
+      C_Title     : constant GString_C := GWindows.GStrings.To_GString_C (Title);
       Win_HWND    : GWindows.Types.Handle;
       Client_HWND : GWindows.Types.Handle;
       Style    : Interfaces.C.unsigned :=
@@ -572,7 +572,7 @@ package body GWindows.Windows is
       Height     : in     Integer           := GWindows.Constants.Use_Default;
       Is_Dynamic : in     Boolean           := False)
    is
-      C_Title : GString_C := GWindows.GStrings.To_GString_C (Title);
+      C_Title : constant GString_C := GWindows.GStrings.To_GString_C (Title);
       Win_HWND : GWindows.Types.Handle;
       Style    : Interfaces.C.unsigned :=
         WS_OVERLAPPEDWINDOW or WS_CHILDWINDOW;
@@ -603,7 +603,7 @@ package body GWindows.Windows is
    procedure Large_Icon (Window  : in out Window_Type;
                          Name    : in     GString)
    is
-      C_Name : GString_C := GWindows.GStrings.To_GString_C (Name);
+      C_Name : constant GString_C := GWindows.GStrings.To_GString_C (Name);
 
       procedure SendMessage
         (hwnd   : Interfaces.C.long := Handle (Window);
@@ -623,7 +623,7 @@ package body GWindows.Windows is
    procedure Small_Icon (Window  : in out Window_Type;
                          Name    : in     GString)
    is
-      C_Name : GString_C := GWindows.GStrings.To_GString_C (Name);
+      C_Name : constant GString_C := GWindows.GStrings.To_GString_C (Name);
 
       procedure SendMessage
         (hwnd   : Interfaces.C.long := Handle (Window);
@@ -990,7 +990,7 @@ package body GWindows.Windows is
       pragma Import (StdCall, SendMessage,
                        "SendMessage" & Character_Mode_Identifier);
 
-      Client_Window : GWindows.Base.Base_Window_Access :=
+      Client_Window : constant GWindows.Base.Base_Window_Access :=
         MDI_Client_Window (Window);
 
    begin
@@ -1332,7 +1332,7 @@ package body GWindows.Windows is
    is
       use type GWindows.Base.Pointer_To_Base_Window_Class;
 
-      MDI_Window : GWindows.Base.Pointer_To_Base_Window_Class :=
+      MDI_Window : constant GWindows.Base.Pointer_To_Base_Window_Class :=
         MDI_Active_Window (Window);
    begin
       if MDI_Window /= null then
@@ -1350,7 +1350,7 @@ package body GWindows.Windows is
    is
       use type GWindows.Base.Pointer_To_Base_Window_Class;
 
-      MDI_Window : GWindows.Base.Pointer_To_Base_Window_Class :=
+      MDI_Window : constant GWindows.Base.Pointer_To_Base_Window_Class :=
         MDI_Active_Window (Window);
    begin
       if MDI_Window /= null then
@@ -1400,7 +1400,7 @@ package body GWindows.Windows is
    -- On_Change_Cursor --
    ----------------------
 
-   Default_Cursor : GWindows.Cursors.Cursor_Type :=
+   Default_Cursor : constant GWindows.Cursors.Cursor_Type :=
      GWindows.Cursors.Load_System_Cursor (GWindows.Cursors.IDC_ARROW);
 
    procedure On_Change_Cursor (Window : in out Window_Type)
@@ -1524,7 +1524,7 @@ package body GWindows.Windows is
          MK_CONTROL                 : constant := 8;
          MK_MBUTTON                 : constant := 16;
 
-         State : Interfaces.C.unsigned := Interfaces.C.unsigned (wParam);
+         State : constant Interfaces.C.unsigned := Interfaces.C.unsigned (wParam);
          Keys  : Mouse_Key_States := (others => False);
       begin
          if (State and MK_LBUTTON) = MK_LBUTTON then
@@ -1556,7 +1556,7 @@ package body GWindows.Windows is
             declare
                type Char_Buf is new Interfaces.C.char_array (0 .. 256);
 
-               File_Name : Char_Buf := (others => Interfaces.C.nul);
+               File_Name : constant Char_Buf := (others => Interfaces.C.nul);
 
                function Number_Of_Files
                  (HDROP : in Interfaces.C.int      := wParam;
@@ -1566,7 +1566,7 @@ package body GWindows.Windows is
                return Natural;
                pragma Import (StdCall, Number_Of_Files, "DragQueryFile");
 
-               File_Count : Natural := Number_Of_Files;
+               File_Count : constant Natural := Number_Of_Files;
 
                procedure DragQueryFile
                  (HDROP : in Interfaces.C.int := wParam;
@@ -1654,7 +1654,7 @@ package body GWindows.Windows is
             declare
                HTCLIENT : constant := 1;
 
-               Low : Integer := GWindows.Utilities.Low_Word (lParam);
+               Low : constant Integer := GWindows.Utilities.Low_Word (lParam);
             begin
                if
                  Low = HTCLIENT
@@ -1872,9 +1872,9 @@ package body GWindows.Windows is
             declare
                use Interfaces.C;
 
-               High    : unsigned :=
+               High    : constant unsigned :=
                  GWindows.Utilities.Unsigned_High_Word (wParam);
-               Low     : unsigned :=
+               Low     : constant unsigned :=
                  GWindows.Utilities.Unsigned_Low_Word (wParam);
                Item_Is : Hover_Item_Type := Menu_Item;
 
@@ -2878,7 +2878,7 @@ package body GWindows.Windows is
       Name       : in     GString;
       Is_Dynamic : in     Boolean                := False)
    is
-      C_Text  : GString_C := GWindows.GStrings.To_GString_C (Name);
+      C_Text  : constant GString_C := GWindows.GStrings.To_GString_C (Name);
 
       function CreateDialog
         (hInst : Interfaces.C.long       :=
@@ -3022,7 +3022,7 @@ package body GWindows.Windows is
       Key         :    out GCharacter)
    is
       type State_Array is array (0 .. 255) of Character;
-      Keyboard_State : State_Array := (others => ' ');
+      Keyboard_State : constant State_Array := (others => ' ');
 
       procedure GetKeyboardState
         (lpbKeyState : State_Array := Keyboard_State);
