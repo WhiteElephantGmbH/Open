@@ -703,7 +703,7 @@ package body GNATCOM.VARIANT is
          new Ada.Unchecked_Conversion (Interfaces.C.double,
                                        BRECORD);
 
-      Result : BRECORD := To_BRECORD (From.u.dblVal);
+      Result : constant BRECORD := To_BRECORD (From.u.dblVal);
    begin
       if From.vt /= GNATCOM.Types.VT_RECORD then
          raise INVALID_TYPE_ERROR;

@@ -49,7 +49,7 @@ package body GNATCOM.ITypeLib_Interface is
    procedure Open (This        : in out ITypeLib_Type;
                    Source_Name : in     String)
    is
-      Name  : GNATCOM.Types.BSTR := GNATCOM.BSTR.To_BSTR (Source_Name);
+      Name  : constant GNATCOM.Types.BSTR := GNATCOM.BSTR.To_BSTR (Source_Name);
       pTLib : aliased GNATCOM.Types.Pointer_To_ITypeLib;
    begin
       Error_Check

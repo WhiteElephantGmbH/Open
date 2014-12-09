@@ -401,7 +401,7 @@ package body GNATCOM.Dispinterface is
       Result         : aliased GNATCOM.Types.VARIANT :=
         GNATCOM.Types.VARIANT_MISSING;
       Put_DISPID     : aliased Interfaces.C.long := DISPID_PROPERTYPUT;
-      PDispatch      : GNATCOM.Types.Pointer_To_IDispatch := Pointer (This);
+      PDispatch      : constant GNATCOM.Types.Pointer_To_IDispatch := Pointer (This);
    begin
       if Parameters'length = 0 then
          Pdispparams := No_Arguments'unchecked_access;
@@ -451,7 +451,7 @@ package body GNATCOM.Dispinterface is
                   new Ada.Unchecked_Conversion (System.Address,
                                                 DefferedFillIn_Type);
 
-               DefferedFillin : DefferedFillIn_Type :=
+               DefferedFillin : constant DefferedFillIn_Type :=
                  To_Procedure (Exception_Info.pfnDeferredFillIn'address);
             begin
                DefferedFillin (Exception_Info'unchecked_access);
@@ -688,7 +688,7 @@ package body GNATCOM.Dispinterface is
 
       if GNATCOM.Errors.FAILED (Result) then
          declare
-            Message : String := GNATCOM.Errors.To_String (Result);
+            Message : constant String := GNATCOM.Errors.To_String (Result);
          begin
             case Result is
                when DISP_E_UNKNOWNNAME =>

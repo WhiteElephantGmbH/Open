@@ -39,17 +39,17 @@ with Interfaces.C.Pointers;
 package body GNATCOM.Types is
 
    package wchar_array_pointer is new Interfaces.C.Pointers
-     (index              => Interfaces.C.size_t,
-      element            => Interfaces.C.wchar_t,
-      element_array      => Interfaces.C.wchar_array,
-      default_terminator => Interfaces.C.wide_nul);
+     (Index              => Interfaces.C.size_t,
+      Element            => Interfaces.C.wchar_t,
+      Element_Array      => Interfaces.C.wchar_array,
+      Default_Terminator => Interfaces.C.wide_nul);
 
    -- To_wchar_array --
 
    function To_C (From : access Interfaces.C.wchar_t)
      return Interfaces.C.wchar_array
    is
-      WC_Array : Interfaces.C.wchar_array :=
+      WC_Array : constant Interfaces.C.wchar_array :=
         wchar_array_pointer.Value (wchar_array_pointer.Pointer (From));
    begin
       return WC_Array;

@@ -109,12 +109,12 @@ package body GNATCOM.Errors is
      return String
    is
       MAX_ERROR : constant := 1024;
-      Message   : Interfaces.C.char_array (0 .. MAX_ERROR) :=
+      Message   : constant Interfaces.C.char_array (0 .. MAX_ERROR) :=
         (others => Interfaces.C.nul);
    begin
          FormatMessage (hr       => Result,
-                        lpbuffer => Message,
-                        nsize    => MAX_ERROR);
+                        lpBuffer => Message,
+                        nSize    => MAX_ERROR);
          return Interfaces.C.To_Ada (Message);
    end To_String;
 
@@ -126,54 +126,54 @@ package body GNATCOM.Errors is
 
       if FAILED (Result) then
          declare
-            Message : String := To_String (Result);
+            Message : constant String := To_String (Result);
          begin
             case Result is
                when E_NOTIMPL =>
                   Ada.Exceptions.Raise_Exception
-                    (NOT_IMPLEMENTED_ERROR'Identity,
+                    (NOT_IMPLEMENTED_ERROR'identity,
                      Message);
                when E_OUTOFMEMORY =>
                   Ada.Exceptions.Raise_Exception
-                    (OUT_OF_MEMORY_ERROR'Identity,
+                    (OUT_OF_MEMORY_ERROR'identity,
                      Message);
                when E_INVALIDARG =>
                   Ada.Exceptions.Raise_Exception
-                    (INVALID_ARGUMENT_ERROR'Identity,
+                    (INVALID_ARGUMENT_ERROR'identity,
                      Message);
                when E_NOINTERFACE =>
                   Ada.Exceptions.Raise_Exception
-                    (NO_INTERFACE_ERROR'Identity,
+                    (NO_INTERFACE_ERROR'identity,
                      Message);
                when E_POINTER =>
                   Ada.Exceptions.Raise_Exception
-                    (INVALID_POINTER_ERROR'Identity,
+                    (INVALID_POINTER_ERROR'identity,
                      Message);
                when E_ABORT =>
                   Ada.Exceptions.Raise_Exception
-                    (ABORT_ERROR'Identity,
+                    (ABORT_ERROR'identity,
                      Message);
                when E_FAIL =>
                   Ada.Exceptions.Raise_Exception
-                    (COM_ERROR'Identity,
+                    (COM_ERROR'identity,
                      Message);
                when E_ACCESSDENIED =>
                   Ada.Exceptions.Raise_Exception
-                    (ACCESS_DENIED_ERROR'Identity,
+                    (ACCESS_DENIED_ERROR'identity,
                      Message);
                when E_UNEXPECTED =>
                   Ada.Exceptions.Raise_Exception
-                    (UNEXPECTED_ERROR'Identity,
+                    (UNEXPECTED_ERROR'identity,
                      Message);
                when CO_E_OBJNOTCONNECTED =>
                   Ada.Exceptions.Raise_Exception
-                    (OBJECT_NOT_CONNECTED_ERROR'Identity,
+                    (OBJECT_NOT_CONNECTED_ERROR'identity,
                      Message);
                when others =>
                   Ada.Exceptions.Raise_Exception
-                    (COM_ERROR'Identity,
+                    (COM_ERROR'identity,
                      "HRESULT (" &
-                     Strip (GNATCOM.Types.HRESULT'Image (Result)) & ") : " &
+                     Strip (GNATCOM.Types.HRESULT'image (Result)) & ") : " &
                      Message);
             end case;
          end;
@@ -208,7 +208,7 @@ package body GNATCOM.Errors is
    is
       use System.Storage_Elements;
    begin
-      return Strip (To_Integer (Address)'Img);
+      return Strip (To_Integer (Address)'img);
    end To_String;
 
    -- Get_Last_HRESULT --
@@ -230,7 +230,7 @@ package body GNATCOM.Errors is
    function Strip (Image_String : String) return String
    is
    begin
-      return Image_String (Image_String'First + 1 .. Image_String'Last);
+      return Image_String (Image_String'first + 1 .. Image_String'last);
    end Strip;
 
 begin

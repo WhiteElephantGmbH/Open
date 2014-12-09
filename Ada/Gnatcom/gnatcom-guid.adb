@@ -71,7 +71,7 @@ package body GNATCOM.GUID is
 
       New_GUID    : aliased GNATCOM.Types.GUID;
    begin
-      if FAILED (CoCreateGuid (New_GUID'Unchecked_Access)) then
+      if FAILED (CoCreateGuid (New_GUID'unchecked_access)) then
          raise GUID_Error;
       end if;
 
@@ -91,8 +91,8 @@ package body GNATCOM.GUID is
         C.To_C (Ada.Characters.Handling.To_Wide_String (From));
       ID        : aliased GNATCOM.Types.GUID;
    begin
-      if FAILED (CLSIDFromString (To_LPWSTR (ID_String'Address),
-                                  ID'Unchecked_Access))
+      if FAILED (CLSIDFromString (To_LPWSTR (ID_String'address),
+                                  ID'unchecked_access))
       then
          raise GUID_Error;
       end if;
@@ -110,13 +110,13 @@ package body GNATCOM.GUID is
       Ref_GUID    : aliased GNATCOM.Types.GUID := From;
       GUID_String : aliased GNATCOM.Types.LPWSTR;
    begin
-      if SUCCEEDED (StringFromCLSID (Ref_GUID'Unchecked_Access,
-                                     GUID_String'Unchecked_Access))
+      if SUCCEEDED (StringFromCLSID (Ref_GUID'unchecked_access,
+                                     GUID_String'unchecked_access))
       then
          declare
-            Ada_GUID_String : String := GNATCOM.Types.To_Ada (GUID_String);
+            Ada_GUID_String : constant String := GNATCOM.Types.To_Ada (GUID_String);
          begin
-            CoTaskMemFree (GUID_String.all'Address);
+            CoTaskMemFree (GUID_String.all'address);
             return Ada_GUID_String;
          end;
       else

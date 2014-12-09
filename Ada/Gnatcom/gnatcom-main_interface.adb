@@ -221,7 +221,7 @@ package body GNATCOM.Main_Interface is
       From        : in     String;
       Server_Type : in     GNATCOM.Types.CLSCTX := GNATCOM.Types.CLSCTX_ALL)
    is
-      Prog_ID  : GNATCOM.Types.BSTR := GNATCOM.BSTR.To_BSTR (From);
+      Prog_ID  : constant GNATCOM.Types.BSTR := GNATCOM.BSTR.To_BSTR (From);
       Class_ID : aliased GNATCOM.Types.GUID;
    begin
       Error_Check (CLSIDFromProgID (Prog_ID, Class_ID'unchecked_access));
@@ -284,7 +284,7 @@ package body GNATCOM.Main_Interface is
      (This : in out Interface_Type;
       From : in     String)
    is
-      Name : GNATCOM.Types.BSTR := GNATCOM.BSTR.To_BSTR (From);
+      Name : constant GNATCOM.Types.BSTR := GNATCOM.BSTR.To_BSTR (From);
    begin
       Error_Check
         (CoGetObject (pszName => Name,
@@ -333,7 +333,7 @@ package body GNATCOM.Main_Interface is
       From   : in     String;
       Server : in     String)
    is
-      Prog_ID  : GNATCOM.Types.BSTR := GNATCOM.BSTR.To_BSTR (From);
+      Prog_ID  : constant GNATCOM.Types.BSTR := GNATCOM.BSTR.To_BSTR (From);
       Class_ID : aliased GNATCOM.Types.GUID;
    begin
       Error_Check (CLSIDFromProgID (Prog_ID, Class_ID'unchecked_access));
@@ -498,7 +498,7 @@ package body GNATCOM.Main_Interface is
    -- Put_In_GIT --
 
    function Put_In_GIT (This : Interface_Type) return GIT_Cookie is
-      PGIT   : GNATCOM.Types.Pointer_To_IGlobalInterfaceTable := Get_GIT;
+      PGIT   : constant GNATCOM.Types.Pointer_To_IGlobalInterfaceTable := Get_GIT;
       Cookie : aliased Interfaces.C.unsigned_long;
       IID    : aliased GNATCOM.Types.GUID := This.IID;
    begin
@@ -514,7 +514,7 @@ package body GNATCOM.Main_Interface is
 
    procedure Remove_From_GIT (Cookie : in GIT_Cookie)
    is
-      PGIT   : GNATCOM.Types.Pointer_To_IGlobalInterfaceTable := Get_GIT;
+      PGIT   : constant GNATCOM.Types.Pointer_To_IGlobalInterfaceTable := Get_GIT;
    begin
       Error_Check (PGIT.Vtbl.RevokeInterfaceFromGlobal
                    (PGIT,
@@ -526,7 +526,7 @@ package body GNATCOM.Main_Interface is
    procedure Attach_From_GIT (This   : in out Interface_Type;
                               Cookie : in     GIT_Cookie)
    is
-      PGIT   : GNATCOM.Types.Pointer_To_IGlobalInterfaceTable := Get_GIT;
+      PGIT   : constant GNATCOM.Types.Pointer_To_IGlobalInterfaceTable := Get_GIT;
    begin
       Free (This);
 
@@ -545,7 +545,7 @@ package body GNATCOM.Main_Interface is
 
       if GNATCOM.Errors.FAILED (Result) then
          declare
-            Message : String := GNATCOM.Errors.To_String (Result);
+            Message : constant String := GNATCOM.Errors.To_String (Result);
          begin
             case Result is
                when REGDB_E_CLASSNOTREG =>

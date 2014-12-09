@@ -150,7 +150,7 @@ package body GNATCOM.BSTR is
       end if;
 
       declare
-         Ada_String : String := GNATCOM.Types.To_Ada (From);
+         Ada_String : constant String := GNATCOM.Types.To_Ada (From);
       begin
 
          if Free then
@@ -174,7 +174,7 @@ package body GNATCOM.BSTR is
       end if;
 
       declare
-         Ada_String : Wide_String := GNATCOM.Types.To_Ada (From);
+         Ada_String : constant Wide_String := GNATCOM.Types.To_Ada (From);
       begin
          if Free then
             GNATCOM.BSTR.Free (From);
