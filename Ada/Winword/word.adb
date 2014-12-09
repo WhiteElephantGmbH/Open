@@ -1,17 +1,17 @@
 with Ada.Exceptions;
-with Text_Io; use Text_Io;
+with Text_IO; use Text_IO;
 --------------------------------------------------
 with GNATCOM.Initialize; use GNATCOM.Initialize;
 with GNATCOM.BSTR;
-with GNATCOM.types;
-with GNATCOM.Variant;
-with Winword.Uapplication_interface; use Winword.Uapplication_interface;
-with Winword.Documents_Interface; use Winword.Documents_Interface;
-with Winword.Udocument_Interface; use Winword.Udocument_Interface;
+with GNATCOM.Types;
+with GNATCOM.VARIANT;
+with winword.uApplication_Interface; use winword.uApplication_Interface;
+with winword.Documents_Interface; use winword.Documents_Interface;
+with winword.uDocument_Interface; use winword.uDocument_Interface;
 
 package body Word is
    -- Winword Instanz
-   App: Uapplication_Type;
+   App: uApplication_Type;
    -- Dokumentenliste
    Doclist: Documents_Type;
    -- Aktives Dokument
@@ -27,7 +27,7 @@ package body Word is
       end if;
 
       -- Winword Instanz laden
-      Create(app, "Word.Application",Gnatcom.Types.CLSCTX_SERVER);
+      Create(App, "Word.Application",GNATCOM.Types.CLSCTX_SERVER);
       -- Dokumentenliste initialisieren
       Attach(Doclist, Get_Documents(App));
    end Init;
@@ -39,22 +39,22 @@ package body Word is
       GNATCOM.Initialize.Initialize_COM;
 
       -- Winword Instanz laden
-      Create(inst.app, "Word.Application",Gnatcom.Types.CLSCTX_SERVER);
+      Create(Inst.app, "Word.Application",GNATCOM.Types.CLSCTX_SERVER);
       -- Dokumentenliste initialisieren
-      Attach(inst.Doclist, Get_Documents(inst.App));
-      return inst;
+      Attach(Inst.Doclist, Get_Documents(Inst.app));
+      return Inst;
    end Init;
 
    ------------------
 
    procedure Open_Document(Filename: in String) is
-      Variant_Name: aliased Gnatcom.Types.Variant:=Gnatcom.Variant.To_Variant(Filename);
+      Variant_Name: aliased GNATCOM.Types.VARIANT:=GNATCOM.VARIANT.To_VARIANT(Filename);
    begin
       Attach(Doc, Open(Doclist, Variant_Name'access));
    end Open_Document;
 
    procedure Open_Document(Inst: in out Winword_Instance; Filename: in String)is
-      Variant_Name: aliased Gnatcom.Types.Variant:=Gnatcom.Variant.To_Variant(Filename);
+      Variant_Name: aliased GNATCOM.Types.VARIANT:=GNATCOM.VARIANT.To_VARIANT(Filename);
    begin
       Attach(Inst.Doc, Open(Inst.Doclist, Variant_Name'access));
    end Open_Document;
@@ -62,101 +62,101 @@ package body Word is
    ------------------
 
    procedure Close(Savechanges: in Boolean:=False) is
-    Savechanges_Variant: aliased Gnatcom.Types.Variant;
+    Savechanges_Variant: aliased GNATCOM.Types.VARIANT;
    begin
       if Savechanges then
-         Savechanges_Variant:=Gnatcom.Variant.To_Variant(-1);
+         Savechanges_Variant:=GNATCOM.VARIANT.To_VARIANT(-1);
       else
-         Savechanges_Variant:=Gnatcom.Variant.To_Variant(0);
+         Savechanges_Variant:=GNATCOM.VARIANT.To_VARIANT(0);
       end if;
-      Close(Doc, Savechanges_Variant'Access);
+      Close(Doc, Savechanges_Variant'access);
    end Close;
 
    procedure Close(Inst: in Winword_Instance; Savechanges: in Boolean:=False)is
-    Savechanges_Variant: aliased Gnatcom.Types.Variant;
+    Savechanges_Variant: aliased GNATCOM.Types.VARIANT;
    begin
       if Savechanges then
-         Savechanges_Variant:=Gnatcom.Variant.To_Variant(-1);
+         Savechanges_Variant:=GNATCOM.VARIANT.To_VARIANT(-1);
       else
-         Savechanges_Variant:=Gnatcom.Variant.To_Variant(0);
+         Savechanges_Variant:=GNATCOM.VARIANT.To_VARIANT(0);
       end if;
-      Close(Inst.Doc, Savechanges_Variant'Access);
+      Close(Inst.Doc, Savechanges_Variant'access);
    end Close;
 
    -----------------
 
    procedure Print(Background: in Boolean:=False) is
-      Bkgd_Variant: aliased Gnatcom.Types.Variant:=Gnatcom.Variant.To_Variant(0);
+      Bkgd_Variant: aliased GNATCOM.Types.VARIANT:=GNATCOM.VARIANT.To_VARIANT(0);
    begin
       if not Background then
-         Printout(Doc, Bkgd_Variant'Access);
+         PrintOut(Doc, Bkgd_Variant'access);
       else
-         Printout(Doc);
+         PrintOut(Doc);
       end if;
    end Print;
 
    procedure Print(Inst: in Winword_Instance; Background: in Boolean:=False)is
-      Bkgd_Variant: aliased Gnatcom.Types.Variant:=Gnatcom.Variant.To_Variant(0);
+      Bkgd_Variant: aliased GNATCOM.Types.VARIANT:=GNATCOM.VARIANT.To_VARIANT(0);
    begin
       if not Background then
-         Printout(Inst.Doc, Bkgd_Variant'Access);
+         PrintOut(Inst.Doc, Bkgd_Variant'access);
       else
-         Printout(Inst.Doc);
+         PrintOut(Inst.Doc);
       end if;
    end Print;
 
    -------------------
 
    procedure Run_Macro(Macro_Name: in String) is
-      BSTR_Name: Gnatcom.Types.Bstr:=Gnatcom.Bstr.To_Bstr(Macro_Name);
-      Ret: Gnatcom.types.Variant;
+      BSTR_Name: constant GNATCOM.Types.BSTR:=GNATCOM.BSTR.To_BSTR(Macro_Name);
+      Ret: GNATCOM.Types.VARIANT;
    begin
       Ret:=Run(App, BSTR_Name);
    end Run_Macro;
 
    procedure Run_Macro(Inst: in Winword_Instance; Macro_Name: in String)is
-      BSTR_Name: Gnatcom.Types.Bstr:=Gnatcom.Bstr.To_Bstr(Macro_Name);
-      Ret: Gnatcom.types.Variant;
+      BSTR_Name: constant GNATCOM.Types.BSTR:=GNATCOM.BSTR.To_BSTR(Macro_Name);
+      Ret: GNATCOM.Types.VARIANT;
    begin
-      Ret:=Run(Inst.App, BSTR_Name);
+      Ret:=Run(Inst.app, BSTR_Name);
    end Run_Macro;
 
    -----------------------
 
    procedure Show is
    begin
-      Put_visible(App, 1);
+      Put_Visible(App, 1);
       Activate(App);
    end Show;
 
    procedure Show(Inst: in Winword_Instance)is
    begin
-      Put_visible(Inst.App, 1);
-      Activate(Inst.App);
+      Put_Visible(Inst.app, 1);
+      Activate(Inst.app);
    end Show;
 
    --------------------
 
    procedure Quit(Savechanges: in Boolean:=False) is
-      Savechanges_Variant: aliased Gnatcom.Types.Variant;
+      Savechanges_Variant: aliased GNATCOM.Types.VARIANT;
    begin
       if Savechanges then
-         Savechanges_Variant:=Gnatcom.Variant.To_Variant(-1);
+         Savechanges_Variant:=GNATCOM.VARIANT.To_VARIANT(-1);
       else
-         Savechanges_Variant:=Gnatcom.Variant.To_Variant(0);
+         Savechanges_Variant:=GNATCOM.VARIANT.To_VARIANT(0);
       end if;
-      Quit(App,Savechanges_Variant'Access);
+      Quit(App,Savechanges_Variant'access);
    end Quit;
 
    procedure Quit(Inst: in Winword_Instance; Savechanges: in Boolean:=False)is
-      Savechanges_Variant: aliased Gnatcom.Types.Variant;
+      Savechanges_Variant: aliased GNATCOM.Types.VARIANT;
    begin
       if Savechanges then
-         Savechanges_Variant:=Gnatcom.Variant.To_Variant(-1);
+         Savechanges_Variant:=GNATCOM.VARIANT.To_VARIANT(-1);
       else
-         Savechanges_Variant:=Gnatcom.Variant.To_Variant(0);
+         Savechanges_Variant:=GNATCOM.VARIANT.To_VARIANT(0);
       end if;
-      Quit(Inst.App,Savechanges_Variant'Access);
+      Quit(Inst.app,Savechanges_Variant'access);
    end Quit;
 
    --------------------
@@ -165,7 +165,7 @@ package body Word is
       Run: Integer;
    begin
       Run := Integer(Get_Visible(App));
-      return true;
+      return True;
    exception
       when others =>
          return False;
@@ -174,8 +174,8 @@ package body Word is
    function Is_Running(Inst: in Winword_Instance) return Boolean is
       Run: Integer;
    begin
-      Run := Integer(Get_Visible(Inst.App));
-      return true;
+      Run := Integer(Get_Visible(Inst.app));
+      return True;
    exception
       when others =>
          return False;
