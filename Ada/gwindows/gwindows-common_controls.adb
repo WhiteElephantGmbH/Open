@@ -39,7 +39,6 @@ with System;
 with Gwindows.Gstrings;
 with Gwindows.Utilities;
 with Gwindows.Internal;
-with Gwindows.Types;
 --with Ada.Text_Io; use Ada.Text_Io;
 
 package body Gwindows.Common_Controls is
@@ -1074,7 +1073,6 @@ package body Gwindows.Common_Controls is
          None_Ok    : in     Boolean                              := False;
          Show       : in     Boolean                              := True;
          Is_Dynamic : in     Boolean                              := False        ) is
-      use type Interfaces.C.Unsigned;
 
       Styles : Interfaces.C.Unsigned := 0;
 
@@ -1596,7 +1594,6 @@ package body Gwindows.Common_Controls is
          Align      : in     List_View_Control_Alignment_Type     := Align_Left;
          Show       : in     Boolean                              := True;
          Is_Dynamic : in     Boolean                              := False       ) is
-      use type Interfaces.C.Unsigned;
 
       Lvs_Icon      : constant := 16#0000#;
       Lvs_Report    : constant := 16#0001#;
@@ -2175,7 +2172,6 @@ package body Gwindows.Common_Controls is
          Single_Expand : in     Boolean                              := False;
          Show          : in     Boolean                              := True;
          Is_Dynamic    : in     Boolean                              := False  ) is
-      use type Interfaces.C.Unsigned;
 
       Tvs_Hasbuttons  : constant := 16#0001#;
       Tvs_Haslines    : constant := 16#0002#;
@@ -2552,7 +2548,6 @@ package body Gwindows.Common_Controls is
          Tips       : in     Boolean                              := True;
          Show       : in     Boolean                              := True;
          Is_Dynamic : in     Boolean                              := False       ) is
-      use type Interfaces.C.Unsigned;
 
       Tbs_Autoticks : constant := 16#0001#;
       Tbs_Vert      : constant := 16#0002#;
@@ -2733,7 +2728,6 @@ package body Gwindows.Common_Controls is
          Align      : in     Up_Down_Control_Align_Type           := Align_Right;
          Show       : in     Boolean                              := True;
          Is_Dynamic : in     Boolean                              := False        ) is
-      use type Interfaces.C.Unsigned;
 
       Uds_Wrap        : constant := 16#0001#;
       Uds_Setbuddyint : constant := 16#0002#;
@@ -2948,7 +2942,6 @@ package body Gwindows.Common_Controls is
          Multi_Line : in     Boolean                              := False;
          Show       : in     Boolean                              := True;
          Is_Dynamic : in     Boolean                              := False  ) is
-      use type Interfaces.C.Unsigned;
 
       --  TCS_SCROLLOPPOSITE      : constant := 16#0001#;
       --  TCS_BOTTOM              : constant := 16#0002#;

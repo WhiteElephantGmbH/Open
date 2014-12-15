@@ -33,8 +33,6 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with GWindows.Base;
-
 package body GWindows.Packing_Boxes is
 
    -----------------
@@ -184,7 +182,7 @@ package body GWindows.Packing_Boxes is
 
    begin
       if not (Iconic (Window)) then
-         Enumerate_Children (Window, Count_Children'Unrestricted_Access);
+         Enumerate_Children (Window, Count_Children'unrestricted_access);
 
          if Window.Fill_Width or Window.Fill_Height then
 
@@ -220,7 +218,7 @@ package body GWindows.Packing_Boxes is
                end if;
             end if;
 
-            Enumerate_Children (Window, Size_Children'Unrestricted_Access);
+            Enumerate_Children (Window, Size_Children'unrestricted_access);
          end if;
 
          case Window.Direction is
@@ -250,7 +248,7 @@ package body GWindows.Packing_Boxes is
                  Total_Height;
          end case;
 
-         Enumerate_Children (Window, Pack_Children'Unrestricted_Access);
+         Enumerate_Children (Window, Pack_Children'unrestricted_access);
       end if;
    exception
       when others =>
@@ -308,7 +306,7 @@ package body GWindows.Packing_Boxes is
 
    procedure Create
      (Window     : in out Packing_Box_Type;
-      Parent     : in out GWindows.Base.Base_Window_Type'Class;
+      Parent     : in out GWindows.Base.Base_Window_Type'class;
       Left       : in     Integer;
       Top        : in     Integer;
       Width      : in     Integer;

@@ -33,7 +33,6 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with GWindows.Constants;
 with GWindows.GStrings;
 
 with GWindows.Windows;

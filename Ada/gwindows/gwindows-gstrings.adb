@@ -111,7 +111,7 @@ package body GWindows.GStrings is
    function To_Wide_String (Value : GString) return Wide_String
    is
    begin
-      return GString (Value);
+      return Value;
    end To_Wide_String;
 
    ----------------------------

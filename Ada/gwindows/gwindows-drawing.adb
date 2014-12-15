@@ -33,7 +33,6 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with Interfaces.C;
 with GWindows.Drawing.Capabilities;
 with GWindows.GStrings;
 

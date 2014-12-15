@@ -35,7 +35,6 @@
 
 with Interfaces.C;
 
-with GWindows.Base;
 with GWindows.GStrings;
 
 package body GWindows.List_Boxes is

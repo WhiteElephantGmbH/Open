@@ -35,15 +35,9 @@
 
 with Ada.Unchecked_Conversion;
 with Ada.Unchecked_Deallocation;
---with Ada.Text_Io; use Ada.Text_Io;
 with Ada.Tags; use Ada.Tags;
 
-with System;
-
-with Interfaces.C;
-
 with GWindows.GStrings;
-with GWindows.Colors;
 with GWindows.Internal;
 with GWindows.Utilities;
 
@@ -288,7 +282,6 @@ package body GWindows.Base is
       Is_Dynamic : in     Boolean                := False)
    is
       use GWindows.Drawing_Objects;
-      use type Interfaces.C.unsigned;
 
       procedure Link (Window : in out Base_Window_Type'Class);
       --  Attach HWND to Window
@@ -490,7 +483,6 @@ package body GWindows.Base is
 
    function Focus return Pointer_To_Base_Window_Class
    is
-      use type GWindows.Types.Handle;
 
       function GetFocus return GWindows.Types.Handle;
       pragma Import (StdCall, GetFocus, "GetFocus");
@@ -580,7 +572,6 @@ package body GWindows.Base is
 
    function Valid (Window : in Base_Window_Type) return Boolean
    is
-      use type Interfaces.C.long;
 
       function IsWindow (hwnd : Interfaces.C.long := Window.HWND)
                         return Interfaces.C.long;
@@ -596,7 +587,6 @@ package body GWindows.Base is
    procedure Border (Window : in out Base_Window_Type;
                      State  : in     Boolean          := True)
    is
-      use type Interfaces.C.unsigned;
    begin
       if State then
          SetWindowLong (Window.HWND,
@@ -620,7 +610,6 @@ package body GWindows.Base is
    ------------
 
    function Border (Window : in Base_Window_Type) return Boolean is
-      use type Interfaces.C.unsigned;
    begin
       return (GetWindowLong (Window.HWND) and WS_BORDER) = WS_BORDER;
    end Border;
@@ -632,7 +621,6 @@ package body GWindows.Base is
    procedure Group (Window : in out Base_Window_Type;
                     State  : in     Boolean     := True)
    is
-      use type Interfaces.C.unsigned;
    begin
       if State then
          SetWindowLong (Window.HWND,
@@ -652,7 +640,6 @@ package body GWindows.Base is
    -----------
 
    function Group (Window : in Base_Window_Type) return Boolean is
-      use type Interfaces.C.unsigned;
    begin
       return (GetWindowLong (Window.HWND) and WS_GROUP) = WS_GROUP;
    end Group;
@@ -748,7 +735,6 @@ package body GWindows.Base is
    procedure Tab_Stop (Window : in out Base_Window_Type;
                        State  : in     Boolean     := True)
    is
-      use type Interfaces.C.unsigned;
    begin
       if State then
          SetWindowLong (Window.HWND,
@@ -771,7 +757,6 @@ package body GWindows.Base is
 
    function Tab_Stop (Window : in Base_Window_Type) return Boolean
    is
-      use type Interfaces.C.unsigned;
    begin
       return (GetWindowLong (Window.HWND) and WS_TABSTOP) = WS_TABSTOP;
    end Tab_Stop;
@@ -1054,7 +1039,6 @@ package body GWindows.Base is
    procedure Horizontal_Scroll_Bar (Window : in out Base_Window_Type;
                                     State  : Boolean := True)
    is
-      use type Interfaces.C.unsigned;
    begin
       if State then
          SetWindowLong (Window.HWND,
@@ -1078,7 +1062,6 @@ package body GWindows.Base is
    function Horizontal_Scroll_Bar (Window : in Base_Window_Type)
                                   return Boolean
    is
-      use type Interfaces.C.unsigned;
    begin
       return (GetWindowLong (Window.HWND) and WS_HSCROLL) = WS_HSCROLL;
    end Horizontal_Scroll_Bar;
@@ -1090,7 +1073,6 @@ package body GWindows.Base is
    procedure Vertical_Scroll_Bar (Window : in out Base_Window_Type;
                                   State  : Boolean := True)
    is
-      use type Interfaces.C.unsigned;
    begin
       if State then
          SetWindowLong (Window.HWND,
@@ -1114,7 +1096,6 @@ package body GWindows.Base is
    function Vertical_Scroll_Bar (Window : in Base_Window_Type)
                                 return Boolean
    is
-      use type Interfaces.C.unsigned;
    begin
       return (GetWindowLong (Window.HWND) and WS_VSCROLL) = WS_VSCROLL;
    end Vertical_Scroll_Bar;
@@ -2018,7 +1999,7 @@ package body GWindows.Base is
    is
    begin
       if
-        Window.In_Dialog = True and then
+        Window.In_Dialog and then
         Code = 0 and then
         (ID >= 1) and then
         (ID <= 9)

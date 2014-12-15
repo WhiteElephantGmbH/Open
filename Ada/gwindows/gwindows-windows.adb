@@ -33,7 +33,6 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with Interfaces.C;
 with System;
 
 with GWindows.Colors;
@@ -42,7 +41,6 @@ with GWindows.Cursors;
 with GWindows.GStrings;
 with GWindows.Utilities;
 with GWindows.Internal;
---with Ada.Text_Io; use Ada.Text_io;
 
 pragma Elaborate_All (GWindows.Cursors);
 
@@ -1610,7 +1608,7 @@ package body GWindows.Windows is
             Window.Font_Handle := GWindows.Types.Handle (wParam);
 
          when WM_GETDLGCODE =>
-            if Window.All_Keys = True then
+            if Window.All_Keys then
                Return_Value := DLGC_WANTALLKEYS;
             else
                Return_Value := DLGC_WANTCHARS;

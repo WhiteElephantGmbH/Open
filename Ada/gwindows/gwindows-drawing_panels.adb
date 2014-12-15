@@ -53,7 +53,7 @@ package body GWindows.Drawing_Panels is
 
    procedure Get_Canvas
      (Window : in Drawing_Panel_Type;
-      Canvas : in out Drawing_Canvas_Type'Class)
+      Canvas : in out Drawing_Canvas_Type'class)
    is
       use GWindows.Drawing;
    begin
@@ -121,7 +121,7 @@ package body GWindows.Drawing_Panels is
 
          Select_Object (New_Canvas, New_Bitmap);
 
-         if Copy = True then
+         if Copy then
             BitBlt (New_Canvas, 0, 0, Window.Width, Window.Height,
                     Window.Memory_Canvas, 0, 0);
          end if;
