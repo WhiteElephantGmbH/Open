@@ -34,7 +34,6 @@
 ------------------------------------------------------------------------------
 
 with Ada.Unchecked_Conversion;
-with System;
 with GNATCOM.Errors;
 with GNATCOM.BSTR;
 
