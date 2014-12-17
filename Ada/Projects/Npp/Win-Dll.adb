@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                           (c) 2013 by White Elephant GmbH, Schaffhausen, Switzerland                              *
+-- *                       (c) 2013 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -19,13 +19,14 @@ package body Win.Dll is
 
   The_Instance : HINSTANCE := System.Null_Address;
 
-  function Main (Hinst        : HINSTANCE; --> UD: Exported
+  function Main (Hinst        : HINSTANCE;
                  Fdw_Reason   : DWORD;
                  Ppv_Reserved : LPVOID) return BOOL
   with
-    Export         => TRUE,
+    Export         => Standard.True,
     Convention     => Stdcall,
     External_Name  => "DllMain";
+  pragma Warnings (Off, Main); -- exported
 
   function Main (Hinst        : in HINSTANCE;
                  Fdw_Reason   : in DWORD;                 --> UP: Not used

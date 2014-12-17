@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2013 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2013 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -30,10 +30,10 @@ package Promotion is
 
   procedure Set_Message (Item : String);
 
-  procedure Set_Error (Item   : String;
-                       File   : String := "";
-                       Line   : Server.Line_Number := Server.Line_Number'first;
-                       Column : Server.Column_Range := Server.Column_Range'first);
+  procedure Set_Error (Item      : String;
+                       File      : String := "";
+                       At_Line   : Server.Line_Number := Server.Line_Number'first;
+                       At_Column : Server.Column_Range := Server.Column_Range'first);
 
   procedure Complete;
 

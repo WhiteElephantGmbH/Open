@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2008 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2008 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -149,20 +149,20 @@ package Server is
 
   function Case_Updates return Case_Data;
 
-  function Updates_For (Filename   : String;
-                        First_Line : Line_Number;
-                        Last_Line  : Line_Number;
-                        Content    : String) return Tokens;
+  function Updates_For (The_Filename : String;
+                        First_Line   : Line_Number;
+                        Last_Line    : Line_Number;
+                        Content      : String) return Tokens;
 
-  function Referenced (Filename : String;
-                       Column   : Column_Range;
-                       Line     : Line_Number;
-                       Content  : String) return Boolean;
+  function Referenced (The_Filename : String;
+                       At_Column    : Column_Range;
+                       At_Line      : Line_Number;
+                       Content      : String) return Boolean;
 
-  function Usage (Filename : String;
-                  Column   : Column_Range;
-                  Line     : Line_Number;
-                  Content  : String) return References;
+  function Usage (The_Filename : String;
+                  At_Column    : Column_Range;
+                  At_Line      : Line_Number;
+                  Content      : String) return References;
 
   function Unused return References;
 

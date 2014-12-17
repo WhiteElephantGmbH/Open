@@ -482,13 +482,6 @@ package body Text is
   end "=";
 
 
-  function "=" (Left  : Character;
-                Right : String) return Boolean is
-  begin
-    return "=" ("" & Left, Right);
-  end "=";
-
-
   function "<" (Left  : String;
                 Right : Character) return Boolean is
   begin
@@ -496,24 +489,10 @@ package body Text is
   end "<";
 
 
-  function "<" (Left  : Character;
-                Right : String) return Boolean is
-  begin
-    return "<" ("" & Left, Right);
-  end "<";
-
-
   function ">" (Left  : String;
                 Right : Character) return Boolean is
   begin
     return ">" (Left, "" & Right);
-  end ">";
-
-
-  function ">" (Left  : Character;
-                Right : String) return Boolean is
-  begin
-    return ">" ("" & Left, Right);
   end ">";
 
 

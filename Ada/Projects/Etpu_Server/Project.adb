@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2013 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2013 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -138,9 +138,9 @@ package body Project is
       if Name(Index) = Separator or Name(Index) = Other_Separator then
         if The_Index /= Name'first then
           declare
-            Part : constant String := Name(The_Index + 1 .. Index - 1);
+            Area_Part : constant String := Name(The_Index + 1 .. Index - 1);
           begin
-            if Part = Area then
+            if Area_Part = Area then
               The_String := Text.String_Of (Name(Name'first .. Index));
               The_Index := Name'last;
               for Inner_Index in reverse Index .. Name'last loop
@@ -239,7 +239,7 @@ package body Project is
 
 
   procedure Create_Work_Area_For (Project_Parts :     Strings.Item;
-                                  The_Work_Path : out String_List.Item) is
+                                  New_Work_Path : out String_List.Item) is
 
     function Part_Of (Index : Positive) return String is
     begin
@@ -249,14 +249,14 @@ package body Project is
     use type String_List.Item;
 
   begin -- Create_Work_Area_For
-    String_List.Clear (The_Work_Path);
+    String_List.Clear (New_Work_Path);
     The_Project_Folder := The_Area_Folder;
     for Index in Strings.First .. Project_Parts.Count - 1 loop
       declare
         Area   : constant String := Part_Of (Index);
         Folder : constant String := Text.String_Of (The_Project_Folder) & Area & Separator;
       begin
-        The_Work_Path := Folder + The_Work_Path;
+        New_Work_Path := Folder + New_Work_Path;
         The_Project_Folder := Text.String_Of (Folder);
       end;
     end loop;
@@ -391,16 +391,16 @@ package body Project is
     begin
       for Folder of The_Work_Path loop
         declare
-          Filename : constant String := Folder & Module & ".c";
+          C_Filename : constant String := Folder & Module & ".c";
         begin
-          if Windows.Files.File_Exists (Filename) then
-            return Filename;
+          if Windows.Files.File_Exists (C_Filename) then
+            return C_Filename;
           end if;
         end;
       end loop;
-      Promotion.Set_Error (Item => "Unknown source for " & Module,
-                           File => Filename,
-                           Line => The_Source_Line);
+      Promotion.Set_Error (Item    => "Unknown source for " & Module,
+                           File    => Filename,
+                           At_Line => The_Source_Line);
       return "";
     end Source_Of;
 

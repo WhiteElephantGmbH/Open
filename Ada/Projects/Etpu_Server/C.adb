@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2013 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2013 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -83,16 +83,16 @@ package body C is
     Text_End      : constant String := (1 => Ascii.Cr);
 
     function Line_Number return Server.Line_Number is
-      Image : constant String := Text_For (Line_Mark1, Line_End1, "");
+      Image1 : constant String := Text_For (Line_Mark1, Line_End1, "");
     begin
       begin
-        return Server.Line_Number'value(Image);
+        return Server.Line_Number'value(Image1);
       exception
       when others =>
         declare
-          Image : constant String := Text_For (Line_Mark2, Line_End2, "");
+          Image2 : constant String := Text_For (Line_Mark2, Line_End2, "");
         begin
-          return Server.Line_Number'value(Image);
+          return Server.Line_Number'value(Image2);
         end;
       end;
     exception
@@ -103,9 +103,9 @@ package body C is
   begin
     if Text.Trimmed (Result) /= "" then
       Log.Write ("ERROR OUTPUT=" & Result);
-      Promotion.Set_Error (Item => Text_For (Text_Mark, Text_End, "Error detected in " & Filename),
-                           File => Text_For (Filename_Mark, Filename_End, Filename),
-                           Line => Line_Number);
+      Promotion.Set_Error (Item    => Text_For (Text_Mark, Text_End, "Error detected in " & Filename),
+                           File    => Text_For (Filename_Mark, Filename_End, Filename),
+                           At_Line => Line_Number);
     end if;
   exception
   when Promotion.Error =>
@@ -119,7 +119,7 @@ package body C is
   procedure Handle_For (Filename   : String;
                         Parameters : String;
                         Text_Mark  : String;
-                        Action     : access function (Parameters : String) return String) is
+                        Action     : access function (With_Parameters : String) return String) is
   begin
     Handle_Errors_For (Filename  => Filename,
                        Text_Mark => Text_Mark,

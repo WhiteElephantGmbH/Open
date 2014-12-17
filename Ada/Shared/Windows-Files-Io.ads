@@ -21,7 +21,6 @@
 -->Style: White_Elephant
 
 with Ada.Finalization;
-with Win32.Winnt;
 
 package Windows.Files.Io is
 
@@ -29,6 +28,7 @@ package Windows.Files.Io is
 
   type Open_Mode is (Read_Only, Append, Modify);
 
+  pragma Warnings (Off); -- Allow hiding of Windows.Files exceptions
   Bad_Handle       : exception;
   Bad_Size         : exception; -- Size of generic item not supported.
   Creation_Failure : exception;
@@ -36,6 +36,7 @@ package Windows.Files.Io is
   File_Not_Found   : exception;
   Wrong_Mode       : exception;
   Unexpected_Error : exception;
+  pragma Warnings (On);
 
   function Is_Already_Open (Filename : String) return Boolean;
 

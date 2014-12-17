@@ -16,8 +16,6 @@
 -->Style: White_Elephant
 
 with Ada.Unchecked_Conversion;
-with Win32.Winbase;
-with Win32.Windef;
 with Win32.Winver;
 with Windows; pragma Elaborate_All (Windows);
 

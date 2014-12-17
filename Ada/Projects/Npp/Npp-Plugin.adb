@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2013 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2013 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -22,11 +22,12 @@ with Scintilla;
 
 package body Npp.Plugin is
 
-  function Is_Unicode return Win.BOOL --> UD: exported
+  function Is_Unicode return Win.BOOL 
   with
     Export        => True,
     Convention    => C,
     External_Name => "isUnicode";
+  pragma Warnings (Off, Is_Unicode); -- exported
 
   type Info is record
     Npp_Handle              : Win.HWND;
@@ -38,31 +39,35 @@ package body Npp.Plugin is
     Convention => C_Pass_By_Copy,
     Pack       => True;
 
-  procedure Set_Info (Data : Info) --> UD: exported
+  procedure Set_Info (Data : Info)
   with
     Export         => True,
     Convention     => C,
     External_Name  => "setInfo";
+  pragma Warnings (Off, Set_Info); -- exported
 
-  function Get_Funcs_Array (Count : access Win.INT) return System.Address --> UD: exported
+  function Get_Funcs_Array (Count : access Win.INT) return System.Address
   with
     Export        => True,
     Convention    => C,
     External_Name => "getFuncsArray";
+  pragma Warnings (Off, Get_Funcs_Array); -- exported
 
-  procedure Be_Notified (Notif : access Scintilla.Notification) --> UD: exported
+  procedure Be_Notified (Notif : access Scintilla.Notification)
   with
     Export        => True,
     Convention    => C,
     External_Name => "beNotified";
+  pragma Warnings (Off, Be_Notified); -- exported
 
-  function Message_Proc (Message : Win.UINT;  --> UD: exported
+  function Message_Proc (Message : Win.UINT;
                          Wpara   : Win.WPARAM;
                          Lpara   : Win.LPARAM) return Win.LRESULT
   with
     Export        => True,
     Convention    => C,
     External_Name => "messageProc";
+  pragma Warnings (Off, Message_Proc); -- exported
 
 
   Max_Functions : constant := 8;
@@ -70,8 +75,6 @@ package body Npp.Plugin is
   type Function_Count is range 0..Max_Functions;
 
   subtype Function_Range is Function_Count range 1..Function_Count'last;
-
-  Wide_Nul : constant Wide_Character := Wide_Character'first;
 
   Item_Name_Length : constant := 64;
 
@@ -95,9 +98,9 @@ package body Npp.Plugin is
 
   The_Name : aliased Wide_String (1..256) := (others => Wide_Nul);
 
-  procedure Define (Name : Wide_String) is
+  procedure Define (Wide_Name : Wide_String) is
   begin
-    The_Name(1..Name'length) := Name;
+    The_Name(1..Wide_Name'length) := Wide_Name;
   end Define;
 
 
@@ -109,7 +112,7 @@ package body Npp.Plugin is
 
   Last_Id : Win.INT := 0;
 
-  procedure Install (Set_Info         :     Callback := null;
+  procedure Install (Set_Info_Call    :     Callback := null;
                      Tb_Modification  :     Callback := null;
                      Ready            :     Callback := null;
                      Buffer_Activated :     Callback := null;
@@ -127,7 +130,7 @@ package body Npp.Plugin is
     use type Win.INT;
 
   begin -- Install
-    Add (Set_Info, Set_Info_Callbacks);
+    Add (Set_Info_Call, Set_Info_Callbacks);
     Add (Tb_Modification, Tb_Modification_Callbacks);
     Add (Ready, Ready_Callbacks);
     Add (Buffer_Activated, Buffer_Activated_Callbacks);
@@ -241,9 +244,9 @@ package body Npp.Plugin is
   end Add_Notify_Handler;
 
 
-  procedure Add_Function (Name    : Wide_String;
-                          Command : Callback;
-                          Toolbar : Toolbar_Icons := No_Toolbar) is
+  procedure Add_Function (Wide_Name : Wide_String;
+                          Command   : Callback;
+                          Toolbar   : Toolbar_Icons := No_Toolbar) is
   begin
     if The_Count = Function_Range'last then
       raise Too_Many_Commands;
@@ -252,7 +255,7 @@ package body Npp.Plugin is
     declare
       Item : Func_Item renames The_Function(The_Count);
     begin
-      Item.Name (Item.Name'first .. Item.Name'first + Name'length - 1) := Name;
+      Item.Name (Item.Name'first .. Item.Name'first + Wide_Name'length - 1) := Wide_Name;
       case Function_Range(The_Count) is
       when 1 =>
         Item.P_Func := Command_1'access;
@@ -302,10 +305,10 @@ package body Npp.Plugin is
     use type Win.LRESULT;
     Wide_Filename : Wide_String := Ada.Characters.Handling.To_Wide_String (Filename) & Wide_Nul;
   begin
-     return Win.Send_Message (Handle => The_Info.Npp_Handle,
-                              Msg    => Npp.M_SWITCHTOFILE,
-                              Wpar   => 0,
-                              Lpar   => Convert(Wide_Filename(Wide_Filename'first)'address)) = Win.OK;
+     return Win.Send_Message (To   => The_Info.Npp_Handle,
+                              Msg  => Npp.M_SWITCHTOFILE,
+                              Wpar => 0,
+                              Lpar => Convert(Wide_Filename(Wide_Filename'first)'address)) = Win.OK;
   end Switched_To;
 
 
@@ -313,20 +316,20 @@ package body Npp.Plugin is
     use type Win.LRESULT;
     Wide_Filename : Wide_String := Ada.Characters.Handling.To_Wide_String (Filename) & Wide_Nul;
   begin
-     return Win.Send_Message (Handle => The_Info.Npp_Handle,
-                              Msg    => Npp.M_DOOPEN,
-                              Wpar   => 0,
-                              Lpar   => Convert(Wide_Filename(Wide_Filename'first)'address)) = Win.OK;
+     return Win.Send_Message (To   => The_Info.Npp_Handle,
+                              Msg  => Npp.M_DOOPEN,
+                              Wpar => 0,
+                              Lpar => Convert(Wide_Filename(Wide_Filename'first)'address)) = Win.OK;
   end Opened;
 
 
   function All_Files_Saved return Boolean is
     use type Win.LRESULT;
   begin
-    return Win.Send_Message (Handle => The_Info.Npp_Handle,
-                             Msg    => Npp.M_SAVEALLFILES,
-                             Wpar   => 0,
-                             Lpar   => 0) = Win.OK;
+    return Win.Send_Message (To   => The_Info.Npp_Handle,
+                             Msg  => Npp.M_SAVEALLFILES,
+                             Wpar => 0,
+                             Lpar => 0) = Win.OK;
   end All_Files_Saved;
 
 
@@ -354,10 +357,10 @@ package body Npp.Plugin is
   begin
     for Index in 1 .. The_Count loop
       if The_Toolbar(Index) /= No_Toolbar then
-        Win.Send_Message (Handle => The_Info.Npp_Handle,
-                          Msg    => Npp.M_ADDTOOLBARICON,
-                          Wpar   => The_Function(Index).Cmd_Id,
-                          Lpar   => Convert(The_Toolbar(Index)'address));
+        Win.Send_Message (To   => The_Info.Npp_Handle,
+                          Msg  => Npp.M_ADDTOOLBARICON,
+                          Wpar => The_Function(Index).Cmd_Id,
+                          Lpar => Convert(The_Toolbar(Index)'address));
       end if;
     end loop;
   end Create_Toolbar_Buttons;

@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                           (c) 2014 by White Elephant GmbH, Schaffhausen, Switzerland                              *
+-- *                       (c) 2014 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -143,8 +143,8 @@ package body Elephant_Dll is
 
 begin
   Log.Open;
-  Npp.Plugin.Define (Name => "Npp_Elephant");
-  Npp.Plugin.Install (Set_Info         => Initialize'access,
+  Npp.Plugin.Define ("Npp_Elephant");
+  Npp.Plugin.Install (Set_Info_Call    => Initialize'access,
                       Ready            => Ready'access,
                       Buffer_Activated => Activation'access,
                       Buffer_Updated   => Update'access);

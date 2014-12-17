@@ -22,7 +22,6 @@ with Ada.Unchecked_Conversion;
 with Ada.Unchecked_Deallocation;
 with Win32.Winbase;
 
-
 package body Windows.Files.Io is
 
   Wide_Nul : constant Wide_Character := Wide_Character'first;
@@ -49,21 +48,21 @@ package body Windows.Files.Io is
   function Is_Already_Open (Filename : String) return Boolean is
     Name       : aliased constant String := Filename & Nul;
     Share_Mode : constant Win32.DWORD:= 0; -- Exclusive
-    Handle     : Win32.Winnt.HANDLE;
+    The_Handle : Win32.Winnt.HANDLE;
     Is_Ok      : Win32.BOOL;
     use type Win32.Winnt.HANDLE;
   begin
-    Handle := Win32.Winbase.CreateFileA (Win32.Addr(Name),
+    The_Handle := Win32.Winbase.CreateFileA (Win32.Addr(Name),
                                          Win32.Winnt.GENERIC_READ,
                                          Share_Mode,
                                          null,
                                          Win32.Winbase.OPEN_EXISTING,
                                          Win32.Winnt.FILE_ATTRIBUTE_NORMAL,
                                          System.Null_Address);
-    if Handle = Win32.Winbase.INVALID_HANDLE_VALUE then
+    if The_Handle = Win32.Winbase.INVALID_HANDLE_VALUE then
       return True;
     else
-      Is_Ok := Win32.Winbase.CloseHandle (Handle);
+      Is_Ok := Win32.Winbase.CloseHandle (The_Handle);
       return False;
     end if;
   end Is_Already_Open;
@@ -174,9 +173,7 @@ package body Windows.Files.Io is
     end if;
     if Element'size = 8 then
       declare
-        pragma Warnings (Off);
         function As_Element is new Ada.Unchecked_Conversion (Character, Element);
-        pragma Warnings (On);
       begin
         return As_Element (Next_Character_From (File.Fsa));
       end;
@@ -330,7 +327,8 @@ package body Windows.Files.Io is
       Fsa.Position := Terminator_Position; -- Last byte was start of terminator
       declare
         Return_String : constant String := Fsa.Buffer (Start_Position..Terminator_Position - 1);
-        Next_Byte     : constant Character := Next_Character_From (Fsa); -->UD: read ahead
+        Next_Byte : constant Character := Next_Character_From (Fsa);
+        pragma Warnings (Off, Next_Byte); -- read ahead
       begin
         return Return_String;
       end;
@@ -419,9 +417,7 @@ package body Windows.Files.Io is
         raise Bad_Handle;
       else
         declare
-          pragma Warnings (Off);
           function Convert is new Ada.Unchecked_Conversion (Element, Character);
-          pragma Warnings (On);
         begin
           Write_Character_To (File.Fsa, Convert (Item));
         end;

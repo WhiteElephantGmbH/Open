@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2013 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2013 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -31,26 +31,26 @@ package body Promotion is
 
     procedure Start;
 
-    procedure Set_Message (Item : String);
+    procedure Set_Message_Text (Item : String);
 
-    procedure Set_Error (Item   : String;
-                         File   : String;
-                         Line   : Server.Line_Number := Server.Line_Number'first;
-                         Column : Server.Column_Range := Server.Column_Range'first);
+    procedure Set_Error_Text (Item      : String;
+                              File      : String;
+                              At_Line   : Server.Line_Number := Server.Line_Number'first;
+                              At_Column : Server.Column_Range := Server.Column_Range'first);
 
-    procedure Complete;
+    procedure Set_Complete;
 
     entry Get_Message_Ready (The_Result : out Boolean);
 
     entry Get_Error_Ready (The_Result : out Boolean);
 
-    function Message return String;
+    function Actual_Message return String;
 
-    function Filename return String;
+    function Actual_Filename return String;
 
-    function Line return Server.Line_Number;
+    function Actual_Line return Server.Line_Number;
 
-    function Column return Server.Column_Range;
+    function Actual_Column return Server.Column_Range;
 
   private
     The_Message  : Text.String;
@@ -70,25 +70,25 @@ package body Promotion is
 
   task body Handler is
 
-    procedure Promote (Filename : String) is
+    procedure Promote (Name : String) is
     begin
-      Set_Message ("Promote " & Filename);
-      C.Promote (Filename);
-      Set_Message ("Promotion of " & Filename & " successfully completed.");
+      Set_Message ("Promote " & Name);
+      C.Promote (Name);
+      Set_Message ("Promotion of " & Name & " successfully completed.");
     exception
     when Error =>
       Log.Write ("Promotion Error");
     when Item: others =>
       Log.Write ("Promotion.Handler.Promote", Item);
-      Set_Message ("Promotion of " & Filename & " failed.");
+      Set_Message ("Promotion of " & Name & " failed.");
     end Promote;
 
 
-    procedure Promote_All is
+    procedure Promote_All_Projects is
     begin
       Promotion.Define_Next_Message_Color (Promotion.Red);
       Set_Message ("Promote all not implemented.");
-    end Promote_All;
+    end Promote_All_Projects;
 
     The_Name       : Text.String;
     Is_Promote_All : Boolean;
@@ -101,7 +101,7 @@ package body Promotion is
       Control.Start;
     end Start;
     if Is_Promote_All then
-      Promote_All;
+      Promote_All_Projects;
     else
       Promote (Text.String_Of (The_Name));
     end if;
@@ -131,31 +131,31 @@ package body Promotion is
     end Start;
 
 
-    procedure Set_Message (Item : String) is
+    procedure Set_Message_Text (Item : String) is
     begin
       The_Message := Text.String_Of (Item);
       New_Message := True;
-    end Set_Message;
+    end Set_Message_Text;
 
 
-    procedure Set_Error (Item   : String;
-                         File   : String;
-                         Line   : Server.Line_Number := Server.Line_Number'first;
-                         Column : Server.Column_Range := Server.Column_Range'first) is
+    procedure Set_Error_Text (Item      : String;
+                              File      : String;
+                              At_Line   : Server.Line_Number := Server.Line_Number'first;
+                              At_Column : Server.Column_Range := Server.Column_Range'first) is
     begin
       The_Message := Text.String_Of (Item);
       The_Filename := Text.String_Of (File);
-      The_Line := Line;
-      The_Column := Column;
+      The_Line := At_Line;
+      The_Column := At_Column;
       New_Message := False;
       New_Error := True;
-    end Set_Error;
+    end Set_Error_Text;
 
 
-    procedure Complete is
+    procedure Set_Complete is
     begin
       Is_Complete := True;
-    end Complete;
+    end Set_Complete;
 
 
     entry Get_Message_Ready (The_Result : out Boolean) when New_Message or New_Error or Is_Complete is
@@ -178,28 +178,28 @@ package body Promotion is
     end Get_Error_Ready;
 
 
-    function Message return String is
+    function Actual_Message return String is
     begin
       return Text.String_Of (Last_Message);
-    end Message;
+    end Actual_Message;
 
 
-    function Filename return String is
+    function Actual_Filename return String is
     begin
       return Text.String_Of (The_Filename);
-    end Filename;
+    end Actual_Filename;
 
 
-    function Line return Server.Line_Number is
+    function Actual_Line return Server.Line_Number is
     begin
       return The_Line;
-    end Line;
+    end Actual_Line;
 
 
-    function Column return Server.Column_Range is
+    function Actual_Column return Server.Column_Range is
     begin
       return The_Column;
-    end Column;
+    end Actual_Column;
 
   end Control;
 
@@ -216,31 +216,31 @@ package body Promotion is
   begin
     case The_Message_Color is
     when Black =>
-      Control.Set_Message (Item);
+      Control.Set_Message_Text (Item);
     when Blue =>
-      Control.Set_Message ("%b" & Item);
+      Control.Set_Message_Text ("%b" & Item);
     when Green =>
-      Control.Set_Message ("%g" & Item);
+      Control.Set_Message_Text ("%g" & Item);
     when Red =>
-      Control.Set_Message ("%r" & Item);
+      Control.Set_Message_Text ("%r" & Item);
     end case;
     The_Message_Color := Black;
   end Set_Message;
 
 
-  procedure Set_Error (Item   : String;
-                       File   : String := "";
-                       Line   : Server.Line_Number := Server.Line_Number'first;
-                       Column : Server.Column_Range := Server.Column_Range'first) is
+  procedure Set_Error (Item      : String;
+                       File      : String := "";
+                       At_Line   : Server.Line_Number := Server.Line_Number'first;
+                       At_Column : Server.Column_Range := Server.Column_Range'first) is
   begin
-    Control.Set_Error (Item, File, Line, Column);
+    Control.Set_Error_Text (Item, File, At_Line, At_Column);
     raise Error;
   end Set_Error;
 
 
   procedure Complete is
   begin
-    Control.Complete;
+    Control.Set_Complete;
   end Complete;
 
 
@@ -262,25 +262,25 @@ package body Promotion is
 
   function Message return String is
   begin
-    return Control.Message;
+    return Control.Actual_Message;
   end Message;
 
 
   function Filename return String is
   begin
-    return Control.Filename;
+    return Control.Actual_Filename;
   end Filename;
 
 
   function Line return Server.Line_Number is
   begin
-    return Control.Line;
+    return Control.Actual_Line;
   end Line;
 
 
   function Column return Server.Column_Range is
   begin
-    return Control.Column;
+    return Control.Actual_Column;
   end Column;
 
 end Promotion;

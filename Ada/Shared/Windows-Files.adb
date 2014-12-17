@@ -557,6 +557,7 @@ package body Windows.Files is
   type GET_FILEEX_INFO_LEVELS is (
     Getfileexinfostandard,
     Getfileexmaxinfolevel);
+  pragma Warnings (Off, Getfileexmaxinfolevel); -- used for completeness
   for GET_FILEEX_INFO_LEVELS'size use 32;
 
 
@@ -1224,7 +1225,7 @@ package body Windows.Files is
     Is_Ok                    : Win32.BOOL;
     The_Return_Code          : Integer;
     The_Io_Status_Block      : aliased Io_Status_Block;
---    Buffer_Overflow          : constant Win32.Dword := 16#8000_0005#;
+--  Buffer_Overflow          : constant Win32.Dword := 16#8000_0005#;
     Request_File_Stream_Info : constant := 22;
     Share_Mode               : constant := Nt.FILE_SHARE_READ + Nt.FILE_SHARE_WRITE;
     The_Info_Buffer          : aliased File_Stream_Information;
@@ -1280,7 +1281,7 @@ package body Windows.Files is
     Is_Ok                    : Win32.BOOL;
     The_Return_Code          : Integer;
     The_Io_Status_Block      : aliased Io_Status_Block;
---    Buffer_Overflow          : constant Win32.Dword := 16#8000_0005#;
+--  Buffer_Overflow          : constant Win32.Dword := 16#8000_0005#;
     Request_File_Stream_Info : constant := 22;
     Share_Mode               : constant := Nt.FILE_SHARE_READ + Nt.FILE_SHARE_WRITE;
     The_Info_Buffer          : aliased File_Stream_Information;
@@ -1388,7 +1389,7 @@ package body Windows.Files is
         elsif Return_Code = Win32.Winerror.ERROR_NOT_CONNECTED then
           declare
             Lc_Name        : constant String := Ada.Characters.Handling.To_Lower (Name);
-            Computer_Name  : constant String := Windows.Computer_Name;
+            Computers_Name : constant String := Windows.Computer_Name;
             Root_Key       : constant String := "SYSTEM\CurrentControlSet\Services\LanmanServer\Shares" & Nul;
             The_Key        : aliased Win32.Winreg.HKEY;
             The_Long_Code  : Win32.LONG;
@@ -1402,7 +1403,7 @@ package body Windows.Files is
             function Convert is new Ada.Unchecked_Conversion (System.Address, Win32.LPBYTE);
             use type Win32.LONG;
           begin
-            if Computer_Name /= "" and then
+            if Computers_Name /= "" and then
                Win32.Winreg.RegOpenKeyA (Win32.Winreg.HKEY_LOCAL_MACHINE,
                                          Win32.Addr(Root_Key),
                                          The_Key'unchecked_access) = Win32.Winerror.NO_ERROR
@@ -1427,7 +1428,7 @@ package body Windows.Files is
                        Path = Lc_Name (Lc_Name'first .. Lc_Name'first + Path'length - 1)
                     then
                       The_Long_Code := Win32.Winreg.RegCloseKey (The_Key);
-                      return "\\" & Computer_Name & "\" &
+                      return "\\" & Computers_Name & "\" &
                              The_Name (The_Name'first .. The_Name'first + Natural(The_Name_Size) - 1) &
                              Lc_Name(Lc_Name'first + Path'length .. Lc_Name'last);
                     end if;

@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2013 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2013 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -132,7 +132,7 @@ package body Npp.Message is
   end Clear;
 
 begin
-  Plugin.Install (Set_Info        => Load_Rich_Edit_Dll'access,
+  Plugin.Install (Set_Info_Call   => Load_Rich_Edit_Dll'access,
                   Tb_Modification => Create_Message_Window'access);
   The_Dialog_Id := Plugin.Last_Dialog_Id;
 end Npp.Message;

@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                           (c) 2014 by White Elephant GmbH, Schaffhausen, Switzerland                              *
+-- *                       (c) 2014 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -19,10 +19,6 @@ with Ada.Unchecked_Conversion;
 with Npp.Plugin;
 
 package body Npp.Tree_View is
-
-  function Convert is new Ada.Unchecked_Conversion (Win.INT, System.Address);
-  function Convert is new Ada.Unchecked_Conversion (System.Address, Win.LPARAM);
-  function Convert is new Ada.Unchecked_Conversion (Win.LPARAM, System.Address);
 
   The_Tree_View : Win.HWND;
 
@@ -49,6 +45,9 @@ package body Npp.Tree_View is
                                          Win.TVS_HASLINES +
                                          Win.TVS_LINESATROOT;
     use type Win.INT;
+
+    function Convert is new Ada.Unchecked_Conversion (Win.INT, System.Address);
+    function Convert is new Ada.Unchecked_Conversion (System.Address, Win.LPARAM);
 
   begin
     The_Tree_View := Win.Create_Window (Class_Name  => Class_Name,
@@ -183,6 +182,8 @@ package body Npp.Tree_View is
     use type Item;
     use type Win.UINT;
 
+    function Convert is new Ada.Unchecked_Conversion (System.Address, Win.LPARAM);
+
   begin
     The_Item.Mask := Win.TVIF_TEXT + Win.TVIF_PARAM + Win.TVIF_CHILDREN;
     The_Item.Text := Image(Image'first)'address;
@@ -214,6 +215,10 @@ package body Npp.Tree_View is
   procedure Double_Click (Handle  : Win.HWND) is
     Selected_Item : aliased Win.LRESULT;
     The_Item      : aliased Win.TV_ITEM_ANSI;
+
+    function Convert is new Ada.Unchecked_Conversion (Win.LPARAM, System.Address);
+    function Convert is new Ada.Unchecked_Conversion (System.Address, Win.LPARAM);
+
   begin
     if Double_Click_Handler /= null then
       Selected_Item := Win.Send_Message (Handle,

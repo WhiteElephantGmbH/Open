@@ -22,9 +22,11 @@ package body Strings is
 
   package Map renames Ada.Strings.Maps;
 
+  pragma Warnings (Off); -- allow hiding predefined operator
   function "<" (Left  : Character;
                 Right : Map.Character_Set) return Boolean renames Map.Is_In;
-
+  pragma Warnings (On);
+  
   Line_Break  : constant Map.Character_Set := Map.To_Set (Ascii.Cr & Ascii.Lf);
   White_Space : constant Map.Character_Set := Map.To_Set (Space & Ascii.Ht & Ascii.Cr & Ascii.Lf);
 
@@ -164,11 +166,11 @@ package body Strings is
 
   function Reduced (The_String : String) return String is
 
-    type Separator is (None, Blank, New_Line);
+    type Separator is (No_Separator, Blank, New_Line);
 
     Reduced_String : String (1 .. The_String'length);
     The_Size       : Natural := 0;
-    The_Separator  : Separator := None;
+    The_Separator  : Separator := No_Separator;
     The_Character  : Character;
 
   begin
@@ -193,10 +195,10 @@ package body Strings is
         when New_Line =>
           Reduced_String (The_Size) := Ascii.Cr;
           The_Size := The_Size + 1;
-        when None =>
+        when No_Separator =>
           null;
         end case;
-        The_Separator := None;
+        The_Separator := No_Separator;
         Reduced_String (The_Size) := The_Character;
       end if;
     end loop;
@@ -212,16 +214,17 @@ package body Strings is
 
   function Padded_Image_Of (The_Value : Element;
                             Padding   : Character := '0') return String is
-
+    pragma Warnings (Off); -- allow hiding of Element
     function Image is new Image_Of (Element);
+    pragma Warnings (On);
 
-    Item : constant String  := Image(The_Value);
+    Element_Image : constant String  := Image(The_Value);
 
   begin
     if The_Value < Element'val(0) then
       raise Usage_Error;
     end if;
-    return Ada.Strings.Fixed."*"(Element'width - Item'length - 1, Padding) & Item;
+    return Ada.Strings.Fixed."*"(Element'width - Element_Image'length - 1, Padding) & Element_Image;
   end Padded_Image_Of;
 
 

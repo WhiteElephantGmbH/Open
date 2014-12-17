@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2008 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2008 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -123,7 +123,7 @@ package body Command is
     Is_Open : Boolean;
 
   begin -- Serve
-    Windows.Pipe.Open (Pipe     => The_Pipe,
+    Windows.Pipe.Open (The_Pipe => The_Pipe,
                        Name     => Pipe_Name,
                        Kind     => Windows.Pipe.Server,
                        Mode     => Windows.Pipe.Duplex,

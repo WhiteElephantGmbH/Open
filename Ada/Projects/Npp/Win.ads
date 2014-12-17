@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2013 ..2014 by White Elephant GmbH, Schaffhausen, Switzerland                           *
+-- *                       (c) 2013 ..2015 by White Elephant GmbH, Schaffhausen, Switzerland                           *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -197,15 +197,15 @@ package Win with Pure => True is
   function RGB (Red, Green, Blue : BYTE) return COLORREF;
 
 
-  function Send_Message (Handle : HWND;
-                         Msg    : UINT;
-                         Wpar   : WPARAM;
-                         Lpar   : LPARAM) return LRESULT;
+  function Send_Message (To   : HWND;
+                         Msg  : UINT;
+                         Wpar : WPARAM;
+                         Lpar : LPARAM) return LRESULT;
 
-  procedure Send_Message (Handle : HWND;
-                          Msg    : UINT;
-                          Wpar   : WPARAM;
-                          Lpar   : LPARAM);
+  procedure Send_Message (To   : HWND;
+                          Msg  : UINT;
+                          Wpar : WPARAM;
+                          Lpar : LPARAM);
 
   function Load_Bitmap (Instance    : HINSTANCE;
                         Bitmap_Name : String) return HBITMAP;

@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2013 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2013 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -21,11 +21,11 @@ package Npp.Plugin is
 
   Too_Many_Commands : exception;
 
-  procedure Define (Name : Wide_String);
+  procedure Define (Wide_Name : Wide_String);
 
   function Name return System.Address;
 
-  procedure Install (Set_Info         : Callback := null;
+  procedure Install (Set_Info_Call    : Callback := null;
                      Tb_Modification  : Callback := null;
                      Ready            : Callback := null;
                      Buffer_Activated : Callback := null;
@@ -36,9 +36,9 @@ package Npp.Plugin is
   procedure Add_Notify_Handler (Handler  : Notify_Handler;
                                 For_Code : Win.INT);
 
-  procedure Add_Function (Name    : Wide_String;
-                          Command : Callback;
-                          Toolbar : Npp.Toolbar_Icons := Npp.No_Toolbar);
+  procedure Add_Function (Wide_Name : Wide_String;
+                          Command   : Callback;
+                          Toolbar   : Npp.Toolbar_Icons := Npp.No_Toolbar);
 
   function Handle return Win.HWND;
 
@@ -49,5 +49,5 @@ package Npp.Plugin is
   function Edit_View return Win.HWND;
 
   function All_Files_Saved return Boolean;
-  
+
 end Npp.Plugin;

@@ -266,8 +266,8 @@ package Text is
   function "=" (Left  : String;
                 Right : Character) return Boolean;
 
-  function "=" (Left  : Character;
-                Right : String) return Boolean;
+  --function "=" (Left  : Character;
+  --              Right : String) return Boolean;
 
   --function "<" (Left  : String;
   --              Right : String)          return Boolean;
@@ -279,8 +279,8 @@ package Text is
   function "<" (Left  : String;
                 Right : Character) return Boolean;
 
-  function "<" (Left  : Character;
-                Right : String) return Boolean;
+  --function "<" (Left  : Character;
+  --              Right : String) return Boolean;
 
   --function ">" (Left  : String;
   --              Right : String)          return Boolean;
@@ -292,8 +292,8 @@ package Text is
   function ">" (Left  : String;
                 Right : Character) return Boolean;
 
-  function ">" (Left  : Character;
-                Right : String) return Boolean;
+  --function ">" (Left  : Character;
+  --              Right : String) return Boolean;
   --  Returns the result of a byte per byte comparison according to the ordinal
   --  values.
 

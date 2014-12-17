@@ -55,12 +55,12 @@ package body Log is
 
     procedure Write (The_String : String);
 
-    procedure Write (The_String   : String;
-                     The_Category : Category);
+    procedure Write_To_Category (The_String   : String;
+                                 The_Category : Category);
 
     procedure Report_Categories;
 
-    function Lookup (The_Category : String) return Category;
+    function Lookup_Category (The_Category : String) return Category;
 
   private
     Flush_After_Write : Boolean  := False;
@@ -147,7 +147,7 @@ package body Log is
             Category_Names := Strings.List_Of (Windows.Registry.Value_Of ("Categories"));
             if (Category_Names.Count > 0) and (Category_Names.Count <= 30) then
               Categories := 2 ** (Category_Names.Count + 1) - 1;
-              if Lookup ("debug") = 0 then -- debug not specified
+              if Lookup_Category ("debug") = 0 then -- debug not specified
                 Categories := Categories - 1;  -- So mask out bit 0
               end if;
             end if;
@@ -167,7 +167,7 @@ package body Log is
     end Open;
 
 
-    procedure Write (The_String   : String) is
+    procedure Write (The_String : String) is
       use type Unsigned.Longword;
     begin
       if Logging_Is_Active then
@@ -197,27 +197,27 @@ package body Log is
     end Write;
 
 
-    procedure Write (The_String   : String;
-                     The_Category : Category) is
+    procedure Write_To_Category (The_String   : String;
+                                 The_Category : Category) is
       use type Unsigned.Longword;
     begin
       if (The_Category and Categories) /= 0 then
-        Write (The_String);
+        Guarded.Write (The_String);
       end if;
-    end Write;
+    end Write_To_Category;
 
 
     procedure Report_Categories is
     begin
       if Category_Names.Count = 0 then
-        Write ("Logging categories not specified - All selected");
+        Guarded.Write ("Logging categories not specified - All selected");
       else
-        Write ("Logging categories = " & Strings.Data_Of (Category_Names,","));
+        Guarded.Write ("Logging categories = " & Strings.Data_Of (Category_Names,","));
       end if;
     end Report_Categories;
 
 
-    function Lookup (The_Category : String) return Category is
+    function Lookup_Category (The_Category : String) return Category is
       The_Index : Natural := 0;
     begin
       if Category_Names.Count = 0 then
@@ -234,7 +234,7 @@ package body Log is
         end if;
       end loop;
       return 0;
-    end Lookup;
+    end Lookup_Category;
 
   end Guarded;
 
@@ -278,7 +278,7 @@ package body Log is
   procedure Write (The_String   : String;
                    The_Category : Category := Debug) is
   begin
-    Guarded.Write (The_String, The_Category);
+    Guarded.Write_To_Category (The_String, The_Category);
   exception
   when others =>
     null;
@@ -325,11 +325,11 @@ package body Log is
   function Lookup (The_Category : String) return Category is
     Lc_Category : constant String := Strings.Lowercase_Of (The_Category);
   begin
-    Guarded.Write ("Log.Lookup: Categories=" & The_Category, Debug);
+    Guarded.Write_To_Category ("Log.Lookup: Categories=" & The_Category, Debug);
     if Lc_Category = "debug" then
       return Debug;
     else
-      return Guarded.Lookup (Lc_Category);
+      return Guarded.Lookup_Category (Lc_Category);
     end if;
   end Lookup;
 

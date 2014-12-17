@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                           (c) 2008 .. 2014 by Soudronic AG, Bergdietikon, Switzerland                             *
+-- *                           (c) 2008 .. 2015 by Soudronic AG, Bergdietikon, Switzerland                             *
 -- *                      Developed by White Elephant GmbH, Switzerland (www.white-elephant.ch)                        *
 -- *********************************************************************************************************************
 -->Style: White_Elephant
@@ -110,11 +110,11 @@ package body Server is
       delay 0.5;  -- Wait for server to start
       for Try in 1..4 loop --> UD: just count
         begin  -- Attempt to connect to server
-          Windows.Pipe.Open (Pipe => The_Pipe,
-                             Name => Pipe_Name,
-                             Kind => Windows.Pipe.Client,
-                             Mode => Windows.Pipe.Duplex,
-                             Size => Server.Source_Buffer'length);
+          Windows.Pipe.Open (The_Pipe => The_Pipe,
+                             Name     => Pipe_Name,
+                             Kind     => Windows.Pipe.Client,
+                             Mode     => Windows.Pipe.Duplex,
+                             Size     => Server.Source_Buffer'length);
           Send (Open_Project, Name);
           if The_Length = 0 then
             Set_Message (Project_Not_Opened & "protocol error (no Confirmation)");
@@ -192,12 +192,12 @@ package body Server is
   end Case_Updates;
 
 
-  function Updates_For (Filename   : String;
-                        First_Line : Line_Number;
-                        Last_Line  : Line_Number;
-                        Content    : String) return Tokens is
+  function Updates_For (The_Filename : String;
+                        First_Line   : Line_Number;
+                        Last_Line    : Line_Number;
+                        Content      : String) return Tokens is
   begin
-    Send (Updates_For, Filename);
+    Send (Updates_For, The_Filename);
     Send (Natural(First_Line));
     Send (Natural(Last_Line));
     Send (Content);
@@ -211,15 +211,15 @@ package body Server is
   end Updates_For;
 
 
-  The_Column   : Column_Range;
-  The_Line     : Line_Number;
-  The_Filename : Text.String;
+  The_Actual_Column   : Column_Range;
+  The_Actual_Line     : Line_Number;
+  The_Actual_Filename : Text.String;
 
 
   procedure Read_Filename is
   begin
     Send (Get_Filename);
-    The_Filename := Text.String_Of (Data_String);
+    The_Actual_Filename := Text.String_Of (Data_String);
   end Read_Filename;
 
 
@@ -238,8 +238,8 @@ package body Server is
     if Reference = Not_Referenced then
       return False;
     else
-      The_Column := Reference.Column;
-      The_Line := Reference.Line;
+      The_Actual_Column := Reference.Column;
+      The_Actual_Line := Reference.Line;
       Read_Filename;
       return True;
     end if;
@@ -257,28 +257,28 @@ package body Server is
   end Has_Message;
 
 
-  function Referenced (Filename : String;
-                       Column   : Column_Range;
-                       Line     : Line_Number;
+  function Referenced (The_Filename : String;
+                       At_Column    : Column_Range;
+                       At_Line      : Line_Number;
                        Content  : String) return Boolean is
   begin
-    Send (Referenced, Filename);
-    Send (Natural(Column));
-    Send (Natural(Line));
+    Send (Referenced, The_Filename);
+    Send (Natural(At_Column));
+    Send (Natural(At_Line));
     Send (Content);
     return Has_Reference;
   end Referenced;
 
 
-  function Usage (Filename : String;
-                  Column   : Column_Range;
-                  Line     : Line_Number;
-                  Content  : String) return References is
+  function Usage (The_Filename : String;
+                  At_Column    : Column_Range;
+                  At_Line      : Line_Number;
+                  Content      : String) return References is
     use type System.Address;
   begin
-    Send (Usage, Filename);
-    Send (Natural(Column));
-    Send (Natural(Line));
+    Send (Usage, The_Filename);
+    Send (Natural(At_Column));
+    Send (Natural(At_Line));
     Send (Content);
     declare
       type References_Access is access all References;
@@ -347,19 +347,19 @@ package body Server is
 
   function Filename return String is
   begin
-    return Text.String_Of (The_Filename);
+    return Text.String_Of (The_Actual_Filename);
   end Filename;
 
 
   function Column return Column_Range is
   begin
-    return The_Column;
+    return The_Actual_Column;
   end Column;
 
 
   function Line return Line_Number is
   begin
-    return The_Line;
+    return The_Actual_Line;
   end Line;
 
 end Server;

@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                           (c) 2013 by White Elephant GmbH, Schaffhausen, Switzerland                              *
+-- *                       (c) 2013 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -41,33 +41,33 @@ package body Win is
   end RGB;
 
 
-  function Send_Message (Handle : HWND;
-                         Msg    : UINT;
-                         Wpar   : WPARAM;
-                         Lpar   : LPARAM) return LRESULT is
+  function Send_Message (To   : HWND;
+                         Msg  : UINT;
+                         Wpar : WPARAM;
+                         Lpar : LPARAM) return LRESULT is
 
-    function Send_Message_A (Handle : HWND;
-                             Msg    : UINT;
-                             Wpar   : WPARAM;
-                             Lpar   : LPARAM) return LRESULT
+    function Send_Message_A (H : HWND;
+                             M : UINT;
+                             W : WPARAM;
+                             L : LPARAM) return LRESULT
     with
-      Import        => TRUE,
+      Import        => Standard.True,
       Convention    => Stdcall,
       External_Name => "SendMessageA";
 
     use type LRESULT;
 
   begin
-    return Send_Message_A (Handle, Msg, Wpar, Lpar);
+    return Send_Message_A (To, Msg, Wpar, Lpar);
   end Send_Message;
 
 
-  procedure Send_Message (Handle : HWND;
-                          Msg    : UINT;
-                          Wpar   : WPARAM;
-                          Lpar   : LPARAM) is
+  procedure Send_Message (To   : HWND;
+                          Msg  : UINT;
+                          Wpar : WPARAM;
+                          Lpar : LPARAM) is
   begin
-    if Send_Message (Handle, Msg, Wpar, Lpar) = OK then
+    if Send_Message (To, Msg, Wpar, Lpar) = OK then
       null;
     end if;
   end Send_Message;
@@ -76,24 +76,23 @@ package body Win is
   function Load_Bitmap (Instance    : HINSTANCE;
                         Bitmap_Name : String) return HBITMAP is
 
-    function Load_Bitmap_A (Instance    : HINSTANCE;
-                            Bitmap_Name : LPCSTR) return HBITMAP
+    function Load_Bitmap_A (I : HINSTANCE;
+                            B : LPCSTR) return HBITMAP
     with
-      Import        => TRUE,
+      Import        => Standard.True,
       Convention    => Stdcall,
       External_Name => "LoadBitmapA";
 
   begin
-    return Load_Bitmap_A (Instance    => Instance,
-                          Bitmap_Name => Bitmap_Name(Bitmap_Name'first)'address);
+    return Load_Bitmap_A (Instance, Bitmap_Name(Bitmap_Name'first)'address);
   end Load_Bitmap;
 
 
   function Load_Library (Lib_File_Name : Wide_String) return HINSTANCE is
 
-    function Load_Library_W (Lib_File_Name : LPCWSTR) return HINSTANCE
+    function Load_Library_W (L : LPCWSTR) return HINSTANCE
     with
-      Import        => TRUE,
+      Import        => Standard.True,
       Convention    => Stdcall,
       External_Name => "LoadLibraryW";
 
@@ -114,36 +113,36 @@ package body Win is
                           Instance    : HINSTANCE;
                           Param       : LPVOID) return HWND is
 
-    function Create_Window_Ex_W (Ex_Style    : DWORD;
-                                 Class_Name  : LPCWSTR;
-                                 Window_Name : LPCWSTR;
-                                 Style       : DWORD;
-                                 X           : INT;
-                                 Y           : INT;
-                                 Width       : INT;
-                                 Height      : INT;
-                                 Wnd_Parent  : HWND;
-                                 Menu        : HMENU;
-                                 Instance    : HINSTANCE;
-                                 Param       : LPVOID) return HWND
+    function Create_Window_Ex_W (Ex_Style   : DWORD;
+                                 Class      : LPCWSTR;
+                                 Window     : LPCWSTR;
+                                 Wnd_Style  : DWORD;
+                                 X_Position : INT;
+                                 Y_Position : INT;
+                                 Wnd_Width  : INT;
+                                 Wnd_Height : INT;
+                                 Parent     : HWND;
+                                 Wnd_Menu   : HMENU;
+                                 Instances  : HINSTANCE;
+                                 Parameters : LPVOID) return HWND
     with
-      Import        => TRUE,
+      Import        => Standard.True,
       Convention    => Stdcall,
       External_Name => "CreateWindowExW";
 
   begin
-    return Create_Window_Ex_W (Ex_Style    => 0,
-                               Class_Name  => Class_Name(Class_Name'first)'address,
-                               Window_Name => Window_Name(Window_Name'first)'address,
-                               Style       => Style,
-                               X           => X,
-                               Y           => Y,
-                               Width       => Width,
-                               Height      => Height,
-                               Wnd_Parent  => Wnd_Parent,
-                               Menu        => Menu,
-                               Instance    => Instance,
-                               Param       => Param);
+    return Create_Window_Ex_W (Ex_Style   => 0,
+                               Class      => Class_Name(Class_Name'first)'address,
+                               Window     => Window_Name(Window_Name'first)'address,
+                               Wnd_Style  => Style,
+                               X_Position => X,
+                               Y_Position => Y,
+                               Wnd_Width  => Width,
+                               Wnd_Height => Height,
+                               Parent     => Wnd_Parent,
+                               Wnd_Menu   => Menu,
+                               Instances  => Instance,
+                               Parameters => Param);
   end Create_Window;
 
 end Win;

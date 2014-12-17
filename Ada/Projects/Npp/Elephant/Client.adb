@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                           (c) 2014 by White Elephant GmbH, Schaffhausen, Switzerland                              *
+-- *                       (c) 2014 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -192,10 +192,10 @@ package body Client is
 
   begin -- Update_Style
     declare
-      Results : constant Server.Tokens := Server.Updates_For (Filename   => Filename,
-                                                              First_Line => Line_Number'first,
-                                                              Last_Line  => Line_Number'last,
-                                                              Content    => Buffer_Content(Handle));
+      Results : constant Server.Tokens := Server.Updates_For (The_Filename => Filename,
+                                                              First_Line   => Line_Number'first,
+                                                              Last_Line    => Line_Number'last,
+                                                              Content      => Buffer_Content(Handle));
     begin
       for Result of Results loop
         Set_Style_For (Result);
@@ -267,7 +267,7 @@ package body Client is
 
 
   procedure Reference (Filename         : String;
-                       Location         : Server.Location;
+                       At_Location      : Server.Location;
                        Show_Cursor_Line : Boolean := False) is
     Editor : Scintilla.Object;
   begin
@@ -275,18 +275,18 @@ package body Client is
       Scintilla.Create (Editor, Npp.Plugin.Edit_View);
       if Show_Cursor_Line then
         Scintilla.Set_Cursor (Handle => Editor,
-                              Line   => Positive(Location.Line),
+                              Line   => Positive(At_Location.Line),
                               Column => Positive(Column_Range'first));
         Scintilla.Show_Cursor_Line (Editor);
       else
         Scintilla.Set_Cursor (Handle => Editor,
-                              Line   => Positive(Location.Line),
-                              Column => Positive(Location.Column));
+                              Line   => Positive(At_Location.Line),
+                              Column => Positive(At_Location.Column));
       end if;
     else
       Show_Error (Filename &
-                  " (" & Line_Number'image(Location.Line) &
-                  ", " & Column_Range'image(Location.Column) & ")");
+                  " (" & Line_Number'image(At_Location.Line) &
+                  ", " & Column_Range'image(At_Location.Column) & ")");
     end if;
   end Reference;
 
@@ -305,10 +305,10 @@ package body Client is
                                                Line     => Line_Number(Scintilla.Current_Line(Editor)),
                                                Column   => Column_Range(Scintilla.Current_Column(Editor)));
     begin
-      if Server.Referenced (Filename => Buffer_Name,
-                            Line     => Current_Location.Line,
-                            Column   => Current_Location.Column,
-                            Content  => Buffer_Content (Editor))
+      if Server.Referenced (The_Filename => Buffer_Name,
+                            At_Line      => Current_Location.Line,
+                            At_Column    => Current_Location.Column,
+                            Content      => Buffer_Content (Editor))
       then
         The_Location_Stack := The_Location_Stack + Current_Location;
         Reference (Server.Filename, Server.Location'(Line => Server.Line, Column => Server.Column));
@@ -363,9 +363,8 @@ package body Client is
   end Image_Of;
 
 
-  procedure Show (The_References        : References;
-                  No_References_Message : String;
-                  Expand                : Boolean := False) is
+  procedure Show_References (No_References_Message : String;
+                             Expand                : Boolean := False) is
 
     The_File_Index : Natural := 0;
 
@@ -382,9 +381,9 @@ package body Client is
     else
       for Index in The_References.Locations'range loop
         declare
-          Location : Server.File_Reference renames The_References.Locations(Index);
+          The_Location : Server.File_Reference renames The_References.Locations(Index);
         begin
-          if Location.File_Index /= The_File_Index then
+          if The_Location.File_Index /= The_File_Index then
             if Expand and (The_File_Index /= 0) then
               Npp.Tree_View.Expand (Filename_Item);
             end if;
@@ -393,8 +392,8 @@ package body Client is
           end if;
           declare
             Cursor_Mark   : constant Character := Character'val(149);
-            Line          : constant String := Image_Of (Location.Image_Index);
-            At_Position   : constant Natural := Line'first + Positive(Location.Cursor.Column) - 1;
+            Line          : constant String := Image_Of (The_Location.Image_Index);
+            At_Position   : constant Natural := Line'first + Positive(The_Location.Cursor.Column) - 1;
             Last_Position : Natural := Line'last;
             use type Text.String;
             use type Server.Line_Counter;
@@ -403,8 +402,8 @@ package body Client is
               declare
                 Next_Location : Server.File_Reference renames The_References.Locations(Index + 1);
               begin
-                if (Next_Location.Cursor.Line = Location.Cursor.Line) and
-                  (Next_Location.File_Index = Location.File_Index)
+                if (Next_Location.Cursor.Line = The_Location.Cursor.Line) and
+                  (Next_Location.File_Index = The_Location.File_Index)
                 then
                   Last_Position := Line'first + Positive(Next_Location.Cursor.Column) - 2;
                 end if;
@@ -416,7 +415,7 @@ package body Client is
             The_Line := The_Line & Cursor_Mark & Line(At_Position .. Last_Position);
             if Last_Position = Line'last then
               The_Item := Npp.Tree_View.Add (Parent => Filename_Item,
-                                             Data   => Location'address,
+                                             Data   => The_Location'address,
                                              Title  => Text.String_Of (The_Line));
               Text.Clear (The_Line);
             end if;
@@ -427,7 +426,7 @@ package body Client is
         Npp.Tree_View.Expand (Filename_Item);
       end if;
     end if;
-  end Show;
+  end Show_References;
 
 
   procedure Show_Usage is
@@ -441,11 +440,12 @@ package body Client is
     if The_References /= null then
       Dispose (The_References);
     end if;
-    The_References := new Server.References'(Server.Usage (Filename => Buffer_Name,
-                                             Line     => Line_Number(Scintilla.Current_Line(Editor)),
-                                             Column   => Column_Range(Scintilla.Current_Column(Editor)),
-                                             Content  => Buffer_Content (Editor)));
-    Show (The_References, "Not used", Expand => True);
+    The_References
+      := new Server.References'(Server.Usage (The_Filename => Buffer_Name,
+                                              At_Line      => Line_Number(Scintilla.Current_Line(Editor)),
+                                              At_Column    => Column_Range(Scintilla.Current_Column(Editor)),
+                                              Content      => Buffer_Content (Editor)));
+    Show_References ("Not used", Expand => True);
   exception
   when Item: others =>
     Log.Write ("Show_Usage", Item);
@@ -462,7 +462,7 @@ package body Client is
       Dispose (The_References);
     end if;
     The_References := new Server.References'(Server.Unused);
-    Show (The_References, "No unused declarations");
+    Show_References ("No unused declarations");
   end Show_Unused;
 
 
@@ -538,10 +538,10 @@ package body Client is
   procedure Tree_View_Location_Handler (Data : System.Address) is
   begin
     declare
-      Location : constant File_Reference_Access := Convert(Data);
-      Filename : constant String := Filename_At (Location.File_Index);
+      At_Location : constant File_Reference_Access := Convert(Data);
+      Filename    : constant String := Filename_At (At_Location.File_Index);
     begin
-      Reference (Filename, Location.Cursor, Show_Cursor_Line => True);
+      Reference (Filename, At_Location.Cursor, Show_Cursor_Line => True);
     end;
   exception
   when others =>

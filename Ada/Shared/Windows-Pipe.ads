@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -42,7 +42,7 @@ package Windows.Pipe is
   Forever : constant Duration := 0.0;
 
 
-  procedure Open (Pipe      : in out Handle;
+  procedure Open (The_Pipe  : in out Handle;
                   Name      :        String;
                   Kind      :        Role;
                   Mode      :        Access_Mode;
@@ -51,20 +51,20 @@ package Windows.Pipe is
                   Get_Call  :        Get_Callback := null);
   -- opens or reopens a pipe
 
-  procedure Close (Pipe : in out Handle);
+  procedure Close (The_Pipe : in out Handle);
   -- no exceptions
 
-  procedure Read (Pipe      :     Handle;
+  procedure Read (From_Pipe :     Handle;
                   Data      :     System.Address;
                   Length    : out Natural;
                   Wait_Time :     Duration := Forever);
 
-  procedure Write (Pipe   : Handle;
-                   Data   : System.Address;
-                   Length : Natural);
+  procedure Write (To_Pipe : Handle;
+                   Data    : System.Address;
+                   Length  : Natural);
 
-  procedure Put (Pipe : Handle;
-                 Item : String);
+  procedure Put (To_Pipe : Handle;
+                 Item    : String);
 
 private
   type Named_Pipe;

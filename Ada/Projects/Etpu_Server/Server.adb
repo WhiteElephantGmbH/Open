@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                           (c) 2014 by White Elephant GmbH, Schaffhausen, Switzerland                              *
+-- *                       (c) 2014 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -63,28 +63,28 @@ package body Server is
   end Case_Updates;
 
 
-  function Updates_For (Filename   : String;                  --> UP: not implemented
-                        First_Line : Line_Number;             --> UP: not implemented
-                        Last_Line  : Line_Number;             --> UP: not implemented
-                        Content    : String) return Tokens is --> UP: not implemented
+  function Updates_For (The_Filename : String;                  --> UP: not implemented
+                        First_Line   : Line_Number;             --> UP: not implemented
+                        Last_Line    : Line_Number;             --> UP: not implemented
+                        Content      : String) return Tokens is --> UP: not implemented
   begin
     return No_Tokens;
   end Updates_For;
 
 
-  function Referenced (Filename : String;                   --> UP: not implemented
-                       Column   : Column_Range;             --> UP: not implemented
-                       Line     : Line_Number;              --> UP: not implemented
-                       Content  : String) return Boolean is --> UP: not implemented
+  function Referenced (The_Filename : String;                   --> UP: not implemented
+                       At_Column    : Column_Range;             --> UP: not implemented
+                       At_Line      : Line_Number;              --> UP: not implemented
+                       Content      : String) return Boolean is --> UP: not implemented
   begin
     return False;
   end Referenced;
 
 
-  function Usage (Filename : String;                      --> UP: not implemented
-                  Column   : Column_Range;                --> UP: not implemented
-                  Line     : Line_Number;                 --> UP: not implemented
-                  Content  : String) return References is --> UP: not implemented
+  function Usage (The_Filename : String;                      --> UP: not implemented
+                  At_Column    : Column_Range;                --> UP: not implemented
+                  At_Line      : Line_Number;                 --> UP: not implemented
+                  Content      : String) return References is --> UP: not implemented
   begin
     return No_References;
   end Usage;

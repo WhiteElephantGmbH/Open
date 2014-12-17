@@ -319,7 +319,7 @@ package body Windows.Registry is
   function Value_Of (The_Entry : String) return Unsigned.Longword is
     function Convert is new Ada.Unchecked_Conversion(System.Address, Win32.PBYTE);
     Entry_Name  : aliased constant String := The_Entry & Nul;
-    Entry_Type  : aliased Win32.DWORD;
+    Entry_Kind  : aliased Win32.DWORD;
     The_Value   : aliased Unsigned.Longword;
     The_Size    : aliased Win32.DWORD := 4;
     Return_Code : Win32.LONG;
@@ -329,12 +329,12 @@ package body Windows.Registry is
     Return_Code := Win32.Winreg.RegQueryValueExA (The_Current_Key,
                                                   Win32.Addr(Entry_Name),
                                                   null,
-                                                  Entry_Type'unchecked_access,
+                                                  Entry_Kind'unchecked_access,
                                                   Convert(The_Value'address),
                                                   The_Size'unchecked_access);
     if Return_Code /= Win32.Winerror.ERROR_SUCCESS then
       raise Entry_Not_Found;
-    elsif Entry_Type = Win32.Winnt.REG_DWORD then
+    elsif Entry_Kind = Win32.Winnt.REG_DWORD then
       return The_Value;
     else
       raise Wrong_Type;
@@ -346,7 +346,7 @@ package body Windows.Registry is
     function Convert is new Ada.Unchecked_Conversion(System.Address, Win32.PBYTE);
     function Convert is new Ada.Unchecked_Conversion(System.Address, Win32.PULONG);
     Entry_Name      : aliased constant String := The_Entry & Nul;
-    Entry_Type      : aliased Win32.DWORD;
+    Entry_Kind      : aliased Win32.DWORD;
     Max_String_Size : constant := 250;
     The_Size        : aliased Natural := Max_String_Size;
     The_Value       : String (1..Max_String_Size);
@@ -357,14 +357,14 @@ package body Windows.Registry is
     Return_Code := Win32.Winreg.RegQueryValueExA (The_Current_Key,
                                                   Win32.Addr(Entry_Name),
                                                   null,
-                                                  Entry_Type'unchecked_access,
+                                                  Entry_Kind'unchecked_access,
                                                   Convert(The_Value'address),
                                                   Convert(The_Size'address));
     if Return_Code = Win32.Winerror.ERROR_MORE_DATA then
       raise Overflow;
     elsif Return_Code /= Win32.Winerror.ERROR_SUCCESS then
       raise Entry_Not_Found;
-    elsif Entry_Type = Win32.Winnt.REG_SZ then
+    elsif Entry_Kind = Win32.Winnt.REG_SZ then
       return The_Value (1..The_Size - 1);
     else
       raise Wrong_Type;
@@ -376,7 +376,7 @@ package body Windows.Registry is
     function Convert is new Ada.Unchecked_Conversion(System.Address, Win32.PBYTE);
     function Convert is new Ada.Unchecked_Conversion(System.Address, Win32.PULONG);
     Entry_Name      : aliased constant Wide_String := Ada.Characters.Handling.To_Wide_String(The_Entry) & Wide_Nul;
-    Entry_Type      : aliased Win32.DWORD;
+    Entry_Kind      : aliased Win32.DWORD;
     Max_String_Size : constant := 250;
     The_Size        : aliased Natural := Max_String_Size;
     The_Value       : Wide_String (1..Max_String_Size);
@@ -387,14 +387,14 @@ package body Windows.Registry is
     Return_Code := Win32.Winreg.RegQueryValueExW (The_Current_Key,
                                                   Win32.Addr(Entry_Name),
                                                   null,
-                                                  Entry_Type'unchecked_access,
+                                                  Entry_Kind'unchecked_access,
                                                   Convert(The_Value'address),
                                                   Convert(The_Size'address));
     if Return_Code = Win32.Winerror.ERROR_MORE_DATA then
       raise Overflow;
     elsif Return_Code /= Win32.Winerror.ERROR_SUCCESS then
       raise Entry_Not_Found;
-    elsif Entry_Type = Win32.Winnt.REG_SZ then
+    elsif Entry_Kind = Win32.Winnt.REG_SZ then
       return The_Value (1..The_Size - 1);
     else
       raise Wrong_Type;
@@ -406,7 +406,7 @@ package body Windows.Registry is
     function Convert is new Ada.Unchecked_Conversion(System.Address, Win32.PBYTE);
     function Convert is new Ada.Unchecked_Conversion(System.Address, Win32.PULONG);
     Entry_Name      : aliased constant String := The_Entry & Nul;
-    Entry_Type      : aliased Win32.DWORD;
+    Entry_Kind      : aliased Win32.DWORD;
     Max_String_Size : constant := 250;
     The_Size        : aliased Natural := Max_String_Size;
     The_Value       : String (1..Max_String_Size);
@@ -418,16 +418,16 @@ package body Windows.Registry is
     Return_Code := Win32.Winreg.RegQueryValueExA (The_Current_Key,
                                                   Win32.Addr(Entry_Name),
                                                   null,
-                                                  Entry_Type'unchecked_access,
+                                                  Entry_Kind'unchecked_access,
                                                   Convert(The_Value'address),
                                                   Convert(The_Size'address));
     if Return_Code = Win32.Winerror.ERROR_MORE_DATA then
       raise Overflow;
     elsif Return_Code /= Win32.Winerror.ERROR_SUCCESS then
       raise Entry_Not_Found;
-    elsif Entry_Type = Win32.Winnt.REG_SZ then
+    elsif Entry_Kind = Win32.Winnt.REG_SZ then
       return +The_Value (1..The_Size - 1);
-    elsif Entry_Type = Win32.Winnt.REG_MULTI_SZ then
+    elsif Entry_Kind = Win32.Winnt.REG_MULTI_SZ then
       return Strings.Item_Of (The_Value (1..The_Size - 2), Ascii.Nul);
     else
       raise Wrong_Type;
