@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -28,7 +28,7 @@ package body Windows is
   package C renames  Interfaces.C;
 
   function Is_Nt return Boolean is
-    Temp_Bool           : Win32.BOOL;
+    Temp_Bool           : Win32.BOOL; pragma Unreferenced (Temp_Bool);
     Version_Information : aliased Base.OSVERSIONINFOA;
     use type Win32.DWORD;
   begin
@@ -40,7 +40,7 @@ package body Windows is
 
 
   function Is_Win98 return Boolean is
-    Temp_Bool                  : Win32.BOOL;
+    Temp_Bool                  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
     Version_Information        : aliased Base.OSVERSIONINFOA;
     Ver_Platform_Win32_Windows : constant := 1;
     use type Win32.DWORD;
@@ -90,7 +90,7 @@ package body Windows is
 
 
   function Is_First_Instance_Of (The_Name : String) return Boolean is
-    The_Handle : Win32.Windef.HWND;
+    The_Handle : Win32.Windef.HWND; pragma Unreferenced (The_Handle);
     use type Win32.DWORD;
   begin
     The_Handle := Base.CreateMutex (null, Win32.FALSE, Win32.Addr(The_Name));
@@ -165,7 +165,7 @@ package body Windows is
 
 
   procedure Reduce_Thread_Priority is
-    Temp          : Win32.BOOL;
+    Temp          : Win32.BOOL; pragma Unreferenced (Temp);
     Current_Tread : constant Nt.HANDLE := Base.GetCurrentThread;
   begin
     Temp := Base.SetThreadPriority (Current_Tread, Base.THREAD_PRIORITY_BELOW_NORMAL);
@@ -173,7 +173,7 @@ package body Windows is
 
 
   procedure Set_Priority_Class_To_Idle is
-    Temp    : Win32.BOOL;
+    Temp    : Win32.BOOL; pragma Unreferenced (Temp);
     Process : constant Nt.HANDLE := Base.GetCurrentProcess;
   begin
     Temp := Base.SetPriorityClass (Process, Base.IDLE_PRIORITY_CLASS);
@@ -201,7 +201,7 @@ package body Windows is
     The_Handle          : Nt.HANDLE;
     Th32cs_Snap_Process : constant Win32.DWORD := 16#02#;
     The_Information     : aliased Process_Entry;
-    Temp                : Win32.BOOL;
+    Temp                : Win32.BOOL; pragma Unreferenced (Temp);
     use type Nt.HANDLE;
     use type Win32.BOOL;
   begin
@@ -235,7 +235,7 @@ package body Windows is
     The_Handle         : Nt.HANDLE;
     Th32cs_Snap_Module : constant Win32.DWORD := 16#08#;
     The_Information    : aliased Module_Entry;
-    Temp               : Win32.BOOL;
+    Temp               : Win32.BOOL; pragma Unreferenced (Temp);
     use type Nt.HANDLE;
     use type Win32.BOOL;
   begin
@@ -258,7 +258,7 @@ package body Windows is
     Th32cs_Snap_Module : constant Win32.DWORD := 16#08#;
     The_Information    : aliased Module_Entry;
     Have_Data          : Boolean := False;
-    Temp               : Win32.BOOL;
+    Temp               : Win32.BOOL; pragma Unreferenced (Temp);
     use type Nt.HANDLE;
     use type Win32.BOOL;
   begin
@@ -280,7 +280,7 @@ package body Windows is
     The_Handle          : Nt.HANDLE;
     Th32cs_Snap_Module : constant Win32.DWORD := 16#08#;
     The_Information    : aliased Module_Entry;
-    Temp               : Win32.BOOL;
+    Temp               : Win32.BOOL; pragma Unreferenced (Temp);
     Have_Data          : Boolean := False;
     use type Nt.HANDLE;
     use type Win32.BOOL;
@@ -410,7 +410,7 @@ package body Windows is
 
     The_Creation_Flags : Win32.DWORD := 0;
     Inherit_Handles    : Win32.BOOL := Win32.FALSE;
-    Is_Ok              : Win32.BOOL;
+    Is_Ok              : Win32.BOOL; pragma Unreferenced (Is_Ok);
 
     use type Win32.BOOL;
     use type Win32.DWORD;
@@ -517,7 +517,7 @@ package body Windows is
     The_Result    : Boolean := False;
     Token_Handle  : aliased Nt.HANDLE;
     Required_Size : aliased Win32.DWORD;
-    Is_Ok         : Win32.BOOL;
+    Is_Ok         : Win32.BOOL; pragma Unreferenced (Is_Ok);
     use type Win32.BOOL;
     use type Win32.DWORD;
   begin

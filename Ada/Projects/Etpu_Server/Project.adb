@@ -178,8 +178,6 @@ package body Project is
   The_Tools_Location      : Text.String;
   The_Work_Path           : String_List.Item;
 
-  Project_Is_Defined : Boolean := False;
-
   procedure Set_Project_Undefined is
   begin
     Text.Clear (The_Project_Name);
@@ -191,7 +189,6 @@ package body Project is
     Text.Clear (The_Product_Extension);
     Text.Clear (The_Tools_Location);
     String_List.Clear (The_Work_Path);
-    Project_Is_Defined := False;
   end Set_Project_Undefined;
 
 
@@ -332,7 +329,6 @@ package body Project is
     end loop;
     ----------------------------------------
     Set_Confirmation ("Project opened " & Project_Name);
-    Project_Is_Defined := True;
     return True;
   exception
   when Error_Set =>

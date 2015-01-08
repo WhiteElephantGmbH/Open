@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -43,7 +43,7 @@ package body Process is
     Default_Size : constant Win32.DWORD := 0;
     The_Data     : String (1..1000);
     The_Length   : aliased Win32.DWORD;
-    Temp         : Win32.BOOL;
+    Temp         : Win32.BOOL; pragma Unreferenced (Temp);
     The_Result   : Text.String;
 
     use type Win32.BOOL;

@@ -2,7 +2,7 @@
 -- *                                  Windows.Files.Io - File handling routines                                        *
 -- *                           Supports File open and creation using Wide_String filenames                             *
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -49,7 +49,7 @@ package body Windows.Files.Io is
     Name       : aliased constant String := Filename & Nul;
     Share_Mode : constant Win32.DWORD:= 0; -- Exclusive
     The_Handle : Win32.Winnt.HANDLE;
-    Is_Ok      : Win32.BOOL;
+    Is_Ok      : Win32.BOOL; pragma Unreferenced (Is_Ok);
     use type Win32.Winnt.HANDLE;
   begin
     The_Handle := Win32.Winbase.CreateFileA (Win32.Addr(Name),
@@ -72,7 +72,7 @@ package body Windows.Files.Io is
     Name       : aliased constant Wide_String := Filename & Wide_Nul;
     Share_Mode : constant := 0;
     The_Handle : Win32.Winnt.HANDLE;
-    Is_Ok      : Win32.BOOL;
+    Is_Ok      : Win32.BOOL; pragma Unreferenced (Is_Ok);
     use type Win32.Winnt.HANDLE;
   begin
     The_Handle := Win32.Winbase.CreateFileW (Win32.Addr(Name),
@@ -207,7 +207,7 @@ package body Windows.Files.Io is
 
 
   procedure Skip_Terminator (Fsa : File_Structure_Access) is
-    The_Character : Character;
+    The_Character : Character; pragma Unreferenced (The_Character);
   begin
     if Next_Character_From (Fsa) = Ascii.Cr and then -- must lookahead
       Fsa.Position /= Fsa.Extent and then -- not end of file
@@ -706,7 +706,7 @@ package body Windows.Files.Io is
 
 
   procedure Flush (File : Handle) is
-    Is_Ok : Win32.BOOL;
+    Is_Ok : Win32.BOOL; pragma Unreferenced (Is_Ok);
   begin
     if File.Fsa = null or else
        File.Fsa.Buffer = null
@@ -722,7 +722,7 @@ package body Windows.Files.Io is
 
 
   procedure Close (The_File : in out Handle) is
-    Is_Ok : Win32.BOOL;
+    Is_Ok : Win32.BOOL; pragma Unreferenced (Is_Ok);
     procedure Dispose is new Ada.Unchecked_Deallocation (Lookahead_Buffer, Buffer_Access);
   begin
     if The_File.Fsa = null or else

@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -130,7 +130,7 @@ package body Windows.Files is
       declare
         The_Handle : Nt.HANDLE;
         The_Data   : aliased Find_Data;
-        Temp_Bool  : Win32.BOOL;
+        Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
         use type Nt.HANDLE;
       begin
          The_Handle := Base.FindFirstFile (Win32.Addr(Filename),
@@ -164,7 +164,7 @@ package body Windows.Files is
       declare
         The_Handle : Nt.HANDLE;
         The_Data   : aliased Find_Data;
-        Temp_Bool  : Win32.BOOL;
+        Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
         use type Nt.HANDLE;
       begin
          The_Handle := Base.FindFirstFile (Win32.Addr(Filename),
@@ -199,7 +199,7 @@ package body Windows.Files is
       declare
         The_Handle : Nt.HANDLE;
         The_Data   : aliased Find_Wide_Data;
-        Temp_Bool  : Win32.BOOL;
+        Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
         use type Nt.HANDLE;
       begin
          The_Handle := Base.FindFirstFileW (Win32.Addr(Filename),
@@ -556,8 +556,7 @@ package body Windows.Files is
 
   type GET_FILEEX_INFO_LEVELS is (
     Getfileexinfostandard,
-    Getfileexmaxinfolevel);
-  pragma Warnings (Off, Getfileexmaxinfolevel); -- used for completeness
+    Getfileexmaxinfolevel); pragma Unreferenced (Getfileexmaxinfolevel); -- used for completeness
   for GET_FILEEX_INFO_LEVELS'size use 32;
 
 
@@ -746,7 +745,7 @@ package body Windows.Files is
   function The_Time_Now return File_Time is
     As_File_Time    : aliased Base.FILETIME;
     The_System_Time : aliased Base.SYSTEMTIME;
-    Temp_Bool       : Win32.BOOL;
+    Temp_Bool       : Win32.BOOL; pragma Unreferenced (Temp_Bool);
   begin
     Base.GetSystemTime (The_System_Time'unchecked_access);
     Temp_Bool := Base.SystemTimeToFileTime (The_System_Time'unchecked_access,
@@ -764,7 +763,7 @@ package body Windows.Files is
     The_File_Time  : aliased Base.FILETIME;
     As_Local_Time  : aliased Base.FILETIME;
     As_System_Time : aliased Base.SYSTEMTIME;
-    Temp_Bool      : Win32.BOOL;
+    Temp_Bool      : Win32.BOOL; pragma Unreferenced (Temp_Bool);
     Date_Size      : Integer;
     Max_Date_Size  : constant := 50;
     Date_Buffer    : aliased String (1..Max_Date_Size);
@@ -837,7 +836,7 @@ package body Windows.Files is
     use type Win32.BOOL;
     The_Data   : aliased Find_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL;
+    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
   begin
     The_Handle := Base.FindFirstFile (Win32.Addr(File_Names),
                                       The_Data'unchecked_access);
@@ -857,7 +856,7 @@ package body Windows.Files is
     use type Win32.BOOL;
     The_Data   : aliased Find_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL;
+    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
   begin
     The_Handle := Base.FindFirstFile (Win32.Addr(File_Names),
                                       The_Data'unchecked_access);
@@ -912,7 +911,7 @@ package body Windows.Files is
     use type Win32.CHAR;
     The_Data   : aliased Find_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL;
+    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
   begin
     The_Handle := Find_First_File_Exa (Win32.Addr(Search_Path),
                                        Find_Ex_Info_Standard,
@@ -948,7 +947,7 @@ package body Windows.Files is
     use type Win32.WCHAR;
     The_Data   : aliased Find_Wide_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL;
+    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
   begin
     The_Handle := Find_First_File_Exw (Win32.Addr(Search_Path),
                                        Find_Ex_Info_Standard,
@@ -983,7 +982,7 @@ package body Windows.Files is
     use type Win32.BOOL;
     The_Data   : aliased Find_Wide_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL;
+    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
   begin
     The_Handle := Base.FindFirstFileW (Win32.Addr(File_Names),
                                        The_Data'unchecked_access);
@@ -1003,7 +1002,7 @@ package body Windows.Files is
     use type Win32.BOOL;
     The_Data   : aliased Find_Wide_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL;
+    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
   begin
     The_Handle := Base.FindFirstFileW (Win32.Addr(File_Names),
                                        The_Data'unchecked_access);
@@ -1174,8 +1173,7 @@ package body Windows.Files is
 
 
   function Volume_Is_Ntfs (The_File_Name : Wide_String) return Boolean is
-    The_Volume_Name   : aliased Wide_String (1..10);
-    pragma Warnings (Off, The_Volume_Name);
+    The_Volume_Name   : aliased Wide_String (1..10); pragma Warnings (Off, The_Volume_Name);
     Root_Path_Name    : Wide_String := The_File_Name & '\' & Wide_Nul;
     Nr_Of_Backslashes : Natural := 1;
     use type Win32.BOOL;
@@ -1222,7 +1220,7 @@ package body Windows.Files is
   procedure Iterate_Alternate_Data_Streams_Of (Filename : String) is
     File_Name                : aliased constant String := Filename & Nul;
     The_File_Handle          : Nt.HANDLE;
-    Is_Ok                    : Win32.BOOL;
+    Is_Ok                    : Win32.BOOL; pragma Unreferenced (Is_Ok);
     The_Return_Code          : Integer;
     The_Io_Status_Block      : aliased Io_Status_Block;
 --  Buffer_Overflow          : constant Win32.Dword := 16#8000_0005#;
@@ -1278,7 +1276,7 @@ package body Windows.Files is
   procedure Iterate_Alternate_Wide_Data_Streams_Of (Filename : Wide_String) is
     File_Name                : aliased constant Wide_String := Filename & Wide_Nul;
     The_File_Handle          : Nt.HANDLE;
-    Is_Ok                    : Win32.BOOL;
+    Is_Ok                    : Win32.BOOL; pragma Unreferenced (Is_Ok);
     The_Return_Code          : Integer;
     The_Io_Status_Block      : aliased Io_Status_Block;
 --  Buffer_Overflow          : constant Win32.Dword := 16#8000_0005#;
@@ -1343,8 +1341,8 @@ package body Windows.Files is
     end if;
     return "";
   end Path_Of;
-  
-  
+
+
   function Is_On_Network (Drive : Character) return Boolean is
     Name   : aliased constant String := Drive & ":" & Nul;
     Length : aliased Win32.DWORD := 0;
@@ -1462,7 +1460,7 @@ package body Windows.Files is
         Segment_Name : aliased constant String := Segment & Nul;
         The_Data     : aliased Win32.Winbase.WIN32_FIND_DATAA;
         The_Handle   : Win32.Winnt.HANDLE;
-        Temp_Bool    : Win32.BOOL;
+        Temp_Bool    : Win32.BOOL; pragma Unreferenced (Temp_Bool);
       begin
         The_Handle := Win32.Winbase.FindFirstFileA (Win32.Addr(Segment_Name),
                                                     The_Data'unchecked_access);

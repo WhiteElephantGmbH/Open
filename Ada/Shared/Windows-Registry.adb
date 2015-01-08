@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -46,7 +46,7 @@ package body Windows.Registry is
 
   procedure Close_Current_Key is
     use type Win32.Winreg.HKEY;
-    Return_Code : Win32.LONG;
+    Return_Code : Win32.LONG; pragma Unreferenced (Return_Code);
   begin
     if (The_Current_Key /= Win32.Winreg.HKEY_CURRENT_USER) and
        (The_Current_Key /= Win32.Winreg.HKEY_LOCAL_MACHINE)
@@ -244,7 +244,7 @@ package body Windows.Registry is
 
   procedure Delete_Key (The_Key : String) is
     Key  : aliased constant String := The_Key & Nul;
-    Temp : Win32.LONG;
+    Temp : Win32.LONG; pragma Unreferenced (Temp);
   begin
     Temp := Win32.Winreg.RegDeleteKey (The_Root, Win32.Addr(Key));
   end Delete_Key;
