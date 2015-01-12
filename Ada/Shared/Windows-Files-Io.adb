@@ -328,7 +328,7 @@ package body Windows.Files.Io is
       declare
         Return_String : constant String := Fsa.Buffer (Start_Position..Terminator_Position - 1);
         Next_Byte : constant Character := Next_Character_From (Fsa);
-        pragma Warnings (Off, Next_Byte); -- read ahead
+        pragma Unreferenced (Next_Byte); -- read ahead
       begin
         return Return_String;
       end;
