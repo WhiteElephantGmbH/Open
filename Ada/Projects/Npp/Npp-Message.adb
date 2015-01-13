@@ -22,7 +22,7 @@ package body Npp.Message is
 
   function Convert is new Ada.Unchecked_Conversion (System.Address, Win.LPARAM);
 
-  Rich_Edit_Dll : Win.HINSTANCE := System.Null_Address; pragma Unreferenced (Rich_Edit_Dll);
+  Rich_Edit_Dll : Win.HINSTANCE := System.Null_Address with Unreferenced;
   The_Messages  : Win.HWND;
 
   The_Messages_Data : Dock_Data;

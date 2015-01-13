@@ -371,7 +371,7 @@ package body Client is
     use type Server.References;
 
     Filename_Item : Npp.Tree_View.Item := Npp.Tree_View.Root;
-    Dummy_Item    : Npp.Tree_View.Item; pragma Unreferenced (Dummy_Item);
+    Dummy_Item    : Npp.Tree_View.Item with Unreferenced;
     The_Line      : Text.String;
 
   begin
