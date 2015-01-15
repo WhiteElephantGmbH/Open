@@ -55,6 +55,8 @@ package body Windows.Pipe is
     use type Win32.DWORD;
   begin
     case Error is
+    when Win32.Winerror.NO_ERROR =>
+      null;
     when Win32.Winerror.ERROR_ACCESS_DENIED =>
       raise Access_Denied;
     when Win32.Winerror.ERROR_BROKEN_PIPE =>
@@ -66,6 +68,7 @@ package body Windows.Pipe is
     when Win32.Winerror.ERROR_MORE_DATA =>
       raise More_Data;
     when Win32.Winerror.ERROR_NO_DATA =>
+      Log.Write ("Windows.Pipe - No_Data");
       raise No_Data;
     when Win32.Winerror.ERROR_PIPE_BUSY =>
       raise Name_In_Use;
@@ -74,10 +77,6 @@ package body Windows.Pipe is
     when Win32.Winerror.ERROR_PIPE_NOT_CONNECTED =>
       raise No_Server;
     when others =>
-      if Error = 0 then
-        Log.Write ("Windows.Pipe - No Error");
-        raise Broken;
-      end if;
       Log.Write ("Windows.Pipe - Unknown_Error:" & Win32.DWORD'image(Error));
       raise Unknown_Error;
     end case;
@@ -337,6 +336,7 @@ package body Windows.Pipe is
     use type Win32.BOOL;
 
   begin
+    Length := 0;
     Check (From_Pipe);
     if From_Pipe.Kind = Client then
       if Wait_Time /= Forever then
