@@ -35,8 +35,6 @@
 
 with Ada.Unchecked_Conversion;
 with Ada.Unchecked_Deallocation;
-with Ada.Tags; use Ada.Tags;
-
 with GWindows.GStrings;
 with GWindows.Internal;
 with GWindows.Utilities;
@@ -66,7 +64,7 @@ package body GWindows.Base is
    --  violation
 
    procedure Destroy_Children
-     (Window : GWindows.Base.Base_Window_Type'Class);
+     (Window : GWindows.Base.Base_Window_Type'class);
    --  Perform the enumeration of child windows for destruction
 
    procedure DestroyMenu
@@ -270,7 +268,7 @@ package body GWindows.Base is
 
    procedure Create_Control
      (Window     : in out Base_Window_Type;
-      Parent     : in out Base_Window_Type'Class;
+      Parent     : in out Base_Window_Type'class;
       Win_Class  : in     GString;
       Text       : in     GString;
       Left       : in     Integer;
@@ -283,13 +281,13 @@ package body GWindows.Base is
    is
       use GWindows.Drawing_Objects;
 
-      procedure Link (Window : in out Base_Window_Type'Class);
+      procedure Link (Window : in out Base_Window_Type'class);
       --  Attach HWND to Window
 
-      procedure Link (Window : in out Base_Window_Type'Class) is
+      procedure Link (Window : in out Base_Window_Type'class) is
       begin
          GWindows.Internal.GWindows_Object_Property_Atom := GlobalAddAtom;
-         Set_GWindow_Object (Window.HWND, Window'Unchecked_Access);
+         Set_GWindow_Object (Window.HWND, Window'unchecked_access);
       end Link;
 
       C_Text  : constant GString_C := GWindows.GStrings.To_GString_C (Text);
@@ -324,18 +322,18 @@ package body GWindows.Base is
          Style := Styles;
       end if;
 
-      On_Pre_Create (Base_Window_Type'Class (Window), Style, ExStyle);
+      On_Pre_Create (Base_Window_Type'class (Window), Style, ExStyle);
 
       Window.HWND := CreateWindowEx (hwndParent => PHWND);
       Window.Is_Dynamic := Is_Dynamic;
 
       Link (Window);
       Window.ParentWindowProc := Get_Window_Procedure (Window.HWND);
-      Set_Window_Procedure (Window.HWND, New_Proc => WndProc_Control'Access);
+      Set_Window_Procedure (Window.HWND, New_Proc => WndProc_Control'access);
       Window.Is_Control := True;
       Get_Font (Parent, Parent_Font);
       Set_Font (Window, Parent_Font);
-      On_Create (Base_Window_Type'Class (Window));
+      On_Create (Base_Window_Type'class (Window));
    end Create_Control;
 
    ------------
@@ -347,12 +345,12 @@ package body GWindows.Base is
       HWND       : in     GWindows.Types.Handle;
       Is_Dynamic : in     Boolean               := False)
    is
-      procedure Link (Window : in out Base_Window_Type'Class);
+      procedure Link (Window : in out Base_Window_Type'class);
       --  Attach HWND to Window
 
-      procedure Link (Window : in out Base_Window_Type'Class) is
+      procedure Link (Window : in out Base_Window_Type'class) is
       begin
-         Set_GWindow_Object (Window.HWND, Window'Unchecked_Access);
+         Set_GWindow_Object (Window.HWND, Window'unchecked_access);
       end Link;
 
    begin
@@ -362,7 +360,7 @@ package body GWindows.Base is
       GWindows.Internal.GWindows_Object_Property_Atom := GlobalAddAtom;
       Link (Window);
       Window.ParentWindowProc := Get_Window_Procedure (Window.HWND);
-      Set_Window_Procedure (Window.HWND, New_Proc => WndProc'Access);
+      Set_Window_Procedure (Window.HWND, New_Proc => WndProc'access);
    end Attach;
 
    -------------------
@@ -376,7 +374,7 @@ package body GWindows.Base is
    is
    begin
       Link (Window, HWND, Is_Dynamic, Window_Link);
-      Set_Window_Procedure (Window.HWND, New_Proc => WndProc'Access);
+      Set_Window_Procedure (Window.HWND, New_Proc => WndProc'access);
    end Attach_Dialog;
 
    --------------------
@@ -388,13 +386,13 @@ package body GWindows.Base is
       HWND       : in     GWindows.Types.Handle;
       Is_Dynamic : in     Boolean               := False)
    is
-      procedure Link (Window : in out Base_Window_Type'Class);
+      procedure Link (Window : in out Base_Window_Type'class);
       --  Attach HWND to Window
 
-      procedure Link (Window : in out Base_Window_Type'Class) is
+      procedure Link (Window : in out Base_Window_Type'class) is
       begin
          GWindows.Internal.GWindows_Object_Property_Atom := GlobalAddAtom;
-         Set_GWindow_Object (Window.HWND, Window'Unchecked_Access);
+         Set_GWindow_Object (Window.HWND, Window'unchecked_access);
       end Link;
 
    begin
@@ -403,7 +401,7 @@ package body GWindows.Base is
 
       Link (Window);
       Window.ParentWindowProc := Get_Window_Procedure (Window.HWND);
-      Set_Window_Procedure (Window.HWND, New_Proc => WndProc_Control'Access);
+      Set_Window_Procedure (Window.HWND, New_Proc => WndProc_Control'access);
       Window.Is_Control := True;
    end Attach_Control;
 
@@ -413,7 +411,7 @@ package body GWindows.Base is
 
    procedure Attach_Dialog_Item
      (Window     : in out Base_Window_Type;
-      Parent     : in     Base_Window_Type'Class;
+      Parent     : in     Base_Window_Type'class;
       ID         : in     Integer;
       Is_Dynamic : in     Boolean               := False)
    is
@@ -431,7 +429,7 @@ package body GWindows.Base is
    ----------
 
    procedure Link
-     (Window     : in out Base_Window_Type'Class;
+     (Window     : in out Base_Window_Type'class;
       HWND       : in     GWindows.Types.Handle;
       Is_Dynamic : in     Boolean;
       Link_Type  : in     Link_Type_Type         := Window_Link)
@@ -442,19 +440,19 @@ package body GWindows.Base is
 
       case Link_Type is
          when Window_Link =>
-            Window.ParentWindowProc := DefWindowProc'Access;
+            Window.ParentWindowProc := DefWindowProc'access;
          when MDI_Child_Link =>
-            Window.ParentWindowProc := DefMDIChildProc'Access;
+            Window.ParentWindowProc := DefMDIChildProc'access;
          when Control_Link =>
             Window.Is_Control := True;
-            Window.ParentWindowProc := DefWindowProc'Access;
+            Window.ParentWindowProc := DefWindowProc'access;
          when Desktop_Link =>
             return;
       end case;
 
       GWindows.Internal.GWindows_Object_Property_Atom := GlobalAddAtom;
-      Set_GWindow_Object (Window.HWND, Window'Unchecked_Access);
-      GWindows.Internal.Add_Keyboard_Control (Window'Unchecked_Access);
+      Set_GWindow_Object (Window.HWND, Window'unchecked_access);
+      GWindows.Internal.Add_Keyboard_Control (Window'unchecked_access);
    end Link;
 
    -----------------------
@@ -683,7 +681,7 @@ package body GWindows.Base is
    end Order;
 
    procedure Order (Window       : in out Base_Window_Type;
-                    After_Window : in     Base_Window_Type'Class)
+                    After_Window : in     Base_Window_Type'class)
    is
    begin
       SetWindowPos (Handle (Window), Handle (After_Window),
@@ -918,7 +916,7 @@ package body GWindows.Base is
       procedure GetWindowText
         (hwnd : GWindows.Types.Handle   := Window.HWND;
          Text : GString_C               := Buf;
-         Max  : Interfaces.C.size_t     := Buf'Last);
+         Max  : Interfaces.C.size_t     := Buf'last);
       pragma Import (StdCall, GetWindowText,
                        "GetWindowText" & Character_Mode_Identifier);
    begin
@@ -1365,7 +1363,7 @@ package body GWindows.Base is
    ------------
 
    procedure Parent (Window        : in out Base_Window_Type;
-                     Parent_Window : in out Base_Window_Type'Class)
+                     Parent_Window : in out Base_Window_Type'class)
    is
       procedure SetParent
         (hwnd  : GWindows.Types.Handle := Window.HWND;
@@ -1492,7 +1490,7 @@ package body GWindows.Base is
       procedure InvalidateRect
         (Hwnd   : GWindows.Types.Handle := Window.HWND;
          lpRect : Integer               := 0;
-         bErase : Integer               := Boolean'Pos (Erase));
+         bErase : Integer               := Boolean'pos (Erase));
       pragma Import (StdCall, InvalidateRect, "InvalidateRect");
 
       procedure RedrawWindow
@@ -1562,7 +1560,7 @@ package body GWindows.Base is
    ------------
 
    procedure Center (Window : in out Base_Window_Type;
-                     Other  : in     Base_Window_Type'Class)
+                     Other  : in     Base_Window_Type'class)
    is
    begin
       Move (Window,
@@ -1591,7 +1589,7 @@ package body GWindows.Base is
    -------------------
 
    function Next_Tab_Stop (Window  : in Base_Window_Type;
-                           Control : in Base_Window_Type'Class)
+                           Control : in Base_Window_Type'class)
                           return Pointer_To_Base_Window_Class
    is
       function GetNextDlgTabItem
@@ -1612,7 +1610,7 @@ package body GWindows.Base is
    -----------------------
 
    function Previous_Tab_Stop (Window  : in Base_Window_Type;
-                               Control : in Base_Window_Type'Class)
+                               Control : in Base_Window_Type'class)
                               return Pointer_To_Base_Window_Class
    is
       function GetNextDlgTabItem
@@ -1658,7 +1656,7 @@ package body GWindows.Base is
                                   lparam : Enumerate_Function);
       pragma Import (StdCall, EnumChildWindows, "EnumChildWindows");
    begin
-      EnumChildWindows (Window.HWND, Enum_Proc'Address, Proc);
+      EnumChildWindows (Window.HWND, Enum_Proc'address, Proc);
    end Enumerate_Children;
 
    ---------------
@@ -1689,7 +1687,7 @@ package body GWindows.Base is
    is
    begin
       if Window.On_Create_Event /= null then
-         Window.On_Create_Event (Base_Window_Type'Class (Window));
+         Window.On_Create_Event (Base_Window_Type'class (Window));
       end if;
    end Fire_On_Create;
 
@@ -1726,7 +1724,7 @@ package body GWindows.Base is
    is
    begin
       if Window.On_Pre_Create_Event /= null then
-         Window.On_Pre_Create_Event (Base_Window_Type'Class (Window),
+         Window.On_Pre_Create_Event (Base_Window_Type'class (Window),
                                      dwStyle,
                                      dwExStyle);
       end if;
@@ -1777,7 +1775,7 @@ package body GWindows.Base is
    is
    begin
       if Window.On_Destroy_Event /= null then
-         Window.On_Destroy_Event (Base_Window_Type'Class (Window));
+         Window.On_Destroy_Event (Base_Window_Type'class (Window));
       end if;
    end Fire_On_Destroy;
 
@@ -1814,7 +1812,7 @@ package body GWindows.Base is
    is
    begin
       if Window.On_Context_Menu_Event /= null then
-         Window.On_Context_Menu_Event (Base_Window_Type'Class (Window),
+         Window.On_Context_Menu_Event (Base_Window_Type'class (Window),
                                        X, Y);
       end if;
    end Fire_On_Context_Menu;
@@ -1858,7 +1856,7 @@ package body GWindows.Base is
    is
    begin
       if Window.On_Horizontal_Scroll_Event /= null then
-         Window.On_Horizontal_Scroll_Event (Base_Window_Type'Class (Window),
+         Window.On_Horizontal_Scroll_Event (Base_Window_Type'class (Window),
                                             Request);
       end if;
    end Fire_On_Horizontal_Scroll;
@@ -1902,7 +1900,7 @@ package body GWindows.Base is
    is
    begin
       if Window.On_Vertical_Scroll_Event /= null then
-         Window.On_Vertical_Scroll_Event (Base_Window_Type'Class (Window),
+         Window.On_Vertical_Scroll_Event (Base_Window_Type'class (Window),
                                             Request);
       end if;
    end Fire_On_Vertical_Scroll;
@@ -2502,11 +2500,11 @@ package body GWindows.Base is
    end Destroy_Win;
 
    procedure Destroy_Children
-     (Window : GWindows.Base.Base_Window_Type'Class)
+     (Window : GWindows.Base.Base_Window_Type'class)
    is
    begin
       GWindows.Base.Enumerate_Children (Window,
-                                        Destroy_Win'Access);
+                                        Destroy_Win'access);
    end Destroy_Children;
 
    ----------
@@ -2515,7 +2513,7 @@ package body GWindows.Base is
 
    procedure Free (This : in Pointer_To_Base_Window_Class) is
       procedure Free_Object is
-         new Ada.Unchecked_Deallocation (Base_Window_Type'Class,
+         new Ada.Unchecked_Deallocation (Base_Window_Type'class,
                                          Pointer_To_Base_Window_Class);
    begin
       if This.Is_Dynamic then
@@ -2540,6 +2538,6 @@ begin
    Window_Class.hInstance := GWindows.Internal.Current_hInstance;
    Window_Class.hIcon := LoadIcon;
    Window_Class.lpszClassName := GWindows.Internal.Window_Class_Name
-     (GWindows.Internal.Window_Class_Name'First)'Access;
+     (GWindows.Internal.Window_Class_Name'first)'access;
    RegisterClass;
 end GWindows.Base;

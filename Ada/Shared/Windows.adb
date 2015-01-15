@@ -28,25 +28,25 @@ package body Windows is
   package C renames  Interfaces.C;
 
   function Is_Nt return Boolean is
-    Temp_Bool           : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+    Unused : Win32.BOOL;
     Version_Information : aliased Base.OSVERSIONINFOA;
     use type Win32.DWORD;
   begin
     Version_Information.dwOSVersionInfoSize := Win32.DWORD (Base.OSVERSIONINFOA'size / 8);
-    Temp_Bool := Base.GetVersionEx (Version_Information'unchecked_access);
+    Unused := Base.GetVersionEx (Version_Information'unchecked_access);
     return (Version_Information.dwPlatformId = Base.VER_PLATFORM_WIN32_NT) and
            (Version_Information.dwMajorVersion >= 4);
   end Is_Nt;
 
 
   function Is_Win98 return Boolean is
-    Temp_Bool                  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+    Unused                     : Win32.BOOL;
     Version_Information        : aliased Base.OSVERSIONINFOA;
     Ver_Platform_Win32_Windows : constant := 1;
     use type Win32.DWORD;
   begin
     Version_Information.dwOSVersionInfoSize := Win32.DWORD (Base.OSVERSIONINFOA'size / 8);
-    Temp_Bool := Base.GetVersionEx (Version_Information'unchecked_access);
+    Unused := Base.GetVersionEx (Version_Information'unchecked_access);
     return (Version_Information.dwPlatformId = Ver_Platform_Win32_Windows) and
            (Version_Information.dwMajorVersion = 4) and
            (Version_Information.dwMinorVersion >= 10);
@@ -90,10 +90,10 @@ package body Windows is
 
 
   function Is_First_Instance_Of (The_Name : String) return Boolean is
-    The_Handle : Win32.Windef.HWND; pragma Unreferenced (The_Handle);
+    Unused : Win32.Windef.HWND;
     use type Win32.DWORD;
   begin
-    The_Handle := Base.CreateMutex (null, Win32.FALSE, Win32.Addr(The_Name));
+    Unused := Base.CreateMutex (null, Win32.FALSE, Win32.Addr(The_Name));
     return Base.GetLastError = 0; -- We succeeded in creating the first occurrence of the mutex
   end Is_First_Instance_Of;
 
@@ -165,18 +165,18 @@ package body Windows is
 
 
   procedure Reduce_Thread_Priority is
-    Temp          : Win32.BOOL; pragma Unreferenced (Temp);
+    Unused        : Win32.BOOL;
     Current_Tread : constant Nt.HANDLE := Base.GetCurrentThread;
   begin
-    Temp := Base.SetThreadPriority (Current_Tread, Base.THREAD_PRIORITY_BELOW_NORMAL);
+    Unused := Base.SetThreadPriority (Current_Tread, Base.THREAD_PRIORITY_BELOW_NORMAL);
   end Reduce_Thread_Priority;
 
 
   procedure Set_Priority_Class_To_Idle is
-    Temp    : Win32.BOOL; pragma Unreferenced (Temp);
+    Unused  : Win32.BOOL;
     Process : constant Nt.HANDLE := Base.GetCurrentProcess;
   begin
-    Temp := Base.SetPriorityClass (Process, Base.IDLE_PRIORITY_CLASS);
+    Unused := Base.SetPriorityClass (Process, Base.IDLE_PRIORITY_CLASS);
   end Set_Priority_Class_To_Idle;
 
   function Create_Tool_Help32_Snapshot (Flags : Win32.DWORD;
@@ -201,7 +201,7 @@ package body Windows is
     The_Handle          : Nt.HANDLE;
     Th32cs_Snap_Process : constant Win32.DWORD := 16#02#;
     The_Information     : aliased Process_Entry;
-    Temp                : Win32.BOOL; pragma Unreferenced (Temp);
+    Unused              : Win32.BOOL;
     use type Nt.HANDLE;
     use type Win32.BOOL;
   begin
@@ -214,7 +214,7 @@ package body Windows is
           exit when Process32_Next (The_Handle, The_Information'unchecked_access) = Win32.FALSE;
         end loop;
       end if;
-      Temp := Base.CloseHandle (The_Handle);
+      Unused := Base.CloseHandle (The_Handle);
     end if;
   end Iterate_Processes;
 
@@ -235,7 +235,7 @@ package body Windows is
     The_Handle         : Nt.HANDLE;
     Th32cs_Snap_Module : constant Win32.DWORD := 16#08#;
     The_Information    : aliased Module_Entry;
-    Temp               : Win32.BOOL; pragma Unreferenced (Temp);
+    Unused             : Win32.BOOL;
     use type Nt.HANDLE;
     use type Win32.BOOL;
   begin
@@ -248,7 +248,7 @@ package body Windows is
           exit when Module32_Next (The_Handle, The_Information'unchecked_access) = Win32.FALSE;
         end loop;
       end if;
-      Temp := Base.CloseHandle (The_Handle);
+      Unused := Base.CloseHandle (The_Handle);
     end if;
   end Iterate_Modules;
 
@@ -258,7 +258,7 @@ package body Windows is
     Th32cs_Snap_Module : constant Win32.DWORD := 16#08#;
     The_Information    : aliased Module_Entry;
     Have_Data          : Boolean := False;
-    Temp               : Win32.BOOL; pragma Unreferenced (Temp);
+    Unused             : Win32.BOOL;
     use type Nt.HANDLE;
     use type Win32.BOOL;
   begin
@@ -266,7 +266,7 @@ package body Windows is
     if The_Handle /= Base.INVALID_HANDLE_VALUE then
       The_Information.Entry_Size := Win32.DWORD(Module_Entry'size / 8); -- size in bytes.
       Have_Data := Module32_First (The_Handle, The_Information'unchecked_access) /= Win32.FALSE;
-      Temp := Base.CloseHandle (The_Handle);
+      Unused := Base.CloseHandle (The_Handle);
     end if;
     if Have_Data then
       return The_Information;
@@ -280,7 +280,7 @@ package body Windows is
     The_Handle          : Nt.HANDLE;
     Th32cs_Snap_Module : constant Win32.DWORD := 16#08#;
     The_Information    : aliased Module_Entry;
-    Temp               : Win32.BOOL; pragma Unreferenced (Temp);
+    Unused             : Win32.BOOL;
     Have_Data          : Boolean := False;
     use type Nt.HANDLE;
     use type Win32.BOOL;
@@ -297,7 +297,7 @@ package body Windows is
           exit when Have_Data or else Module32_Next (The_Handle, The_Information'unchecked_access) = Win32.FALSE;
         end loop;
       end if;
-      Temp := Base.CloseHandle (The_Handle);
+      Unused := Base.CloseHandle (The_Handle);
     end if;
     if Have_Data then
       return The_Information;
@@ -410,7 +410,7 @@ package body Windows is
 
     The_Creation_Flags : Win32.DWORD := 0;
     Inherit_Handles    : Win32.BOOL := Win32.FALSE;
-    Is_Ok              : Win32.BOOL; pragma Unreferenced (Is_Ok);
+    Unused             : Win32.BOOL;
 
     use type Win32.BOOL;
     use type Win32.DWORD;
@@ -504,8 +504,8 @@ package body Windows is
         end if;
       end;
     end if;
-    Is_Ok := Base.CloseHandle (Process_Information.hProcess);
-    Is_Ok := Base.CloseHandle (Process_Information.hThread);
+    Unused := Base.CloseHandle (Process_Information.hProcess);
+    Unused := Base.CloseHandle (Process_Information.hThread);
   end Create_Process;
 
 
@@ -517,7 +517,7 @@ package body Windows is
     The_Result    : Boolean := False;
     Token_Handle  : aliased Nt.HANDLE;
     Required_Size : aliased Win32.DWORD;
-    Is_Ok         : Win32.BOOL; pragma Unreferenced (Is_Ok);
+    Unused         : Win32.BOOL;
     use type Win32.BOOL;
     use type Win32.DWORD;
   begin
@@ -583,7 +583,7 @@ package body Windows is
           end if;
         end;
       end if;
-      Is_Ok := Base.CloseHandle (Token_Handle);
+      Unused := Base.CloseHandle (Token_Handle);
     end if;
     return The_Result;
   end Executing_As_Service;

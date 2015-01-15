@@ -34,15 +34,13 @@
 ------------------------------------------------------------------------------
 
 with Ada.Unchecked_Conversion;
+with GWindows.GStrings;
+with GWindows.Internal;
+with GWindows.Utilities;
 with System;
 
-with Gwindows.Gstrings;
-with Gwindows.Utilities;
-with Gwindows.Internal;
---with Ada.Text_Io; use Ada.Text_Io;
-
-package body Gwindows.Common_Controls is
-   use type Interfaces.C.Unsigned;
+package body GWindows.Common_Controls is
+   use type Interfaces.C.unsigned;
 
    -------------------------------------------------------------------------
    --  Operating System Imports
@@ -147,14 +145,14 @@ package body Gwindows.Common_Controls is
    --     LVIS_STATEIMAGEMASK     : constant := 16#F000#;
    type Systemtime is
       record
-         Wyear         : Interfaces.C.Short;
-         Wmonth        : Interfaces.C.Short;
-         Wdayofweek    : Interfaces.C.Short := 0;
-         Wday          : Interfaces.C.Short;
-         Whour         : Interfaces.C.Short;
-         Wminute       : Interfaces.C.Short;
-         Wsecond       : Interfaces.C.Short;
-         Wmilliseconds : Interfaces.C.Short := 0;
+         Wyear         : Interfaces.C.short;
+         Wmonth        : Interfaces.C.short;
+         Wdayofweek    : Interfaces.C.short := 0;
+         Wday          : Interfaces.C.short;
+         Whour         : Interfaces.C.short;
+         Wminute       : Interfaces.C.short;
+         Wsecond       : Interfaces.C.short;
+         Wmilliseconds : Interfaces.C.short := 0;
       end record;
 
    function Calendar_To_Systemtime (
@@ -171,22 +169,22 @@ package body Gwindows.Common_Controls is
    --     LVIF_STATE              : constant := 16#0008#;
    --     LVIF_INDENT             : constant := 16#0010#;
    --     LVIF_NORECOMPUTE        : constant := 16#0800#;
-   type Lptstr is access all Gchar_C;
+   type Lptstr is access all GChar_C;
 
    use Interfaces.C;
-   Max_Lparam : Interfaces.C.Int := 0;
+   --Max_Lparam : Interfaces.C.Int := 0;
 
    type Lvitem is
       record
-         Mask      : Interfaces.C.Unsigned := 0;
+         Mask      : Interfaces.C.unsigned := 0;
          Item      : Integer               := 0;
          Subitem   : Integer               := 0;
-         State     : Interfaces.C.Unsigned := 0;
-         Statemask : Interfaces.C.Unsigned := 0;
+         State     : Interfaces.C.unsigned := 0;
+         Statemask : Interfaces.C.unsigned := 0;
          Text      : Lptstr                := null;
          Textmax   : Integer               := 0;
          Image     : Integer;
-         Lparam    : Interfaces.C.Int;
+         Lparam    : Interfaces.C.int;
          Indent    : Integer;
       end record;
 
@@ -205,8 +203,8 @@ package body Gwindows.Common_Controls is
    --     LVCFMT_COL_HAS_IMAGES   : constant := 16#8000#;
    type Lvcolumn is
       record
-         Mask    : Interfaces.C.Unsigned := 0;
-         Format  : Interfaces.C.Unsigned := 0;
+         Mask    : Interfaces.C.unsigned := 0;
+         Format  : Interfaces.C.unsigned := 0;
          Width   : Integer               := 0;
          Text    : Lptstr                := null;
          Textmax : Integer               := 0;
@@ -255,16 +253,16 @@ package body Gwindows.Common_Controls is
    --     TVIS_USERMASK           : constant := 16#F000#;
    type Tvitem is
       record
-         Mask           : Interfaces.C.Unsigned := 0;
+         Mask           : Interfaces.C.unsigned := 0;
          Hitem          : Tree_Item_Node        := 0;
-         State          : Interfaces.C.Unsigned := 0;
-         State_Mask     : Interfaces.C.Unsigned := 0;
+         State          : Interfaces.C.unsigned := 0;
+         State_Mask     : Interfaces.C.unsigned := 0;
          Text           : Lptstr                := null;
          Textmax        : Integer               := 0;
          Image          : Integer               := 0;
          Selected_Image : Integer               := 0;
          Children       : Integer               := 0;
-         Lparam         : Interfaces.C.Int      := 0;
+         Lparam         : Interfaces.C.int      := 0;
       end record;
 
    Tcm_First          : constant := 16#1300#;
@@ -289,13 +287,13 @@ package body Gwindows.Common_Controls is
    --    TCIF_STATE              : constant := 16#0010#;
    type Tcitem is
       record
-         Mask       : Interfaces.C.Unsigned                      := 0;
-         State      : Interfaces.C.Unsigned                      := 0;
-         State_Mask : Interfaces.C.Unsigned                      := 0;
+         Mask       : Interfaces.C.unsigned                      := 0;
+         State      : Interfaces.C.unsigned                      := 0;
+         State_Mask : Interfaces.C.unsigned                      := 0;
          Text       : Lptstr                                     := null;
          Textmax    : Integer                                    := 0;
          Image      : Integer                                    := 0;
-         Lparam     : Gwindows.Base.Pointer_To_Base_Window_Class := null;
+         Lparam     : GWindows.Base.Pointer_To_Base_Window_Class := null;
       end record;
 
    Tb_Addbuttons       : constant := (Wm_User + 20);
@@ -310,8 +308,8 @@ package body Gwindows.Common_Controls is
       record
          Image   : Integer                    := 0;
          Command : Integer                    := 0;
-         State   : Interfaces.C.Unsigned_Char := 0;
-         Style   : Interfaces.C.Unsigned_Char := 0;
+         State   : Interfaces.C.unsigned_char := 0;
+         Style   : Interfaces.C.unsigned_char := 0;
          Data    : Integer                    := 0;
          Istring : Integer                    := 0;
       end record;
@@ -365,11 +363,11 @@ package body Gwindows.Common_Controls is
    type Toolinfo is
       record
          Size   : Integer                       := 44;
-         Flags  : Interfaces.C.Unsigned         := 0;
-         Hwnd   : Gwindows.Types.Handle         := 0;
-         Uid    : Gwindows.Types.Handle         := 0;
-         Rect   : Gwindows.Types.Rectangle_Type := (0, 0, 0, 0);
-         Hinst  : Interfaces.C.Long             := Gwindows.Internal.Current_Hinstance;
+         Flags  : Interfaces.C.unsigned         := 0;
+         Hwnd   : GWindows.Types.Handle         := 0;
+         Uid    : GWindows.Types.Handle         := 0;
+         Rect   : GWindows.Types.Rectangle_Type := (0, 0, 0, 0);
+         Hinst  : Interfaces.C.long             := GWindows.Internal.Current_hInstance;
          Text   : Lptstr                        := null;
          Lparam : Integer                       := 0;
       end record;
@@ -474,9 +472,9 @@ package body Gwindows.Common_Controls is
 
    procedure On_Notify (
          Window       : in out Common_Control_Type;
-         Message      : in     Gwindows.Base.Pointer_To_Notification;
-         Control      : in     Gwindows.Base.Pointer_To_Base_Window_Class;
-         Return_Value : in out Interfaces.C.Long                           ) is
+         Message      : in     GWindows.Base.Pointer_To_Notification;
+         Control      : in     GWindows.Base.Pointer_To_Base_Window_Class;
+         Return_Value : in out Interfaces.C.long                           ) is
       pragma Warnings (Off, Control);
       pragma Warnings (Off, Return_Value);
 
@@ -492,23 +490,23 @@ package body Gwindows.Common_Controls is
    begin
       case Message.Code is
          when Nm_Outofmemory =>
-            On_Out_Of_Memory (Common_Control_Type'Class (Window));
+            On_Out_Of_Memory (Common_Control_Type'class (Window));
          when Nm_Click =>
-            On_Click (Common_Control_Type'Class (Window));
+            On_Click (Common_Control_Type'class (Window));
          when Nm_Dblclk =>
-            On_Double_Click (Common_Control_Type'Class (Window));
+            On_Double_Click (Common_Control_Type'class (Window));
          when Nm_Return =>
-            On_Return (Common_Control_Type'Class (Window));
+            On_Return (Common_Control_Type'class (Window));
          when Nm_Rclick =>
-            On_Right_Click (Common_Control_Type'Class (Window));
+            On_Right_Click (Common_Control_Type'class (Window));
          when Nm_Rdblclk =>
-            On_Right_Double_Click (Common_Control_Type'Class (Window));
+            On_Right_Double_Click (Common_Control_Type'class (Window));
          when Nm_Setfocus =>
-            On_Focus (Common_Control_Type'Class (Window));
+            On_Focus (Common_Control_Type'class (Window));
          when Nm_Killfocus =>
-            On_Lost_Focus (Common_Control_Type'Class (Window));
+            On_Lost_Focus (Common_Control_Type'class (Window));
          when Nm_Hover =>
-            On_Hover (Common_Control_Type'Class (Window));
+            On_Hover (Common_Control_Type'class (Window));
           when others =>
             null;
       end case;
@@ -521,8 +519,8 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Bar        : in out Status_Bar_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
-         Text       : in     Gstring;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
+         Text       : in     GString;
          Show       : in     Boolean                              := True;
          Is_Dynamic : in     Boolean                              := False ) is
       Sbs_Sizegrip : constant := 16#100#;
@@ -535,7 +533,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Bar);
+         GWindows.Common_Controls.Show (Bar);
       end if;
 
    end Create;
@@ -550,10 +548,10 @@ package body Gwindows.Common_Controls is
       Sb_Setparts : constant := 1028;
 
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Bar);
-            Umsg   : Interfaces.C.Int  := Sb_Setparts;
-            Wparam : Interfaces.C.Long := Positions'Length;
-            Lparam : System.Address    := Positions'Address );
+            Hwnd   : Interfaces.C.long := Handle (Bar);
+            Umsg   : Interfaces.C.int  := Sb_Setparts;
+            Wparam : Interfaces.C.long := Positions'length;
+            Lparam : System.Address    := Positions'address );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
    begin
@@ -566,7 +564,7 @@ package body Gwindows.Common_Controls is
 
    procedure Text (
          Bar  : in out Status_Bar_Type;
-         Text : in     Gstring;
+         Text : in     GString;
          Part : in     Natural;
          How  : in     Status_Kind_Type := Sunken ) is
       Sb_Settexta   : constant := 16#401#;
@@ -581,20 +579,20 @@ package body Gwindows.Common_Controls is
          Sunken => 0,
          Raised => Sbt_Popout);
 
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Text);
+      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Bar);
-            Umsg   : Interfaces.C.Int  := Sb_Settexta;
+            Hwnd   : Interfaces.C.long := Handle (Bar);
+            Umsg   : Interfaces.C.int  := Sb_Settexta;
             Wparam : Integer           := Format (How) + Part;
-            Lparam : System.Address    := C_Text'Address       );
+            Lparam : System.Address    := C_Text'address       );
       pragma Import (Stdcall, Sendmessagea, "SendMessageA");
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Bar);
-            Umsg   : Interfaces.C.Int  := Sb_Settextw;
+            Hwnd   : Interfaces.C.long := Handle (Bar);
+            Umsg   : Interfaces.C.int  := Sb_Settextw;
             Wparam : Integer           := Format (How) + Part;
-            Lparam : System.Address    := C_Text'Address       );
+            Lparam : System.Address    := C_Text'address       );
       pragma Import (Stdcall, Sendmessagew, "SendMessageW");
 
    begin
@@ -611,7 +609,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Click_Handler (
          Control : in out Common_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Click_Event := Handler;
    end On_Click_Handler;
@@ -622,10 +620,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Click (
          Control : in out Common_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Click_Event /= null then
-         Control.On_Click_Event (Base_Window_Type'Class (Control));
+         Control.On_Click_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Click;
 
@@ -635,7 +633,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Double_Click_Handler (
          Control : in out Common_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Double_Click_Event := Handler;
    end On_Double_Click_Handler;
@@ -646,10 +644,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Double_Click (
          Control : in out Common_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Double_Click_Event /= null then
-         Control.On_Double_Click_Event (Base_Window_Type'Class (Control));
+         Control.On_Double_Click_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Double_Click;
 
@@ -659,7 +657,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Right_Click_Handler (
          Control : in out Common_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Right_Click_Event := Handler;
    end On_Right_Click_Handler;
@@ -670,10 +668,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Right_Click (
          Control : in out Common_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Right_Click_Event /= null then
-         Control.On_Right_Click_Event (Base_Window_Type'Class (Control));
+         Control.On_Right_Click_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Right_Click;
 
@@ -683,7 +681,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Right_Double_Click_Handler (
          Control : in out Common_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Right_Double_Click_Event := Handler;
    end On_Right_Double_Click_Handler;
@@ -694,11 +692,11 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Right_Double_Click (
          Control : in out Common_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Right_Double_Click_Event /= null then
          Control.On_Right_Double_Click_Event
-            (Base_Window_Type'Class (Control));
+            (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Right_Double_Click;
 
@@ -708,7 +706,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Return_Handler (
          Control : in out Common_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Return_Event := Handler;
    end On_Return_Handler;
@@ -719,10 +717,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Return (
          Control : in out Common_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Return_Event /= null then
-         Control.On_Return_Event (Base_Window_Type'Class (Control));
+         Control.On_Return_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Return;
 
@@ -732,7 +730,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Out_Of_Memory_Handler (
          Control : in out Common_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Out_Of_Memory_Event := Handler;
    end On_Out_Of_Memory_Handler;
@@ -743,10 +741,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Out_Of_Memory (
          Control : in out Common_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Out_Of_Memory_Event /= null then
-         Control.On_Out_Of_Memory_Event (Base_Window_Type'Class (Control));
+         Control.On_Out_Of_Memory_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Out_Of_Memory;
 
@@ -756,7 +754,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Focus_Handler (
          Control : in out Common_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Focus_Event := Handler;
    end On_Focus_Handler;
@@ -767,10 +765,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Focus (
          Control : in out Common_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Focus_Event /= null then
-         Control.On_Focus_Event (Base_Window_Type'Class (Control));
+         Control.On_Focus_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Focus;
 
@@ -780,7 +778,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Lost_Focus_Handler (
          Control : in out Common_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Lost_Focus_Event := Handler;
    end On_Lost_Focus_Handler;
@@ -791,10 +789,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Lost_Focus (
          Control : in out Common_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Lost_Focus_Event /= null then
-         Control.On_Lost_Focus_Event (Base_Window_Type'Class (Control));
+         Control.On_Lost_Focus_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Lost_Focus;
 
@@ -804,7 +802,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Hover_Handler (
          Control : in out Common_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Hover_Event := Handler;
    end On_Hover_Handler;
@@ -815,10 +813,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Hover (
          Control : in out Common_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Hover_Event /= null then
-         Control.On_Hover_Event (Base_Window_Type'Class (Control));
+         Control.On_Hover_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Hover;
 
@@ -828,7 +826,7 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Control    : in out Animation_Control_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
          Left       : in     Integer;
          Top        : in     Integer;
          Width      : in     Integer                              := 1;
@@ -836,7 +834,7 @@ package body Gwindows.Common_Controls is
          Auto_Size  : in     Boolean                              := True;
          Show       : in     Boolean                              := True;
          Is_Dynamic : in     Boolean                              := False ) is
-      Styles : Interfaces.C.Unsigned := 0;
+      Styles : Interfaces.C.unsigned := 0;
    begin
       if not Auto_Size then
          Styles := Acs_Center;
@@ -850,7 +848,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Control);
+         GWindows.Common_Controls.Show (Control);
       end if;
 
    end Create;
@@ -861,22 +859,22 @@ package body Gwindows.Common_Controls is
 
    procedure Open (
          Control : in out Animation_Control_Type;
-         Name    : in     Gstring                 ) is
-      C_Text : constant Gstring_C := Gwindows.Gstrings.To_Gstring_C (Name);
+         Name    : in     GString                 ) is
+      C_Text : constant GString_C := GWindows.GStrings.To_GString_C (Name);
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Acm_Opena;
-            Wparam : Interfaces.C.Long := 0;
-            Lparam : Gstring_C         := C_Text            );
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Acm_Opena;
+            Wparam : Interfaces.C.long := 0;
+            Lparam : GString_C         := C_Text            );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Acm_Openw;
-            Wparam : Interfaces.C.Long := 0;
-            Lparam : Gstring_C         := C_Text            );
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Acm_Openw;
+            Wparam : Interfaces.C.long := 0;
+            Lparam : GString_C         := C_Text            );
       pragma Import (Stdcall, Sendmessagew,
          "SendMessage" & Character_Mode_Identifier);
    begin
@@ -894,18 +892,18 @@ package body Gwindows.Common_Controls is
    procedure Close (
          Control : in out Animation_Control_Type ) is
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Acm_Opena;
-            Wparam : Interfaces.C.Long := 0;
-            Lparam : Interfaces.C.Long := 0                 );
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Acm_Opena;
+            Wparam : Interfaces.C.long := 0;
+            Lparam : Interfaces.C.long := 0                 );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Acm_Openw;
-            Wparam : Interfaces.C.Long := 0;
-            Lparam : Interfaces.C.Long := 0                 );
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Acm_Openw;
+            Wparam : Interfaces.C.long := 0;
+            Lparam : Interfaces.C.long := 0                 );
       pragma Import (Stdcall, Sendmessagew,
          "SendMessage" & Character_Mode_Identifier);
    begin
@@ -927,16 +925,16 @@ package body Gwindows.Common_Controls is
          End_Frame   : in     Integer                := - 1 ) is
       type Word is
          record
-            Lpl : Interfaces.C.Short;
-            Lph : Interfaces.C.Short;
+            Lpl : Interfaces.C.short;
+            Lph : Interfaces.C.short;
          end record;
       pragma Convention (C_Pass_By_Copy, Word);
 
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Acm_Play;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Acm_Play;
             Wparam : Integer           := Repeat;
-            Lparam : Word              := (Interfaces.C.Short (Start_Frame), Interfaces.C.Short (End_Frame)) );
+            Lparam : Word              := (Interfaces.C.short (Start_Frame), Interfaces.C.short (End_Frame)) );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
    begin
@@ -957,10 +955,10 @@ package body Gwindows.Common_Controls is
    procedure Stop (
          Control : in out Animation_Control_Type ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Acm_Stop;
-            Wparam : Interfaces.C.Long := 0;
-            Lparam : Interfaces.C.Long := 0                 );
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Acm_Stop;
+            Wparam : Interfaces.C.long := 0;
+            Lparam : Interfaces.C.long := 0                 );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
    begin
@@ -973,7 +971,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Start_Handler (
          Control : in out Animation_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Start_Event := Handler;
    end On_Start_Handler;
@@ -984,10 +982,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Start (
          Control : in out Animation_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Start_Event /= null then
-         Control.On_Start_Event (Base_Window_Type'Class (Control));
+         Control.On_Start_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Start;
 
@@ -997,7 +995,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Stop_Handler (
          Control : in out Animation_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Stop_Event := Handler;
    end On_Stop_Handler;
@@ -1008,10 +1006,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Stop (
          Control : in out Animation_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Stop_Event /= null then
-         Control.On_Stop_Event (Base_Window_Type'Class (Control));
+         Control.On_Stop_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Stop;
 
@@ -1043,15 +1041,15 @@ package body Gwindows.Common_Controls is
          Window  : in out Animation_Control_Type;
          Code    : in     Integer;
          Id      : in     Integer;
-         Control : in     Gwindows.Base.Pointer_To_Base_Window_Class ) is
+         Control : in     GWindows.Base.Pointer_To_Base_Window_Class ) is
       pragma Warnings (Off, Id);
       pragma Warnings (Off, Control);
    begin
       case Code is
          when Acn_Start =>
-            On_Start (Animation_Control_Type'Class (Window));
+            On_Start (Animation_Control_Type'class (Window));
          when Acn_Stop =>
-            On_Stop (Animation_Control_Type'Class (Window));
+            On_Stop (Animation_Control_Type'class (Window));
          when others =>
             null;
       end case;
@@ -1063,7 +1061,7 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Control    : in out Date_Time_Picker_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
          Left       : in     Integer;
          Top        : in     Integer;
          Width      : in     Integer;
@@ -1074,9 +1072,9 @@ package body Gwindows.Common_Controls is
          Show       : in     Boolean                              := True;
          Is_Dynamic : in     Boolean                              := False        ) is
 
-      Styles : Interfaces.C.Unsigned := 0;
+      Styles : Interfaces.C.unsigned := 0;
 
-      type Format_Array is array (Date_Format) of Interfaces.C.Unsigned;
+      type Format_Array is array (Date_Format) of Interfaces.C.unsigned;
 
       Format_Val : constant Format_Array := (Long_Format => 4, Short_Format
         => 0, Time_Format => 9);
@@ -1097,7 +1095,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Control);
+         GWindows.Common_Controls.Show (Control);
       end if;
    end Create;
 
@@ -1107,15 +1105,15 @@ package body Gwindows.Common_Controls is
 
    procedure On_Notify (
          Window       : in out Date_Time_Picker_Type;
-         Message      : in     Gwindows.Base.Pointer_To_Notification;
-         Control      : in     Gwindows.Base.Pointer_To_Base_Window_Class;
-         Return_Value : in out Interfaces.C.Long                           ) is
+         Message      : in     GWindows.Base.Pointer_To_Notification;
+         Control      : in     GWindows.Base.Pointer_To_Base_Window_Class;
+         Return_Value : in out Interfaces.C.long                           ) is
       Dtn_First          : constant := - 760;
       Dtn_Datetimechange : constant := Dtn_First + 1;
    begin
       case Message.Code is
          when Dtn_Datetimechange =>
-            On_Date_Time_Change (Date_Time_Picker_Type'Class (Window));
+            On_Date_Time_Change (Date_Time_Picker_Type'class (Window));
          when others =>
             On_Notify (Common_Control_Type (Window),
                Message, Control, Return_Value);
@@ -1149,7 +1147,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Date_Time_Change_Handler (
          Control : in out Date_Time_Picker_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Date_Time_Change_Event := Handler;
    end On_Date_Time_Change_Handler;
@@ -1160,10 +1158,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Date_Time_Change (
          Control : in out Date_Time_Picker_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Date_Time_Change_Event /= null then
-         Control.On_Date_Time_Change_Event (Base_Window_Type'Class (
+         Control.On_Date_Time_Change_Event (Base_Window_Type'class (
                Control));
       end if;
    end Fire_On_Date_Time_Change;
@@ -1174,16 +1172,16 @@ package body Gwindows.Common_Controls is
 
    procedure Date_Time_Format (
          Control : in out Date_Time_Picker_Type;
-         Format  : in     Gstring                ) is
+         Format  : in     GString                ) is
 
-      C_Text : constant Interfaces.C.Char_Array := Interfaces.C.To_C (Gwindows.Gstrings.To_String
+      C_Text : constant Interfaces.C.char_array := Interfaces.C.To_C (GWindows.GStrings.To_String
         (Format));
 
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long       := Handle (Control);
-            Umsg   : Interfaces.C.Int        := Dtm_Setformat;
-            Wparam : Interfaces.C.Long       := 0;
-            Lparam : Interfaces.C.Char_Array := C_Text            );
+            Hwnd   : Interfaces.C.long       := Handle (Control);
+            Umsg   : Interfaces.C.int        := Dtm_Setformat;
+            Wparam : Interfaces.C.long       := 0;
+            Lparam : Interfaces.C.char_array := C_Text            );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
    begin
@@ -1208,8 +1206,8 @@ package body Gwindows.Common_Controls is
         (Range_End));
 
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Dtm_Setrange;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Dtm_Setrange;
             Wparam : Integer           := Gdtr_Min + Gdtr_Max;
             Lparam : Range_Type        := The_Range            );
       pragma Import (Stdcall, Sendmessage,
@@ -1226,9 +1224,9 @@ package body Gwindows.Common_Controls is
          Control   : in out Date_Time_Picker_Type;
          Date_Time : in     Ada.Calendar.Time      ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Dtm_Setsystemtime;
-            Wparam : Interfaces.C.Long := Gdt_Valid;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Dtm_Setsystemtime;
+            Wparam : Interfaces.C.long := Gdt_Valid;
             Lparam : Systemtime                              );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
@@ -1242,9 +1240,9 @@ package body Gwindows.Common_Controls is
          Control : in     Date_Time_Picker_Type )
      return Ada.Calendar.Time is
       procedure Sendmessage (
-            Hwnd   :        Interfaces.C.Long := Handle (Control);
-            Umsg   :        Interfaces.C.Int  := Dtm_Getsystemtime;
-            Wparam :        Interfaces.C.Long := 0;
+            Hwnd   :        Interfaces.C.long := Handle (Control);
+            Umsg   :        Interfaces.C.int  := Dtm_Getsystemtime;
+            Wparam :        Interfaces.C.long := 0;
             Lparam :    out Systemtime                              );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
@@ -1269,26 +1267,26 @@ package body Gwindows.Common_Controls is
       Seconds : Ada.Calendar.Day_Duration;
       Temp    : Ada.Calendar.Day_Duration;
    begin
-      C_Time.Wyear   := Interfaces.C.Short (Year (Time));
-      C_Time.Wmonth  := Interfaces.C.Short (Month (Time));
-      C_Time.Wday    := Interfaces.C.Short (Day (Time));
+      C_Time.Wyear   := Interfaces.C.short (Year (Time));
+      C_Time.Wmonth  := Interfaces.C.short (Month (Time));
+      C_Time.Wday    := Interfaces.C.short (Day (Time));
 
       Seconds := Ada.Calendar.Seconds (Time);
 
       Temp := Seconds / (60*60);
       C_Time.Whour   :=
-         Interfaces.C.Short (Float'Floor (Float (Temp)));
+         Interfaces.C.short (Float'floor (Float (Temp)));
 
       Temp := (Seconds - (Ada.Calendar.Day_Duration
             (C_Time.Whour) * (60*60))) / 60;
       C_Time.Wminute :=
-         Interfaces.C.Short (Float'Floor (Float (Temp)));
+         Interfaces.C.short (Float'floor (Float (Temp)));
 
       Temp := Seconds -
          ((Ada.Calendar.Day_Duration (C_Time.Whour) * (60 * 60)) +
          (Ada.Calendar.Day_Duration (C_Time.Wminute) * 60));
       C_Time.Wsecond :=
-         Interfaces.C.Short (Float'Floor (Float (Temp)));
+         Interfaces.C.short (Float'floor (Float (Temp)));
 
       return C_Time;
    end Calendar_To_Systemtime;
@@ -1318,9 +1316,9 @@ package body Gwindows.Common_Controls is
    procedure None_Date_Time (
          Control : in out Date_Time_Picker_Type ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Dtm_Setsystemtime;
-            Wparam : Interfaces.C.Long := Gdt_None;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Dtm_Setsystemtime;
+            Wparam : Interfaces.C.long := Gdt_None;
             Lparam : Integer           := 0                  );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
@@ -1332,9 +1330,9 @@ package body Gwindows.Common_Controls is
          Control : in     Date_Time_Picker_Type )
      return Boolean is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Dtm_Getsystemtime;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Dtm_Getsystemtime;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Systemtime                              )
         return Integer;
       pragma Import (Stdcall, Sendmessage,
@@ -1350,8 +1348,8 @@ package body Gwindows.Common_Controls is
    ------------
 
    procedure Create (
-         Control    : in out Ip_Address_Control_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
+         Control    : in out IP_Address_Control_Type;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
          Left       : in     Integer;
          Top        : in     Integer;
          Width      : in     Integer;
@@ -1367,7 +1365,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Control);
+         GWindows.Common_Controls.Show (Control);
       end if;
 
       Tab_Stop (Control);
@@ -1378,7 +1376,7 @@ package body Gwindows.Common_Controls is
    ---------------
 
    procedure On_Change (
-         Control : in out Ip_Address_Control_Type ) is
+         Control : in out IP_Address_Control_Type ) is
    begin
       Fire_On_Change (Control);
    end On_Change;
@@ -1388,10 +1386,10 @@ package body Gwindows.Common_Controls is
    ----------------
 
    procedure On_Command (
-         Window  : in out Ip_Address_Control_Type;
+         Window  : in out IP_Address_Control_Type;
          Code    : in     Integer;
          Id      : in     Integer;
-         Control : in     Gwindows.Base.Pointer_To_Base_Window_Class ) is
+         Control : in     GWindows.Base.Pointer_To_Base_Window_Class ) is
       pragma Warnings (Off, Id);
       pragma Warnings (Off, Control);
 
@@ -1401,11 +1399,11 @@ package body Gwindows.Common_Controls is
    begin
       case Code is
          when En_Setfocus =>
-            On_Focus (Ip_Address_Control_Type'Class (Window));
+            On_Focus (IP_Address_Control_Type'class (Window));
          when En_Killfocus =>
-            On_Lost_Focus (Ip_Address_Control_Type'Class (Window));
+            On_Lost_Focus (IP_Address_Control_Type'class (Window));
          when En_Change =>
-            On_Change (Ip_Address_Control_Type'Class (Window));
+            On_Change (IP_Address_Control_Type'class (Window));
          when others =>
             null;
       end case;
@@ -1416,8 +1414,8 @@ package body Gwindows.Common_Controls is
    -----------------------
 
    procedure On_Change_Handler (
-         Control : in out Ip_Address_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Control : in out IP_Address_Control_Type;
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Change_Event := Handler;
    end On_Change_Handler;
@@ -1427,11 +1425,11 @@ package body Gwindows.Common_Controls is
    --------------------
 
    procedure Fire_On_Change (
-         Control : in out Ip_Address_Control_Type ) is
-      use Gwindows.Base;
+         Control : in out IP_Address_Control_Type ) is
+      use GWindows.Base;
    begin
       if Control.On_Change_Event /= null then
-         Control.On_Change_Event (Base_Window_Type'Class (Control));
+         Control.On_Change_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Change;
 
@@ -1440,7 +1438,7 @@ package body Gwindows.Common_Controls is
    ---------------
 
    procedure On_Create (
-         Control : in out Ip_Address_Control_Type ) is
+         Control : in out IP_Address_Control_Type ) is
    begin
       Tab_Stop (Control);
    end On_Create;
@@ -1451,7 +1449,7 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Control    : in out Progress_Control_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
          Left       : in     Integer;
          Top        : in     Integer;
          Width      : in     Integer;
@@ -1467,7 +1465,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Control);
+         GWindows.Common_Controls.Show (Control);
       end if;
    end Create;
 
@@ -1479,8 +1477,8 @@ package body Gwindows.Common_Controls is
          Control : in out Progress_Control_Type;
          Where   : in     Natural                ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Pbm_Setpos;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Pbm_Setpos;
             Wparam : Integer           := Where;
             Lparam : Integer           := 0                 );
       pragma Import (Stdcall, Sendmessage,
@@ -1493,8 +1491,8 @@ package body Gwindows.Common_Controls is
          Control : in     Progress_Control_Type )
      return Natural is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Pbm_Getpos;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Pbm_Getpos;
             Wparam : Integer           := 0;
             Lparam : Integer           := 0                 )
         return Natural;
@@ -1513,8 +1511,8 @@ package body Gwindows.Common_Controls is
          Low     : in     Natural;
          High    : in     Natural                ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Pbm_Setrange32;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Pbm_Setrange32;
             Wparam : Integer           := Low;
             Lparam : Integer           := High              );
       pragma Import (Stdcall, Sendmessage,
@@ -1531,8 +1529,8 @@ package body Gwindows.Common_Controls is
          Control : in out Progress_Control_Type;
          Amount  : in     Natural               := 1 ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Pbm_Deltapos;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Pbm_Deltapos;
             Wparam : Integer           := Amount;
             Lparam : Integer           := 0                 );
       pragma Import (Stdcall, Sendmessage,
@@ -1549,8 +1547,8 @@ package body Gwindows.Common_Controls is
          Control : in out Progress_Control_Type;
          Size    : in     Natural               := 10 ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Pbm_Setstep;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Pbm_Setstep;
             Wparam : Integer           := Size;
             Lparam : Integer           := 0                 );
       pragma Import (Stdcall, Sendmessage,
@@ -1566,8 +1564,8 @@ package body Gwindows.Common_Controls is
    procedure Step (
          Control : in out Progress_Control_Type ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Pbm_Stepit;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Pbm_Stepit;
             Wparam : Integer           := 0;
             Lparam : Integer           := 0                 );
       pragma Import (Stdcall, Sendmessage,
@@ -1582,7 +1580,7 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Control    : in out List_View_Control_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
          Left       : in     Integer;
          Top        : in     Integer;
          Width      : in     Integer;
@@ -1615,9 +1613,9 @@ package body Gwindows.Common_Controls is
       --  LVS_ALIGNMASK           : constant := 16#0c00#;
       --  LVS_NOCOLUMNHEADER      : constant := 16#4000#;
       Lvs_Nosortheader : constant := 16#8000#;
-      LVS_Ownerdrawfixed           : constant := 16#0400#;
+      --  LVS_Ownerdrawfixed      : constant := 16#0400#;
 
-      Styles : Interfaces.C.Unsigned := 0;
+      Styles : Interfaces.C.unsigned := 0;
    begin
       if Selection = Single then
          Styles := Styles or Lvs_Singlesel;
@@ -1662,7 +1660,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Control);
+         GWindows.Common_Controls.Show (Control);
       end if;
 
    end Create;
@@ -1673,24 +1671,24 @@ package body Gwindows.Common_Controls is
 
    procedure Set_Item (
          Control : in out List_View_Control_Type;
-         Text    : in     Gstring;
+         Text    : in     GString;
          Index   : in     Integer;
          Icon    : in     Integer                := 0 ) is
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Text);
+      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
 
       Item : Lvitem;
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Setitema;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Setitema;
             Wparam : Integer           := 0;
             Lparam : Lvitem            := Item              );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Setitemw;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Setitemw;
             Wparam : Integer           := 0;
             Lparam : Lvitem            := Item              );
       pragma Import (Stdcall, Sendmessagew,
@@ -1699,7 +1697,7 @@ package body Gwindows.Common_Controls is
       Item.Mask := Lvif_Text or Lvif_Image;
       Item.Item := Index;
       Item.Image := Icon;
-      Item.Text := C_Text (0)'Unchecked_Access;
+      Item.Text := C_Text (0)'unchecked_access;
 
       if Character_Mode = Unicode then
          Sendmessagew;
@@ -1714,24 +1712,24 @@ package body Gwindows.Common_Controls is
 
    procedure Set_Sub_Item (
          Control   : in out List_View_Control_Type;
-         Text      : in     Gstring;
+         Text      : in     GString;
          Index     : in     Integer;
          Sub_Index : in     Integer                 ) is
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Text);
+      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
 
       Item : Lvitem;
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Setitema;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Setitema;
             Wparam : Integer           := 0;
             Lparam : Lvitem            := Item              );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Setitemw;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Setitemw;
             Wparam : Integer           := 0;
             Lparam : Lvitem            := Item              );
       pragma Import (Stdcall, Sendmessagew,
@@ -1740,7 +1738,7 @@ package body Gwindows.Common_Controls is
       Item.Mask := Lvif_Text;
       Item.Item := Index;
       Item.Subitem := Sub_Index;
-      Item.Text := C_Text (0)'Unchecked_Access;
+      Item.Text := C_Text (0)'unchecked_access;
 
       if Character_Mode = Unicode then
          Sendmessagew;
@@ -1755,24 +1753,24 @@ package body Gwindows.Common_Controls is
 
    procedure Insert_Item (
          Control : in out List_View_Control_Type;
-         Text    : in     Gstring;
+         Text    : in     GString;
          Index   : in     Integer;
          Icon    : in     Integer                := 0 ) is
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Text);
+      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
 
       Item : Lvitem;
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Insertitema;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Insertitema;
             Wparam : Integer           := 0;
             Lparam : Lvitem            := Item              );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Insertitemw;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Insertitemw;
             Wparam : Integer           := 0;
             Lparam : Lvitem            := Item              );
       pragma Import (Stdcall, Sendmessagew,
@@ -1781,7 +1779,7 @@ package body Gwindows.Common_Controls is
       Item.Mask := Lvif_Text or Lvif_Image or Lvif_Param;
       Item.Item := Index;
       Item.Image := Icon;
-      Item.Text := C_Text (0)'Unchecked_Access;
+      Item.Text := C_Text (0)'unchecked_access;
 
       if Character_Mode = Unicode then
          Sendmessagew;
@@ -1798,31 +1796,31 @@ package body Gwindows.Common_Controls is
 
    procedure Set_Column (
          Control : in out List_View_Control_Type;
-         Text    : in     Gstring;
+         Text    : in     GString;
          Index   : in     Integer;
          Width   : in     Integer                 ) is
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Text);
+      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
 
       Item : Lvcolumn;
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Setcolumna;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Setcolumna;
             Wparam : Integer           := Index;
             Lparam : Lvcolumn          := Item              );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Setcolumnw;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Setcolumnw;
             Wparam : Integer           := Index;
             Lparam : Lvcolumn          := Item              );
       pragma Import (Stdcall, Sendmessagew,
          "SendMessage" & Character_Mode_Identifier);
    begin
       Item.Mask := Lvcf_Text or Lvcf_Width;
-      Item.Text := C_Text (0)'Unchecked_Access;
+      Item.Text := C_Text (0)'unchecked_access;
       Item.Width := Width;
 
       if Character_Mode = Unicode then
@@ -1838,31 +1836,31 @@ package body Gwindows.Common_Controls is
 
    procedure Insert_Column (
          Control : in out List_View_Control_Type;
-         Text    : in     Gstring;
+         Text    : in     GString;
          Index   : in     Integer;
          Width   : in     Integer                 ) is
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Text);
+      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
 
       Item : Lvcolumn;
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Insertcolumna;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Insertcolumna;
             Wparam : Integer           := Index;
             Lparam : Lvcolumn          := Item               );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Insertcolumnw;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Insertcolumnw;
             Wparam : Integer           := Index;
             Lparam : Lvcolumn          := Item               );
       pragma Import (Stdcall, Sendmessagew,
          "SendMessage" & Character_Mode_Identifier);
    begin
       Item.Mask := Lvcf_Text or Lvcf_Width;
-      Item.Text := C_Text (0)'Unchecked_Access;
+      Item.Text := C_Text (0)'unchecked_access;
       Item.Width := Width;
 
       if Character_Mode = Unicode then
@@ -1881,8 +1879,8 @@ package body Gwindows.Common_Controls is
          Control : in     List_View_Control_Type )
      return Integer is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Getitemcount;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Getitemcount;
             Wparam : Integer           := 0;
             Lparam : Integer           := 0                 )
         return Integer;
@@ -1900,8 +1898,8 @@ package body Gwindows.Common_Controls is
          Control : in     List_View_Control_Type )
      return Integer is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Getselectedcount;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Getselectedcount;
             Wparam : Integer           := 0;
             Lparam : Integer           := 0                     )
         return Integer;
@@ -1920,8 +1918,8 @@ package body Gwindows.Common_Controls is
          Index   : in     Integer                 )
      return Boolean is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Getitemstate;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Getitemstate;
             Wparam : Integer           := Index;
             Lparam : Integer           := Lvis_Selected     )
         return Integer;
@@ -1938,8 +1936,8 @@ package body Gwindows.Common_Controls is
    procedure Clear (
          Control : in out List_View_Control_Type ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Deleteallitems;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Deleteallitems;
             Wparam : Integer           := 0;
             Lparam : Integer           := 0                   );
       pragma Import (Stdcall, Sendmessage,
@@ -1954,13 +1952,13 @@ package body Gwindows.Common_Controls is
 
    procedure Item_At_Position (
          Control  : in     List_View_Control_Type;
-         Position : in     Gwindows.Types.Point_Type;
+         Position : in     GWindows.Types.Point_Type;
          Item     : in out Integer;
          Subitem  : in out Integer                    ) is
 
       type Lvhittestinfo is
          record
-            Pt      : Gwindows.Types.Point_Type := Position;
+            Pt      : GWindows.Types.Point_Type := Position;
             Flags   : Natural;
             Item    : Integer;
             Subitem : Integer;
@@ -1969,9 +1967,9 @@ package body Gwindows.Common_Controls is
       Lvm_Subitemhittest : constant := Lvm_First + 57;
 
       procedure Sendmessage (
-            Hwnd   :        Interfaces.C.Long := Gwindows.Common_Controls.Handle (Control);
-            Umsg   :        Interfaces.C.Int  := Lvm_Subitemhittest;
-            Wparam :        Interfaces.C.Long := 0;
+            Hwnd   :        Interfaces.C.long := GWindows.Common_Controls.Handle (Control);
+            Umsg   :        Interfaces.C.int  := Lvm_Subitemhittest;
+            Wparam :        Interfaces.C.long := 0;
             Lparam : in out Lvhittestinfo                                                   );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
@@ -1992,13 +1990,13 @@ package body Gwindows.Common_Controls is
          Control : in     List_View_Control_Type;
          Item    : in     Integer;
          Subitem : in     Integer                 )
-     return Gstring is
+     return GString is
       Lvm_Getitema : constant := Lvm_First + 5;
       Lvm_Getitemw : constant := Lvm_First + 75;
       Lvif_Text    : constant := 16#0001#;
 
       Max_Text : constant := 255;
-      type Buffer is new Gstring_C
+      type Buffer is new GString_C
             (0 .. Max_Text);
       type Pbuffer is access all Buffer;
 
@@ -2009,16 +2007,16 @@ package body Gwindows.Common_Controls is
       Lvi    : Lvitem;
 
       procedure Sendmessagea (
-            Hwnd   :        Interfaces.C.Long := Gwindows.Common_Controls.Handle (Control);
-            Umsg   :        Interfaces.C.Int  := Lvm_Getitema;
+            Hwnd   :        Interfaces.C.long := GWindows.Common_Controls.Handle (Control);
+            Umsg   :        Interfaces.C.int  := Lvm_Getitema;
             Wparam :        Integer           := 0;
             Lparam : in out Lvitem                                                          );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   :        Interfaces.C.Long := Gwindows.Common_Controls.Handle (Control);
-            Umsg   :        Interfaces.C.Int  := Lvm_Getitemw;
+            Hwnd   :        Interfaces.C.long := GWindows.Common_Controls.Handle (Control);
+            Umsg   :        Interfaces.C.int  := Lvm_Getitemw;
             Wparam :        Integer           := 0;
             Lparam : in out Lvitem                                                          );
       pragma Import (Stdcall, Sendmessagew,
@@ -2027,7 +2025,7 @@ package body Gwindows.Common_Controls is
       Lvi.Mask := Lvif_Text;
       Lvi.Item := Item;
       Lvi.Subitem := Subitem;
-      Lvi.Text := C_Text (0)'Unchecked_Access;
+      Lvi.Text := C_Text (0)'unchecked_access;
       Lvi.Textmax := Max_Text;
 
       if Character_Mode = Unicode then
@@ -2036,8 +2034,8 @@ package body Gwindows.Common_Controls is
          Sendmessagea (Lparam => Lvi);
       end if;
 
-      return Gwindows.Gstrings.To_Gstring_From_C
-         (Gstring_C (To_Pbuffer (Lvi.Text).all));
+      return GWindows.GStrings.To_GString_From_C
+         (GString_C (To_Pbuffer (Lvi.Text).all));
    end Text;
 
    --------------
@@ -2053,8 +2051,8 @@ package body Gwindows.Common_Controls is
       Lvis_Selected    : constant := 16#0002#;
 
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Gwindows.Common_Controls.Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Setitemstate;
+            Hwnd   : Interfaces.C.long := GWindows.Common_Controls.Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Setitemstate;
             Wparam : Integer           := Item;
             Lparam : Lvitem                                                          );
       pragma Import (Stdcall, Sendmessage,
@@ -2081,8 +2079,8 @@ package body Gwindows.Common_Controls is
          Width   : in     Integer                 ) is
       type Lvcolumn is
          record
-            Mask    : Interfaces.C.Unsigned := 0;
-            Format  : Interfaces.C.Unsigned := 0;
+            Mask    : Interfaces.C.unsigned := 0;
+            Format  : Interfaces.C.unsigned := 0;
             Width   : Integer               := 0;
             Text    : Lptstr                := null;
             Textmax : Integer               := 0;
@@ -2099,16 +2097,16 @@ package body Gwindows.Common_Controls is
       Item : Lvcolumn;
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Setcolumna;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Setcolumna;
             Wparam : Integer           := Index;
             Lparam : Lvcolumn          := Item              );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Setcolumnw;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Setcolumnw;
             Wparam : Integer           := Index;
             Lparam : Lvcolumn          := Item              );
       pragma Import (Stdcall, Sendmessagew,
@@ -2134,8 +2132,8 @@ package body Gwindows.Common_Controls is
          Index   : in     Integer                 ) is
       Lvm_Deleteitem : constant := Lvm_First + 8;
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Lvm_Deleteitem;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Lvm_Deleteitem;
             Wparam : Integer           := Index;
             Lparam : Integer           := 0                 );
       pragma Import (Stdcall, Sendmessage,
@@ -2161,7 +2159,7 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Control       : in out Tree_View_Control_Type;
-         Parent        : in out Gwindows.Base.Base_Window_Type'Class;
+         Parent        : in out GWindows.Base.Base_Window_Type'class;
          Left          : in     Integer;
          Top           : in     Integer;
          Width         : in     Integer;
@@ -2188,7 +2186,7 @@ package body Gwindows.Common_Controls is
       --  TVS_FULLROWSELECT       : constant := 16#1000#;
       --  TVS_NOSCROLL            : constant := 16#2000#;
       --  TVS_NONEVENHEIGHT       : constant := 16#4000#;
-      Styles : Interfaces.C.Unsigned := 0;
+      Styles : Interfaces.C.unsigned := 0;
    begin
       if Lines then
          Styles := Styles or Tvs_Haslines;
@@ -2214,7 +2212,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Control);
+         GWindows.Common_Controls.Show (Control);
       end if;
    end Create;
 
@@ -2224,11 +2222,11 @@ package body Gwindows.Common_Controls is
 
    procedure Insert_Item (
          Control     : in out Tree_View_Control_Type;
-         Text        : in     Gstring;
+         Text        : in     GString;
          Parent_Node : in     Tree_Item_Node;
          New_Node    :    out Tree_Item_Node;
          Where       : in     Tree_Item_Node          ) is
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Text);
+      C_Text : GString_C := GWindows.GStrings.To_GString_C (Text);
 
       type Tvinsertstruct is
          record
@@ -2240,8 +2238,8 @@ package body Gwindows.Common_Controls is
       Ts : Tvinsertstruct;
 
       function Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Insertitema;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Insertitema;
             Wparam : Integer           := 0;
             Lparam : Tvinsertstruct    := Ts                )
         return Tree_Item_Node;
@@ -2249,8 +2247,8 @@ package body Gwindows.Common_Controls is
          "SendMessage" & Character_Mode_Identifier);
 
       function Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Insertitemw;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Insertitemw;
             Wparam : Integer           := 0;
             Lparam : Tvinsertstruct    := Ts                )
         return Tree_Item_Node;
@@ -2258,7 +2256,7 @@ package body Gwindows.Common_Controls is
          "SendMessage" & Character_Mode_Identifier);
    begin
       Ts.Item.Mask := Tvif_Text;
-      Ts.Item.Text := C_Text (0)'Unchecked_Access;
+      Ts.Item.Text := C_Text (0)'unchecked_access;
 
       if Character_Mode = Unicode then
          New_Node := Sendmessagew;
@@ -2270,7 +2268,7 @@ package body Gwindows.Common_Controls is
 
    procedure Insert_Item (
          Control     : in out Tree_View_Control_Type;
-         Text        : in     Gstring;
+         Text        : in     GString;
          Parent_Node : in     Tree_Item_Node;
          New_Node    :    out Tree_Item_Node;
          Where       : in     Tree_View_List_Location_Type := Sort ) is
@@ -2295,9 +2293,9 @@ package body Gwindows.Common_Controls is
          Control : in out Tree_View_Control_Type;
          Where   : in     Tree_Item_Node          ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Deleteitem;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Deleteitem;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Tree_Item_Node    := Where             );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
@@ -2313,8 +2311,8 @@ package body Gwindows.Common_Controls is
          Control : in     Tree_View_Control_Type )
      return Tree_Item_Node is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Getnextitem;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Getnextitem;
             Wparam : Integer           := Tvgn_Caret;
             Lparam : Integer           := 0                 )
         return Tree_Item_Node;
@@ -2326,7 +2324,7 @@ package body Gwindows.Common_Controls is
 
    function Selected_Item (
          Control : in     Tree_View_Control_Type )
-     return Gstring is
+     return GString is
    begin
       return Text (Control, Selected_Item (Control));
    end Selected_Item;
@@ -2339,8 +2337,8 @@ package body Gwindows.Common_Controls is
          Control : in     Tree_View_Control_Type )
      return Tree_Item_Node is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Getnextitem;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Getnextitem;
             Wparam : Integer           := Tvgn_Root;
             Lparam : Integer           := 0                 )
         return Tree_Item_Node;
@@ -2359,8 +2357,8 @@ package body Gwindows.Common_Controls is
          From    : in     Tree_Item_Node          )
      return Tree_Item_Node is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Getnextitem;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Getnextitem;
             Wparam : Integer           := Tvgn_Parent;
             Lparam : Tree_Item_Node    := From              )
         return Tree_Item_Node;
@@ -2379,8 +2377,8 @@ package body Gwindows.Common_Controls is
          From    : in     Tree_Item_Node          )
      return Tree_Item_Node is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Getnextitem;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Getnextitem;
             Wparam : Integer           := Tvgn_Child;
             Lparam : Tree_Item_Node    := From              )
         return Tree_Item_Node;
@@ -2399,8 +2397,8 @@ package body Gwindows.Common_Controls is
          From    : in     Tree_Item_Node          )
      return Tree_Item_Node is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Getnextitem;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Getnextitem;
             Wparam : Integer           := Tvgn_Next;
             Lparam : Tree_Item_Node    := From              )
         return Tree_Item_Node;
@@ -2419,8 +2417,8 @@ package body Gwindows.Common_Controls is
          From    : in     Tree_Item_Node          )
      return Tree_Item_Node is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Getnextitem;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Getnextitem;
             Wparam : Integer           := Tvgn_Previous;
             Lparam : Tree_Item_Node    := From              )
         return Tree_Item_Node;
@@ -2437,9 +2435,9 @@ package body Gwindows.Common_Controls is
    function Text (
          Control : in     Tree_View_Control_Type;
          Where   : in     Tree_Item_Node          )
-     return Gstring is
+     return GString is
       Max_Text : constant := 255;
-      type Buffer is new Gstring_C
+      type Buffer is new GString_C
             (0 .. Max_Text);
       type Pbuffer is access all Buffer;
 
@@ -2450,16 +2448,16 @@ package body Gwindows.Common_Controls is
       Tv     : Tvitem;
 
       procedure Sendmessagea (
-            Hwnd   :        Interfaces.C.Long := Handle (Control);
-            Umsg   :        Interfaces.C.Int  := Tvm_Getitema;
+            Hwnd   :        Interfaces.C.long := Handle (Control);
+            Umsg   :        Interfaces.C.int  := Tvm_Getitema;
             Wparam :        Integer           := 0;
             Lparam : in out Tvitem                                 );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   :        Interfaces.C.Long := Handle (Control);
-            Umsg   :        Interfaces.C.Int  := Tvm_Getitemw;
+            Hwnd   :        Interfaces.C.long := Handle (Control);
+            Umsg   :        Interfaces.C.int  := Tvm_Getitemw;
             Wparam :        Integer           := 0;
             Lparam : in out Tvitem                                 );
       pragma Import (Stdcall, Sendmessagew,
@@ -2467,7 +2465,7 @@ package body Gwindows.Common_Controls is
    begin
       Tv.Mask := Tvif_Text;
       Tv.Hitem := Where;
-      Tv.Text := C_Text (0)'Unchecked_Access;
+      Tv.Text := C_Text (0)'unchecked_access;
       Tv.Textmax := Max_Text;
 
       if Character_Mode = Unicode then
@@ -2476,8 +2474,8 @@ package body Gwindows.Common_Controls is
          Sendmessagea (Lparam => Tv);
       end if;
 
-      return Gwindows.Gstrings.To_Gstring_From_C
-         (Gstring_C (To_Pbuffer (Tv.Text).all));
+      return GWindows.GStrings.To_GString_From_C
+         (GString_C (To_Pbuffer (Tv.Text).all));
    end Text;
 
    ------------
@@ -2490,8 +2488,8 @@ package body Gwindows.Common_Controls is
       Tve_Expand : constant := 2;
 
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Expand;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Expand;
             Wparam : Integer           := Tve_Expand;
             Lparam : Tree_Item_Node    := At_Node           );
       pragma Import (Stdcall, Sendmessage,
@@ -2510,8 +2508,8 @@ package body Gwindows.Common_Controls is
       Tve_Collapse : constant := 1;
 
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tvm_Expand;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tvm_Expand;
             Wparam : Integer           := Tve_Collapse;
             Lparam : Tree_Item_Node    := At_Node           );
       pragma Import (Stdcall, Sendmessage,
@@ -2537,7 +2535,7 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Control    : in out Trackbar_Control_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
          Left       : in     Integer;
          Top        : in     Integer;
          Width      : in     Integer;
@@ -2563,7 +2561,7 @@ package body Gwindows.Common_Controls is
       Tbs_Nothumb  : constant := 16#0080#;
       Tbs_Tooltips : constant := 16#0100#;
 
-      Styles : Interfaces.C.Unsigned := 0;
+      Styles : Interfaces.C.unsigned := 0;
    begin
       if Where /= No_Ticks then
          Styles := Styles or Tbs_Autoticks;
@@ -2595,7 +2593,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Control);
+         GWindows.Common_Controls.Show (Control);
       end if;
    end Create;
 
@@ -2607,8 +2605,8 @@ package body Gwindows.Common_Controls is
          Control : in out Trackbar_Control_Type;
          Where   : in     Integer                ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tbm_Setpos;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tbm_Setpos;
             Wparam : Integer           := 1;
             Lparam : Integer           := Where             );
       pragma Import (Stdcall, Sendmessage,
@@ -2621,8 +2619,8 @@ package body Gwindows.Common_Controls is
          Control : in     Trackbar_Control_Type )
      return Integer is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tbm_Getpos;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tbm_Getpos;
             Wparam : Integer           := 0;
             Lparam : Integer           := 0                 )
         return Natural;
@@ -2640,8 +2638,8 @@ package body Gwindows.Common_Controls is
          Control : in out Trackbar_Control_Type;
          Where   : in     Integer                ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tbm_Setrangemin;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tbm_Setrangemin;
             Wparam : Integer           := 1;
             Lparam : Integer           := Where             );
       pragma Import (Stdcall, Sendmessage,
@@ -2654,8 +2652,8 @@ package body Gwindows.Common_Controls is
          Control : in     Trackbar_Control_Type )
      return Integer is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tbm_Getrangemin;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tbm_Getrangemin;
             Wparam : Integer           := 0;
             Lparam : Integer           := 0                 )
         return Natural;
@@ -2673,8 +2671,8 @@ package body Gwindows.Common_Controls is
          Control : in out Trackbar_Control_Type;
          Where   : in     Integer                ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tbm_Setrangemax;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tbm_Setrangemax;
             Wparam : Integer           := 1;
             Lparam : Integer           := Where             );
       pragma Import (Stdcall, Sendmessage,
@@ -2687,8 +2685,8 @@ package body Gwindows.Common_Controls is
          Control : in     Trackbar_Control_Type )
      return Integer is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tbm_Getrangemax;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tbm_Getrangemax;
             Wparam : Integer           := 0;
             Lparam : Integer           := 0                 )
         return Natural;
@@ -2714,7 +2712,7 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Control    : in out Up_Down_Control_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
          Left       : in     Integer;
          Top        : in     Integer;
          Width      : in     Integer;
@@ -2738,7 +2736,7 @@ package body Gwindows.Common_Controls is
       Uds_Horz        : constant := 16#0040#;
       Uds_Nothousands : constant := 16#0080#;
 
-      Styles : Interfaces.C.Unsigned := 0;
+      Styles : Interfaces.C.unsigned := 0;
    begin
       if Wrap then
          Styles := Styles or Uds_Wrap;
@@ -2778,7 +2776,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Control);
+         GWindows.Common_Controls.Show (Control);
       end if;
    end Create;
 
@@ -2790,9 +2788,9 @@ package body Gwindows.Common_Controls is
          Control : in out Up_Down_Control_Type;
          Where   : in     Integer               ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Udm_Setpos;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Udm_Setpos;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Integer           := Where             );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
@@ -2804,9 +2802,9 @@ package body Gwindows.Common_Controls is
          Control : in     Up_Down_Control_Type )
      return Integer is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Udm_Setpos;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Udm_Setpos;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Integer           := 0                 )
         return Integer;
       pragma Import (Stdcall, Sendmessage,
@@ -2824,10 +2822,10 @@ package body Gwindows.Common_Controls is
          Min,
          Max     : in     Integer               ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Udm_Setrange;
-            Wparam : Interfaces.C.Long := 0;
-            Lparam : Integer           := Gwindows.Utilities.Make_Long (Interfaces.C.Short (Min), Interfaces.C.Short (Max)) );
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Udm_Setrange;
+            Wparam : Interfaces.C.long := 0;
+            Lparam : Integer           := GWindows.Utilities.Make_Long (Interfaces.C.short (Min), Interfaces.C.short (Max)) );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
    begin
@@ -2853,10 +2851,10 @@ package body Gwindows.Common_Controls is
          Control        : in out Up_Down_Control_Type;
          Position       : in     Integer;
          Delta_Position : in     Integer               ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Position_Changing_Event /= null then
-         Control.On_Position_Changing_Event (Base_Window_Type'Class (
+         Control.On_Position_Changing_Event (Base_Window_Type'class (
                Control),
             Position,
             Delta_Position);
@@ -2891,15 +2889,15 @@ package body Gwindows.Common_Controls is
 
    procedure On_Notify (
          Window       : in out Up_Down_Control_Type;
-         Message      : in     Gwindows.Base.Pointer_To_Notification;
-         Control      : in     Gwindows.Base.Pointer_To_Base_Window_Class;
-         Return_Value : in out Interfaces.C.Long                           ) is
+         Message      : in     GWindows.Base.Pointer_To_Notification;
+         Control      : in     GWindows.Base.Pointer_To_Base_Window_Class;
+         Return_Value : in out Interfaces.C.long                           ) is
       Udn_First    : constant := - 721;
       Udn_Deltapos : constant := Udn_First - 1;
 
       type Nmupdown is
          record
-            Header : Gwindows.Base.Notification;
+            Header : GWindows.Base.Notification;
             Pos    : Integer;
             Delt   : Integer;
          end record;
@@ -2908,7 +2906,7 @@ package body Gwindows.Common_Controls is
 
       function To_Pnmupdown is
       new
-         Ada.Unchecked_Conversion (Gwindows.Base.Pointer_To_Notification,
+         Ada.Unchecked_Conversion (GWindows.Base.Pointer_To_Notification,
          Pnmupdown);
    begin
       case Message.Code is
@@ -2916,7 +2914,7 @@ package body Gwindows.Common_Controls is
             declare
                Nm : constant Pnmupdown := To_Pnmupdown (Message);
             begin
-               On_Position_Changing (Up_Down_Control_Type'Class (Window),
+               On_Position_Changing (Up_Down_Control_Type'class (Window),
                   Nm.Pos,
                   Nm.Delt);
             end;
@@ -2933,7 +2931,7 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Control    : in out Tab_Control_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
          Left       : in     Integer;
          Top        : in     Integer;
          Width      : in     Integer;
@@ -2963,7 +2961,7 @@ package body Gwindows.Common_Controls is
       --  TCS_OWNERDRAWFIXED      : constant := 16#2000#;
       Tcs_Tooltips : constant := 16#4000#;
       --  TCS_FOCUSNEVER          : constant := 16#8000#;
-      Styles : Interfaces.C.Unsigned := Tcs_Tooltips;
+      Styles : Interfaces.C.unsigned := Tcs_Tooltips;
    begin
       if Fixed_Tabs then
          Styles := Styles or Tcs_Fixedwidth;
@@ -2981,7 +2979,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Control);
+         GWindows.Common_Controls.Show (Control);
       end if;
    end Create;
 
@@ -3001,7 +2999,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Change_Handler (
          Control : in out Tab_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Change_Event := Handler;
    end On_Change_Handler;
@@ -3012,10 +3010,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Change (
          Control : in out Tab_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Change_Event /= null then
-         Control.On_Change_Event (Base_Window_Type'Class (Control));
+         Control.On_Change_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Change;
 
@@ -3035,7 +3033,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Changing_Handler (
          Control : in out Tab_Control_Type;
-         Handler : in     Gwindows.Base.Action_Event ) is
+         Handler : in     GWindows.Base.Action_Event ) is
    begin
       Control.On_Changing_Event := Handler;
    end On_Changing_Handler;
@@ -3046,10 +3044,10 @@ package body Gwindows.Common_Controls is
 
    procedure Fire_On_Changing (
          Control : in out Tab_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
    begin
       if Control.On_Changing_Event /= null then
-         Control.On_Changing_Event (Base_Window_Type'Class (Control));
+         Control.On_Changing_Event (Base_Window_Type'class (Control));
       end if;
    end Fire_On_Changing;
 
@@ -3060,28 +3058,28 @@ package body Gwindows.Common_Controls is
    procedure Insert_Tab (
          Control : in out Tab_Control_Type;
          Where   : in     Integer;
-         Value   : in     Gstring           ) is
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Value);
+         Value   : in     GString           ) is
+      C_Text : GString_C := GWindows.GStrings.To_GString_C (Value);
 
       Tc : Tcitem;
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Insertitema;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Insertitema;
             Wparam : Integer           := Where;
             Lparam : Tcitem            := Tc                );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Insertitemw;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Insertitemw;
             Wparam : Integer           := Where;
             Lparam : Tcitem            := Tc                );
       pragma Import (Stdcall, Sendmessagew,
          "SendMessage" & Character_Mode_Identifier);
    begin
       Tc.Mask := Tcif_Text;
-      Tc.Text := C_Text (0)'Unchecked_Access;
+      Tc.Text := C_Text (0)'unchecked_access;
 
       if Character_Mode = Unicode then
          Sendmessagew;
@@ -3098,22 +3096,22 @@ package body Gwindows.Common_Controls is
    procedure Text (
          Control : in out Tab_Control_Type;
          Where   : in     Integer;
-         Value   : in     Gstring           ) is
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Value);
+         Value   : in     GString           ) is
+      C_Text : GString_C := GWindows.GStrings.To_GString_C (Value);
 
       Tc : Tcitem;
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Setitema;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Setitema;
             Wparam : Integer           := Where;
             Lparam : Tcitem            := Tc                );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Setitemw;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Setitemw;
             Wparam : Integer           := Where;
             Lparam : Tcitem            := Tc                );
       pragma Import (Stdcall, Sendmessagew,
@@ -3121,7 +3119,7 @@ package body Gwindows.Common_Controls is
 
    begin
       Tc.Mask := Tcif_Text;
-      Tc.Text := C_Text (0)'Unchecked_Access;
+      Tc.Text := C_Text (0)'unchecked_access;
 
       if Character_Mode = Unicode then
          Sendmessagew;
@@ -3134,9 +3132,9 @@ package body Gwindows.Common_Controls is
    function Text (
          Control : in     Tab_Control_Type;
          Where   : in     Integer           )
-     return Gstring is
+     return GString is
       Max_Text : constant := 255;
-      type Buffer is new Gstring_C
+      type Buffer is new GString_C
             (0 .. Max_Text);
       type Pbuffer is access all Buffer;
 
@@ -3147,16 +3145,16 @@ package body Gwindows.Common_Controls is
       Tc     : Tcitem;
 
       procedure Sendmessagea (
-            Hwnd   :        Interfaces.C.Long := Handle (Control);
-            Umsg   :        Interfaces.C.Int  := Tcm_Getitema;
+            Hwnd   :        Interfaces.C.long := Handle (Control);
+            Umsg   :        Interfaces.C.int  := Tcm_Getitema;
             Wparam :        Integer           := Where;
             Lparam : in out Tcitem                                 );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   :        Interfaces.C.Long := Handle (Control);
-            Umsg   :        Interfaces.C.Int  := Tcm_Getitemw;
+            Hwnd   :        Interfaces.C.long := Handle (Control);
+            Umsg   :        Interfaces.C.int  := Tcm_Getitemw;
             Wparam :        Integer           := Where;
             Lparam : in out Tcitem                                 );
       pragma Import (Stdcall, Sendmessagew,
@@ -3164,7 +3162,7 @@ package body Gwindows.Common_Controls is
 
    begin
       Tc.Mask := Tcif_Text;
-      Tc.Text := C_Text (0)'Unchecked_Access;
+      Tc.Text := C_Text (0)'unchecked_access;
       Tc.Textmax := Max_Text;
 
       if Character_Mode = Unicode then
@@ -3174,7 +3172,7 @@ package body Gwindows.Common_Controls is
       end if;
 
       return Interfaces.C.To_Ada
-         (Gstring_C (To_Pbuffer (Tc.Text).all));
+         (GString_C (To_Pbuffer (Tc.Text).all));
    end Text;
 
    ---------------
@@ -3185,9 +3183,9 @@ package body Gwindows.Common_Controls is
          Control : in     Tab_Control_Type )
      return Integer is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Getitemcount;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Getitemcount;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Integer           := 0                 )
         return Integer;
       pragma Import (Stdcall, Sendmessage,
@@ -3204,9 +3202,9 @@ package body Gwindows.Common_Controls is
          Control : in     Tab_Control_Type )
      return Integer is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Getrowcount;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Getrowcount;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Integer           := 0                 )
         return Integer;
       pragma Import (Stdcall, Sendmessage,
@@ -3223,8 +3221,8 @@ package body Gwindows.Common_Controls is
          Control : in out Tab_Control_Type;
          Where   : in     Integer           ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Setcursel;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Setcursel;
             Wparam : Integer           := Where;
             Lparam : Integer           := 0                 );
       pragma Import (Stdcall, Sendmessage,
@@ -3237,9 +3235,9 @@ package body Gwindows.Common_Controls is
          Control : in     Tab_Control_Type )
      return Integer is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Getcursel;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Getcursel;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Integer           := 0                 )
         return Integer;
       pragma Import (Stdcall, Sendmessage,
@@ -3256,8 +3254,8 @@ package body Gwindows.Common_Controls is
          Control : in out Tab_Control_Type;
          Where   : in     Integer           ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Deleteitem;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Deleteitem;
             Wparam : Integer           := Where;
             Lparam : Integer           := 0                 );
       pragma Import (Stdcall, Sendmessage,
@@ -3273,9 +3271,9 @@ package body Gwindows.Common_Controls is
    procedure Delete_All_Tabs (
          Control : in out Tab_Control_Type ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Deleteallitems;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Deleteallitems;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Integer           := 0                   );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
@@ -3289,15 +3287,15 @@ package body Gwindows.Common_Controls is
 
    function Display_Area (
          Control : in     Tab_Control_Type )
-     return Gwindows.Types.Rectangle_Type is
-      Rt : Gwindows.Types.Rectangle_Type := (0, 0, Width (Control), Height
+     return GWindows.Types.Rectangle_Type is
+      Rt : GWindows.Types.Rectangle_Type := (0, 0, Width (Control), Height
         (Control));
 
       procedure Sendmessage (
-            Hwnd   :        Interfaces.C.Long             := Handle (Control);
-            Umsg   :        Interfaces.C.Int              := Tcm_Adjustrect;
+            Hwnd   :        Interfaces.C.long             := Handle (Control);
+            Umsg   :        Interfaces.C.int              := Tcm_Adjustrect;
             Wparam :        Boolean                       := False;
-            Lparam : in out Gwindows.Types.Rectangle_Type                      );
+            Lparam : in out GWindows.Types.Rectangle_Type                      );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
    begin
@@ -3321,18 +3319,18 @@ package body Gwindows.Common_Controls is
 
    procedure On_Notify (
          Window       : in out Tab_Control_Type;
-         Message      : in     Gwindows.Base.Pointer_To_Notification;
-         Control      : in     Gwindows.Base.Pointer_To_Base_Window_Class;
-         Return_Value : in out Interfaces.C.Long                           ) is
+         Message      : in     GWindows.Base.Pointer_To_Notification;
+         Control      : in     GWindows.Base.Pointer_To_Base_Window_Class;
+         Return_Value : in out Interfaces.C.long                           ) is
       Tcn_First       : constant := - 550;
       Tcn_Selchange   : constant := Tcn_First - 1;
       Tcn_Selchanging : constant := Tcn_First - 2;
    begin
       case Message.Code is
          when Tcn_Selchange =>
-            On_Change (Tab_Control_Type'Class (Window));
+            On_Change (Tab_Control_Type'class (Window));
          when Tcn_Selchanging =>
-            On_Changing (Tab_Control_Type'Class (Window));
+            On_Changing (Tab_Control_Type'class (Window));
          when others =>
             On_Notify (Common_Control_Type (Window),
                Message, Control, Return_Value);
@@ -3347,20 +3345,20 @@ package body Gwindows.Common_Controls is
    procedure Tab_Window (
          Control : in out Tab_Window_Control_Type;
          Where   : in     Integer;
-         Window  : in     Gwindows.Base.Pointer_To_Base_Window_Class ) is
+         Window  : in     GWindows.Base.Pointer_To_Base_Window_Class ) is
       Tc : Tcitem;
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Setitema;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Setitema;
             Wparam : Integer           := Where;
             Lparam : Tcitem            := Tc                );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tcm_Setitemw;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tcm_Setitemw;
             Wparam : Integer           := Where;
             Lparam : Tcitem            := Tc                );
       pragma Import (Stdcall, Sendmessagew,
@@ -3376,27 +3374,27 @@ package body Gwindows.Common_Controls is
       end if;
 
       if Where = Selected_Tab (Control) then
-         On_Change (Tab_Window_Control_Type'Class (Control));
+         On_Change (Tab_Window_Control_Type'class (Control));
       end if;
    end Tab_Window;
 
    function Tab_Window (
          Control : in     Tab_Window_Control_Type;
          Where   : in     Integer                  )
-     return Gwindows.Base.Pointer_To_Base_Window_Class is
+     return GWindows.Base.Pointer_To_Base_Window_Class is
       Tc : Tcitem;
 
       procedure Sendmessagea (
-            Hwnd   :        Interfaces.C.Long := Handle (Control);
-            Umsg   :        Interfaces.C.Int  := Tcm_Getitema;
+            Hwnd   :        Interfaces.C.long := Handle (Control);
+            Umsg   :        Interfaces.C.int  := Tcm_Getitema;
             Wparam :        Integer           := Where;
             Lparam : in out Tcitem                                 );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   :        Interfaces.C.Long := Handle (Control);
-            Umsg   :        Interfaces.C.Int  := Tcm_Getitemw;
+            Hwnd   :        Interfaces.C.long := Handle (Control);
+            Umsg   :        Interfaces.C.int  := Tcm_Getitemw;
             Wparam :        Integer           := Where;
             Lparam : in out Tcitem                                 );
       pragma Import (Stdcall, Sendmessagew,
@@ -3419,13 +3417,13 @@ package body Gwindows.Common_Controls is
 
    procedure On_Changing (
          Control : in out Tab_Window_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
 
       Current : constant Pointer_To_Base_Window_Class := Tab_Window (Control, Selected_Tab
         (Control));
    begin
       if Current /= null then
-         Hide (Current.All);
+         Hide (Current.all);
       end if;
    end On_Changing;
 
@@ -3435,18 +3433,18 @@ package body Gwindows.Common_Controls is
 
    procedure On_Change (
          Control : in out Tab_Window_Control_Type ) is
-      use Gwindows.Base;
+      use GWindows.Base;
 
       Current : constant Pointer_To_Base_Window_Class  := Tab_Window (Control, Selected_Tab
         (Control));
-      Area    : constant Gwindows.Types.Rectangle_Type := Display_Area (Control);
+      Area    : constant GWindows.Types.Rectangle_Type := Display_Area (Control);
    begin
       if Current /= null then
-         Left (Current.All, Area.Left);
-         Top (Current.All, Area.Top);
-         Width (Current.All, Area.Right - Area.Left);
-         Height (Current.All, Area.Bottom - Area.Top);
-         Show (Current.All);
+         Left (Current.all, Area.Left);
+         Top (Current.all, Area.Top);
+         Width (Current.all, Area.Right - Area.Left);
+         Height (Current.all, Area.Bottom - Area.Top);
+         Show (Current.all);
       end if;
    end On_Change;
 
@@ -3456,14 +3454,14 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Control    : in out Toolbar_Control_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
          Left       : in     Integer;
          Top        : in     Integer;
          Width      : in     Integer;
          Height     : in     Integer;
          Show       : in     Boolean                              := True;
          Is_Dynamic : in     Boolean                              := False ) is
-      Styles : constant Interfaces.C.Unsigned := 0;
+      Styles : constant Interfaces.C.unsigned := 0;
    begin
       Create_Control (Control, Parent,
          "ToolbarWindow32",
@@ -3473,7 +3471,7 @@ package body Gwindows.Common_Controls is
          Is_Dynamic => Is_Dynamic);
 
       if Show then
-         Gwindows.Common_Controls.Show (Control);
+         GWindows.Common_Controls.Show (Control);
       end if;
    end Create;
 
@@ -3483,17 +3481,17 @@ package body Gwindows.Common_Controls is
 
    procedure Set_Image_List (
          Control : in out Toolbar_Control_Type;
-         List    : in     Gwindows.Image_Lists.Image_List_Type ) is
+         List    : in     GWindows.Image_Lists.Image_List_Type ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long     := Handle (Control);
-            Umsg   : Interfaces.C.Int      := Tb_Setimagelist;
+            Hwnd   : Interfaces.C.long     := Handle (Control);
+            Umsg   : Interfaces.C.int      := Tb_Setimagelist;
             Wparam : Integer               := 0;
-            Lparam : Gwindows.Types.Handle                      );
+            Lparam : GWindows.Types.Handle                      );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
 
    begin
-      Sendmessage (Lparam => Gwindows.Image_Lists.Handle (List));
+      Sendmessage (Lparam => GWindows.Image_Lists.Handle (List));
    end Set_Image_List;
 
    ----------------
@@ -3509,8 +3507,8 @@ package body Gwindows.Common_Controls is
       Tb : Button_Array;
 
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tb_Addbuttons;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tb_Addbuttons;
             Wparam : Integer           := 1;
             Lparam : Button_Array      := Tb                );
       pragma Import (Stdcall, Sendmessage,
@@ -3532,8 +3530,8 @@ package body Gwindows.Common_Controls is
       type Button_Array is array (1 .. 1) of Tbbutton;
       Tb : Button_Array;
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tb_Addbuttons;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tb_Addbuttons;
             Wparam : Integer           := 1;
             Lparam : Button_Array      := Tb                );
       pragma Import (Stdcall, Sendmessage,
@@ -3550,13 +3548,13 @@ package body Gwindows.Common_Controls is
 
    function Get_Style (
          Control : in     Toolbar_Control_Type )
-     return Interfaces.C.Unsigned is
+     return Interfaces.C.unsigned is
       function Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tb_Getstyle;
-            Wparam : Interfaces.C.Long := 0;
-            Lparam : Interfaces.C.Long := 0                 )
-        return Interfaces.C.Unsigned;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tb_Getstyle;
+            Wparam : Interfaces.C.long := 0;
+            Lparam : Interfaces.C.long := 0                 )
+        return Interfaces.C.unsigned;
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
    begin
@@ -3569,12 +3567,12 @@ package body Gwindows.Common_Controls is
 
    procedure Set_Style (
          Control : in out Toolbar_Control_Type;
-         Style   : in     Interfaces.C.Unsigned ) is
+         Style   : in     Interfaces.C.unsigned ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long     := Handle (Control);
-            Umsg   : Interfaces.C.Int      := Tb_Setstyle;
+            Hwnd   : Interfaces.C.long     := Handle (Control);
+            Umsg   : Interfaces.C.int      := Tb_Setstyle;
             Wparam : Integer               := 0;
-            Lparam : Interfaces.C.Unsigned := Style             );
+            Lparam : Interfaces.C.unsigned := Style             );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
    begin
@@ -3588,8 +3586,8 @@ package body Gwindows.Common_Controls is
    procedure On_Create (
          Control : in out Toolbar_Control_Type ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Tb_Buttonstructsize;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Tb_Buttonstructsize;
             Wparam : Integer           := 20;
             Lparam : Integer           := 0                    );
       pragma Import (Stdcall, Sendmessage,
@@ -3602,11 +3600,11 @@ package body Gwindows.Common_Controls is
          Window  : in out Toolbar_Control_Type;
          Code    : in     Integer;
          Id      : in     Integer;
-         Control : in     Gwindows.Base.Pointer_To_Base_Window_Class ) is
+         Control : in     GWindows.Base.Pointer_To_Base_Window_Class ) is
       pragma Warnings (Off, Control);
    begin
       if Code = 0 then
-         On_Button_Select (Toolbar_Control_Type'Class (Window), Id);
+         On_Button_Select (Toolbar_Control_Type'class (Window), Id);
       end if;
    end On_Command;
 
@@ -3616,7 +3614,7 @@ package body Gwindows.Common_Controls is
 
    procedure On_Button_Select_Handler (
          Control : in out Toolbar_Control_Type;
-         Handler : in     Gwindows.Windows.Select_Event ) is
+         Handler : in     GWindows.Windows.Select_Event ) is
    begin
       Control.On_Button_Select_Event := Handler;
    end On_Button_Select_Handler;
@@ -3628,12 +3626,12 @@ package body Gwindows.Common_Controls is
    procedure Fire_On_Button_Select (
          Control : in out Toolbar_Control_Type;
          Item    : in     Integer               ) is
-      use Gwindows.Base;
-      use Gwindows.Windows;
+      use GWindows.Base;
+      use GWindows.Windows;
 
    begin
       if Control.On_Button_Select_Event /= null then
-         Control.On_Button_Select_Event (Base_Window_Type'Class (Control),
+         Control.On_Button_Select_Event (Base_Window_Type'class (Control),
             Item);
       end if;
    end Fire_On_Button_Select;
@@ -3655,7 +3653,7 @@ package body Gwindows.Common_Controls is
 
    procedure Create (
          Control    : in out Tool_Tip_Type;
-         Parent     : in out Gwindows.Base.Base_Window_Type'Class;
+         Parent     : in out GWindows.Base.Base_Window_Type'class;
          Is_Dynamic : in     Boolean                              := False ) is
       Ws_Popup       : constant := 2147483648;
       Tts_Always_Tip : constant := 1;
@@ -3674,32 +3672,32 @@ package body Gwindows.Common_Controls is
 
    procedure Add_Tool_Tip (
          Control : in out Tool_Tip_Type;
-         Window  : in     Gwindows.Base.Base_Window_Type'Class;
-         Tip     : in     Gstring                               ) is
-      C_Text : Gstring_C := Gwindows.Gstrings.To_Gstring_C (Tip);
+         Window  : in     GWindows.Base.Base_Window_Type'class;
+         Tip     : in     GString                               ) is
+      C_Text : GString_C := GWindows.GStrings.To_GString_C (Tip);
 
       Info : Toolinfo;
 
       procedure Sendmessagea (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Ttm_Addtoola;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Ttm_Addtoola;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Toolinfo          := Info              );
       pragma Import (Stdcall, Sendmessagea,
          "SendMessage" & Character_Mode_Identifier);
 
       procedure Sendmessagew (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Ttm_Addtoolw;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Ttm_Addtoolw;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Toolinfo          := Info              );
       pragma Import (Stdcall, Sendmessagew,
          "SendMessage" & Character_Mode_Identifier);
    begin
       Info.Flags := Ttf_Idishwnd or Ttf_Subclass;
-      Info.Hwnd := Gwindows.Base.Handle (Parent (Control).all);
-      Info.Uid := Gwindows.Base.Handle (Window);
-      Info.Text := C_Text (0)'Unchecked_Access;
+      Info.Hwnd := GWindows.Base.Handle (Parent (Control).all);
+      Info.Uid := GWindows.Base.Handle (Window);
+      Info.Text := C_Text (0)'unchecked_access;
 
       if Character_Mode = Unicode then
          Sendmessagew;
@@ -3717,9 +3715,9 @@ package body Gwindows.Common_Controls is
          Control : in out Tool_Tip_Type;
          Width   : in     Integer        ) is
       procedure Sendmessage (
-            Hwnd   : Interfaces.C.Long := Handle (Control);
-            Umsg   : Interfaces.C.Int  := Ttm_Setmaxtipwidth;
-            Wparam : Interfaces.C.Long := 0;
+            Hwnd   : Interfaces.C.long := Handle (Control);
+            Umsg   : Interfaces.C.int  := Ttm_Setmaxtipwidth;
+            Wparam : Interfaces.C.long := 0;
             Lparam : Integer           := Width               );
       pragma Import (Stdcall, Sendmessage,
          "SendMessage" & Character_Mode_Identifier);
@@ -3727,4 +3725,4 @@ package body Gwindows.Common_Controls is
       Sendmessage;
    end Maximum_Width;
 
-end Gwindows.Common_Controls;
+end GWindows.Common_Controls;

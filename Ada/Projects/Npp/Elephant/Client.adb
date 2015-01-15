@@ -371,7 +371,7 @@ package body Client is
     use type Server.References;
 
     Filename_Item : Npp.Tree_View.Item := Npp.Tree_View.Root;
-    Dummy_Item    : Npp.Tree_View.Item with Unreferenced;
+    Unused        : Npp.Tree_View.Item;
     The_Line      : Text.String;
 
   begin
@@ -414,9 +414,9 @@ package body Client is
             end if;
             The_Line := The_Line & Cursor_Mark & Line(At_Position .. Last_Position);
             if Last_Position = Line'last then
-              Dummy_Item := Npp.Tree_View.Add (Parent => Filename_Item,
-                                               Data   => The_Location'address,
-                                               Title  => Text.String_Of (The_Line));
+              Unused := Npp.Tree_View.Add (Parent => Filename_Item,
+                                           Data   => The_Location'address,
+                                           Title  => Text.String_Of (The_Line));
               Text.Clear (The_Line);
             end if;
           end;

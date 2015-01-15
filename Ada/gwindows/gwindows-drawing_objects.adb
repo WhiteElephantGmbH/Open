@@ -184,7 +184,7 @@ package body GWindows.Drawing_Objects is
    --------------------------
 
    procedure Create_Pattern_Brush (Brush          : in out Brush_Type;
-                                   Bitmap_Pattern : in     Bitmap_Type'Class)
+                                   Bitmap_Pattern : in     Bitmap_Type'class)
    is
       function CreatePatternBrush
         (hBitmap : Interfaces.C.long := Handle (Bitmap_Pattern))
@@ -434,7 +434,7 @@ package body GWindows.Drawing_Objects is
       LR_LOADTRANSPARENT : constant := 16#0020#;
       LR_DEFAULTSIZE     : constant := 16#0040#;
       LR_LOADMAP3DCOLORS : constant := 16#1000#;
-      Lr_Createdibsection     : constant := 16#2000#;
+    --Lr_Createdibsection : constant := 16#2000#;
 
       function LoadImage
         (hInst     : Interfaces.C.long := GWindows.Internal.Current_hInstance;

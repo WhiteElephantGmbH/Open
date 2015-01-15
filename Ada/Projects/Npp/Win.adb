@@ -51,7 +51,7 @@ package body Win is
                              W : WPARAM;
                              L : LPARAM) return LRESULT
     with
-      Import        => Standard.True,
+      Import,
       Convention    => Stdcall,
       External_Name => "SendMessageA";
 
@@ -79,7 +79,7 @@ package body Win is
     function Load_Bitmap_A (I : HINSTANCE;
                             B : LPCSTR) return HBITMAP
     with
-      Import        => Standard.True,
+      Import,
       Convention    => Stdcall,
       External_Name => "LoadBitmapA";
 
@@ -92,7 +92,7 @@ package body Win is
 
     function Load_Library_W (L : LPCWSTR) return HINSTANCE
     with
-      Import        => Standard.True,
+      Import,
       Convention    => Stdcall,
       External_Name => "LoadLibraryW";
 
@@ -126,7 +126,7 @@ package body Win is
                                  Instances  : HINSTANCE;
                                  Parameters : LPVOID) return HWND
     with
-      Import        => Standard.True,
+      Import,
       Convention    => Stdcall,
       External_Name => "CreateWindowExW";
 

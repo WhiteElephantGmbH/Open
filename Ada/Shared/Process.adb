@@ -43,7 +43,7 @@ package body Process is
     Default_Size : constant Win32.DWORD := 0;
     The_Data     : String (1..1000);
     The_Length   : aliased Win32.DWORD;
-    Temp         : Win32.BOOL; pragma Unreferenced (Temp);
+    Unused       : Win32.BOOL;
     The_Result   : Text.String;
 
     use type Win32.BOOL;
@@ -91,7 +91,7 @@ package body Process is
       Log.Write ("!!! Process.Duplicatehandle failed");
       raise Execution_Failed;
     end if;
-    Temp := Base.CloseHandle (In_Temp); -- No longer used
+    Unused := Base.CloseHandle (In_Temp); -- No longer used
 
     Windows.Create_Process (Executable     => Executable,
                             Parameters     => Parameters,
@@ -100,7 +100,7 @@ package body Process is
                             Std_Error      => Error_Output,
                             Std_Output     => Standard_Output,
                             Console        => Windows.Invisible);
-    Temp := Base.CloseHandle (Outbound); -- No longer used, child has a copy
+    Unused := Base.CloseHandle (Outbound); -- No longer used, child has a copy
     loop
       if Base.ReadFile (Inbound,
                         The_Data'address,
@@ -115,7 +115,7 @@ package body Process is
         Text.Append_To (The_Result, The_Data (The_Data'first .. The_Data'first + Natural(The_Length) - 1));
       end if;
     end loop;
-    Temp := Base.CloseHandle (Inbound); -- No longer used
+    Unused := Base.CloseHandle (Inbound); -- No longer used
     return Text.String_Of(The_Result);
 
   exception

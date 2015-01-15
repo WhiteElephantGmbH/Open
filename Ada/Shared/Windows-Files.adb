@@ -130,13 +130,13 @@ package body Windows.Files is
       declare
         The_Handle : Nt.HANDLE;
         The_Data   : aliased Find_Data;
-        Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+        Unused     : Win32.BOOL;
         use type Nt.HANDLE;
       begin
          The_Handle := Base.FindFirstFile (Win32.Addr(Filename),
                                            The_Data'unchecked_access);
          if The_Handle /= Base.INVALID_HANDLE_VALUE then
-           Temp_Bool := Base.FindClose(The_Handle);
+           Unused := Base.FindClose(The_Handle);
            if not Bits_Are_Set_In (The_Data.dwFileAttributes, Nt.FILE_ATTRIBUTE_DIRECTORY) then
               declare
                 Name : constant String := Interfaces.C.To_Ada (Win32.To_C (The_Data.cFileName));
@@ -164,13 +164,13 @@ package body Windows.Files is
       declare
         The_Handle : Nt.HANDLE;
         The_Data   : aliased Find_Data;
-        Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+        Unused     : Win32.BOOL;
         use type Nt.HANDLE;
       begin
          The_Handle := Base.FindFirstFile (Win32.Addr(Filename),
                                            The_Data'unchecked_access);
          if The_Handle /= Base.INVALID_HANDLE_VALUE then
-           Temp_Bool := Base.FindClose(The_Handle);
+           Unused := Base.FindClose(The_Handle);
            if Bits_Are_Set_In (The_Data.dwFileAttributes, Nt.FILE_ATTRIBUTE_DIRECTORY) then
               declare
                 Name : constant String := Interfaces.C.To_Ada (Win32.To_C (The_Data.cFileName));
@@ -199,13 +199,13 @@ package body Windows.Files is
       declare
         The_Handle : Nt.HANDLE;
         The_Data   : aliased Find_Wide_Data;
-        Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+        Unused     : Win32.BOOL;
         use type Nt.HANDLE;
       begin
          The_Handle := Base.FindFirstFileW (Win32.Addr(Filename),
                                             The_Data'unchecked_access);
          if The_Handle /= Base.INVALID_HANDLE_VALUE then
-           Temp_Bool := Base.FindClose(The_Handle);
+           Unused := Base.FindClose(The_Handle);
            declare
              Name : constant Wide_String := Interfaces.C.To_Ada (To_C (The_Data.cFileName));
            begin
@@ -556,7 +556,7 @@ package body Windows.Files is
 
   type GET_FILEEX_INFO_LEVELS is (
     Getfileexinfostandard,
-    Getfileexmaxinfolevel); pragma Unreferenced (Getfileexmaxinfolevel); -- used for completeness
+    Unused_Getfileexmaxinfolevel);
   for GET_FILEEX_INFO_LEVELS'size use 32;
 
 
@@ -745,11 +745,11 @@ package body Windows.Files is
   function The_Time_Now return File_Time is
     As_File_Time    : aliased Base.FILETIME;
     The_System_Time : aliased Base.SYSTEMTIME;
-    Temp_Bool       : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+    Unused          : Win32.BOOL;
   begin
     Base.GetSystemTime (The_System_Time'unchecked_access);
-    Temp_Bool := Base.SystemTimeToFileTime (The_System_Time'unchecked_access,
-                                            As_File_Time'unchecked_access);
+    Unused := Base.SystemTimeToFileTime (The_System_Time'unchecked_access,
+                                         As_File_Time'unchecked_access);
     return As_File_Time;
   end The_Time_Now;
 
@@ -763,7 +763,7 @@ package body Windows.Files is
     The_File_Time  : aliased Base.FILETIME;
     As_Local_Time  : aliased Base.FILETIME;
     As_System_Time : aliased Base.SYSTEMTIME;
-    Temp_Bool      : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+    Unused         : Win32.BOOL;
     Date_Size      : Integer;
     Max_Date_Size  : constant := 50;
     Date_Buffer    : aliased String (1..Max_Date_Size);
@@ -777,10 +777,10 @@ package body Windows.Files is
       return "";
     else
       The_File_Time := The_Time;
-      Temp_Bool  := Base.FileTimeToLocalFileTime (The_File_Time'unchecked_access,
-                                                  As_Local_Time'unchecked_access);
-      Temp_Bool := Base.FileTimeToSystemTime (As_Local_Time'unchecked_access,
-                                              As_System_Time'unchecked_access);
+      Unused  := Base.FileTimeToLocalFileTime (The_File_Time'unchecked_access,
+                                               As_Local_Time'unchecked_access);
+      Unused := Base.FileTimeToSystemTime (As_Local_Time'unchecked_access,
+                                           As_System_Time'unchecked_access);
       Date_Size := Integer (Win32.Winnls.GetDateFormat (Nt.LOCALE_USER_DEFAULT,
                                                         0, As_System_Time'unchecked_access, null,
                                                         Win32.Addr(Date_Buffer), Max_Date_Size));
@@ -836,7 +836,7 @@ package body Windows.Files is
     use type Win32.BOOL;
     The_Data   : aliased Find_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+    Unused     : Win32.BOOL;
   begin
     The_Handle := Base.FindFirstFile (Win32.Addr(File_Names),
                                       The_Data'unchecked_access);
@@ -845,7 +845,7 @@ package body Windows.Files is
         exit when Action_Routine (The_Data) = Stop;
         exit when Base.FindNextFile (The_Handle, The_Data'unchecked_access) = 0;
       end loop;
-      Temp_Bool := Base.FindClose(The_Handle);
+      Unused := Base.FindClose(The_Handle);
     end if;
   end Search_With;
 
@@ -856,7 +856,7 @@ package body Windows.Files is
     use type Win32.BOOL;
     The_Data   : aliased Find_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+    Unused     : Win32.BOOL;
   begin
     The_Handle := Base.FindFirstFile (Win32.Addr(File_Names),
                                       The_Data'unchecked_access);
@@ -865,7 +865,7 @@ package body Windows.Files is
         Action_Routine (The_Data);
         exit when Base.FindNextFile (The_Handle, The_Data'unchecked_access) = 0;
       end loop;
-      Temp_Bool := Base.FindClose(The_Handle);
+      Unused := Base.FindClose(The_Handle);
     end if;
   end Iterate_With;
 
@@ -911,7 +911,7 @@ package body Windows.Files is
     use type Win32.CHAR;
     The_Data   : aliased Find_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+    Unused     : Win32.BOOL;
   begin
     The_Handle := Find_First_File_Exa (Win32.Addr(Search_Path),
                                        Find_Ex_Info_Standard,
@@ -934,7 +934,7 @@ package body Windows.Files is
         end if;
         exit when Base.FindNextFileA (The_Handle, The_Data'unchecked_access) = 0;
       end loop;
-      Temp_Bool := Base.FindClose(The_Handle);
+      Unused := Base.FindClose(The_Handle);
     end if;
   end Iterate_Directories_With;
 
@@ -947,7 +947,7 @@ package body Windows.Files is
     use type Win32.WCHAR;
     The_Data   : aliased Find_Wide_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+    Unused     : Win32.BOOL;
   begin
     The_Handle := Find_First_File_Exw (Win32.Addr(Search_Path),
                                        Find_Ex_Info_Standard,
@@ -970,7 +970,7 @@ package body Windows.Files is
         end if;
         exit when Base.FindNextFileW (The_Handle, The_Data'unchecked_access) = 0;
       end loop;
-      Temp_Bool := Base.FindClose(The_Handle);
+      Unused := Base.FindClose(The_Handle);
     end if;
   end Iterate_Wide_Directories_With;
 
@@ -982,7 +982,7 @@ package body Windows.Files is
     use type Win32.BOOL;
     The_Data   : aliased Find_Wide_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+    Unused     : Win32.BOOL;
   begin
     The_Handle := Base.FindFirstFileW (Win32.Addr(File_Names),
                                        The_Data'unchecked_access);
@@ -991,7 +991,7 @@ package body Windows.Files is
         exit when Action_Routine (The_Data) = Stop;
         exit when Base.FindNextFileW (The_Handle, The_Data'unchecked_access) = 0;
       end loop;
-      Temp_Bool := Base.FindClose(The_Handle);
+      Unused := Base.FindClose(The_Handle);
     end if;
   end Search_Wide_With;
 
@@ -1002,7 +1002,7 @@ package body Windows.Files is
     use type Win32.BOOL;
     The_Data   : aliased Find_Wide_Data;
     The_Handle : Nt.HANDLE;
-    Temp_Bool  : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+    Unused     : Win32.BOOL;
   begin
     The_Handle := Base.FindFirstFileW (Win32.Addr(File_Names),
                                        The_Data'unchecked_access);
@@ -1011,7 +1011,7 @@ package body Windows.Files is
         Action_Routine (The_Data);
         exit when Base.FindNextFileW (The_Handle, The_Data'unchecked_access) = 0;
       end loop;
-      Temp_Bool := Base.FindClose(The_Handle);
+      Unused := Base.FindClose(The_Handle);
     end if;
   end Iterate_Wide_With;
 
@@ -1220,7 +1220,7 @@ package body Windows.Files is
   procedure Iterate_Alternate_Data_Streams_Of (Filename : String) is
     File_Name                : aliased constant String := Filename & Nul;
     The_File_Handle          : Nt.HANDLE;
-    Is_Ok                    : Win32.BOOL; pragma Unreferenced (Is_Ok);
+    Unused                   : Win32.BOOL;
     The_Return_Code          : Integer;
     The_Io_Status_Block      : aliased Io_Status_Block;
 --  Buffer_Overflow          : constant Win32.Dword := 16#8000_0005#;
@@ -1267,7 +1267,7 @@ package body Windows.Files is
             end loop;
           end if;
         end if;
-        Is_Ok := Base.CloseHandle (The_File_Handle);
+        Unused := Base.CloseHandle (The_File_Handle);
       end if;
     end if;
   end Iterate_Alternate_Data_Streams_Of;
@@ -1276,7 +1276,7 @@ package body Windows.Files is
   procedure Iterate_Alternate_Wide_Data_Streams_Of (Filename : Wide_String) is
     File_Name                : aliased constant Wide_String := Filename & Wide_Nul;
     The_File_Handle          : Nt.HANDLE;
-    Is_Ok                    : Win32.BOOL; pragma Unreferenced (Is_Ok);
+    Unused                   : Win32.BOOL;
     The_Return_Code          : Integer;
     The_Io_Status_Block      : aliased Io_Status_Block;
 --  Buffer_Overflow          : constant Win32.Dword := 16#8000_0005#;
@@ -1322,7 +1322,7 @@ package body Windows.Files is
             end loop;
           end if;
         end if;
-        Is_Ok := Base.CloseHandle (The_File_Handle);
+        Unused := Base.CloseHandle (The_File_Handle);
       end if;
     end if;
   end Iterate_Alternate_Wide_Data_Streams_Of;
@@ -1460,14 +1460,14 @@ package body Windows.Files is
         Segment_Name : aliased constant String := Segment & Nul;
         The_Data     : aliased Win32.Winbase.WIN32_FIND_DATAA;
         The_Handle   : Win32.Winnt.HANDLE;
-        Temp_Bool    : Win32.BOOL; pragma Unreferenced (Temp_Bool);
+        Unused       : Win32.BOOL;
       begin
         The_Handle := Win32.Winbase.FindFirstFileA (Win32.Addr(Segment_Name),
                                                     The_Data'unchecked_access);
         if The_Handle = Win32.Winbase.INVALID_HANDLE_VALUE then
           return "?";
         else
-          Temp_Bool := Win32.Winbase.FindClose (The_Handle);
+          Unused := Win32.Winbase.FindClose (The_Handle);
           return Interfaces.C.To_Ada (Win32.To_C (The_Data.cFileName));
         end if;
       end Original_Of;

@@ -1,6 +1,3 @@
-with Ada.Exceptions;
-with Text_IO; use Text_IO;
---------------------------------------------------
 with GNATCOM.Initialize; use GNATCOM.Initialize;
 with GNATCOM.BSTR;
 with GNATCOM.Types;

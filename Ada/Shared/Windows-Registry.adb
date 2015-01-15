@@ -46,12 +46,12 @@ package body Windows.Registry is
 
   procedure Close_Current_Key is
     use type Win32.Winreg.HKEY;
-    Return_Code : Win32.LONG; pragma Unreferenced (Return_Code);
+    Unused : Win32.LONG;
   begin
     if (The_Current_Key /= Win32.Winreg.HKEY_CURRENT_USER) and
        (The_Current_Key /= Win32.Winreg.HKEY_LOCAL_MACHINE)
     then
-      Return_Code := Win32.Winreg.RegCloseKey (The_Current_Key);
+      Unused := Win32.Winreg.RegCloseKey (The_Current_Key);
     end if;
   end Close_Current_Key;
 
@@ -243,10 +243,10 @@ package body Windows.Registry is
 
 
   procedure Delete_Key (The_Key : String) is
-    Key  : aliased constant String := The_Key & Nul;
-    Temp : Win32.LONG; pragma Unreferenced (Temp);
+    Key    : aliased constant String := The_Key & Nul;
+    Unused : Win32.LONG;
   begin
-    Temp := Win32.Winreg.RegDeleteKey (The_Root, Win32.Addr(Key));
+    Unused := Win32.Winreg.RegDeleteKey (The_Root, Win32.Addr(Key));
   end Delete_Key;
 
 

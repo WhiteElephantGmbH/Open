@@ -49,7 +49,7 @@ package body Windows.Files.Io is
     Name       : aliased constant String := Filename & Nul;
     Share_Mode : constant Win32.DWORD:= 0; -- Exclusive
     The_Handle : Win32.Winnt.HANDLE;
-    Is_Ok      : Win32.BOOL; pragma Unreferenced (Is_Ok);
+    Unused     : Win32.BOOL;
     use type Win32.Winnt.HANDLE;
   begin
     The_Handle := Win32.Winbase.CreateFileA (Win32.Addr(Name),
@@ -62,7 +62,7 @@ package body Windows.Files.Io is
     if The_Handle = Win32.Winbase.INVALID_HANDLE_VALUE then
       return True;
     else
-      Is_Ok := Win32.Winbase.CloseHandle (The_Handle);
+      Unused := Win32.Winbase.CloseHandle (The_Handle);
       return False;
     end if;
   end Is_Already_Open;
@@ -72,7 +72,7 @@ package body Windows.Files.Io is
     Name       : aliased constant Wide_String := Filename & Wide_Nul;
     Share_Mode : constant := 0;
     The_Handle : Win32.Winnt.HANDLE;
-    Is_Ok      : Win32.BOOL; pragma Unreferenced (Is_Ok);
+    Unused     : Win32.BOOL;
     use type Win32.Winnt.HANDLE;
   begin
     The_Handle := Win32.Winbase.CreateFileW (Win32.Addr(Name),
@@ -85,7 +85,7 @@ package body Windows.Files.Io is
     if The_Handle = Win32.Winbase.INVALID_HANDLE_VALUE then
       return True;
     else
-      Is_Ok := Win32.Winbase.CloseHandle (The_Handle);
+      Unused := Win32.Winbase.CloseHandle (The_Handle);
       return False;
     end if;
   end Wide_Is_Already_Open;
@@ -207,13 +207,13 @@ package body Windows.Files.Io is
 
 
   procedure Skip_Terminator (Fsa : File_Structure_Access) is
-    The_Character : Character; pragma Unreferenced (The_Character);
+    Unused : Character;
   begin
     if Next_Character_From (Fsa) = Ascii.Cr and then -- must lookahead
       Fsa.Position /= Fsa.Extent and then -- not end of file
       Fsa.Buffer(Fsa.Position + 1) = Ascii.Lf
     then -- Consume second character of terminator
-      The_Character := Next_Character_From (Fsa);
+      Unused := Next_Character_From (Fsa);
     end if;
   end Skip_Terminator;
 
@@ -327,8 +327,7 @@ package body Windows.Files.Io is
       Fsa.Position := Terminator_Position; -- Last byte was start of terminator
       declare
         Return_String : constant String := Fsa.Buffer (Start_Position..Terminator_Position - 1);
-        Next_Byte : constant Character := Next_Character_From (Fsa);
-        pragma Unreferenced (Next_Byte); -- read ahead
+        Unused : constant Character := Next_Character_From (Fsa);
       begin
         return Return_String;
       end;
@@ -706,7 +705,7 @@ package body Windows.Files.Io is
 
 
   procedure Flush (File : Handle) is
-    Is_Ok : Win32.BOOL; pragma Unreferenced (Is_Ok);
+    Unused : Win32.BOOL;
   begin
     if File.Fsa = null or else
        File.Fsa.Buffer = null
@@ -716,13 +715,13 @@ package body Windows.Files.Io is
       if File.Fsa.Mode /= Read_Only then
         Write_Buffer (File.Fsa); -- Flush any partial buffers
       end if;
-      Is_Ok := Win32.Winbase.FlushFileBuffers (File.Fsa.Handle);
+      Unused := Win32.Winbase.FlushFileBuffers (File.Fsa.Handle);
     end if;
   end Flush;
 
 
   procedure Close (The_File : in out Handle) is
-    Is_Ok : Win32.BOOL; pragma Unreferenced (Is_Ok);
+    Unused : Win32.BOOL;
     procedure Dispose is new Ada.Unchecked_Deallocation (Lookahead_Buffer, Buffer_Access);
   begin
     if The_File.Fsa = null or else
@@ -734,7 +733,7 @@ package body Windows.Files.Io is
         Write_Buffer (The_File.Fsa); -- Flush any partial buffers
       end if;
       Dispose (The_File.Fsa.Buffer);
-      Is_Ok := Win32.Winbase.CloseHandle (The_File.Fsa.Handle);
+      Unused := Win32.Winbase.CloseHandle (The_File.Fsa.Handle);
     end if;
   end Close;
 

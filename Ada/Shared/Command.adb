@@ -157,7 +157,7 @@ package body Command is
           end;
         when Server.Case_Updates =>
           declare
-            Results  : constant Server.Case_Data := Server.Case_Updates;
+            Results : constant Server.Case_Data := Server.Case_Updates;
           begin
             Windows.Pipe.Write (The_Pipe, Results'address, Results'size / Unsigned.Byte'size);
           end;
