@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -66,4 +66,25 @@ package body Indefinite_Doubly_Linked_Lists is
     return Natural(Length (List));
   end Count;
 
+  package body Generic_Sorting is
+  
+    package List_Sorting is new Private_Lists.Generic_Sorting ("<");
+
+    function Is_Sorted (List : Item) return Boolean is
+    begin
+      return List_Sorting.Is_Sorted (Private_Lists.List(List));
+    end Is_Sorted;
+
+    procedure Sort (List : in out Item) is
+    begin
+      List_Sorting.Sort (Private_Lists.List(List));
+    end Sort;
+
+    procedure Merge (Target, Source : in out Item) is
+    begin
+      List_Sorting.Merge (Private_Lists.List(Target), Private_Lists.List(Source));
+    end Merge;
+
+  end Generic_Sorting;
+  
 end Indefinite_Doubly_Linked_Lists;

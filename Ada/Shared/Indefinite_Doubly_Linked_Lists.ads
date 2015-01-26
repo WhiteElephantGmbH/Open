@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -24,6 +24,7 @@ generic
 
 package Indefinite_Doubly_Linked_Lists is
   pragma Preelaborate;
+  
   package Private_Lists is new Ada.Containers.Indefinite_Doubly_Linked_Lists (Element_Type => Element);
 
   type Item is new Private_Lists.List with private;
@@ -44,6 +45,20 @@ package Indefinite_Doubly_Linked_Lists is
 
   function Count (List : Item) return Natural with Inline;
 
+  pragma Warnings (Off); -- !!! allow hiding of "<"
+  generic
+      with function "<" (Left, Right : Element) return Boolean is <>;
+  package Generic_Sorting is
+    
+    function Is_Sorted (List : Item) return Boolean;
+
+    procedure Sort (List : in out Item);
+
+    procedure Merge (Target, Source : in out Item);
+
+  end Generic_Sorting;
+  pragma Warnings (On);
+  
 private
   type Item is new Private_Lists.List with null record;
 end Indefinite_Doubly_Linked_Lists;
