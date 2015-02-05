@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -150,4 +150,7 @@ package Unsigned with Preelaborate => True is
 
   procedure Swap (The_Quadword : in out Quadword);
 
+  procedure Split (The_Time        :     Duration;
+                   The_Seconds     : out Unsigned.Quadword;
+                   The_Nanoseconds : out Unsigned.Longword);
 end Unsigned;

@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2014 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -460,5 +460,18 @@ package body Unsigned is
                                      The_Bytes(The_Bytes'first + 1),
                                      The_Bytes(The_Bytes'first)));
   end Swap;
+
+  
+  procedure Split (The_Time        :     Duration;
+                   The_Seconds     : out Quadword;
+                   The_Nanoseconds : out Longword) is
+  begin
+    if The_Time < 0.5 then
+      The_Seconds := Quadword (The_Time);
+    else
+      The_Seconds := Quadword (The_Time - 0.5);
+    end if;
+    The_Nanoseconds := Longword((The_Time - Duration(The_Seconds)) * 1_000_000_000);
+  end Split;
 
 end Unsigned;
