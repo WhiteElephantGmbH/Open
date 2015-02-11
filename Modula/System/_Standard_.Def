@@ -1,7 +1,7 @@
 DEFINITION MODULE Standard;
 
 (*****************************************************************************
- *        (c) 2008 .. 2013 by Soudronic AG, Bergdietikon, Switzerland        *
+ *        (c) 2008 .. 2015 by Soudronic AG, Bergdietikon, Switzerland        *
  *   Developed by White Elephant GmbH, Switzerland (www.white-elephant.ch)   *
  *****************************************************************************)
 
@@ -12,14 +12,8 @@ TYPE
 
   CHAR = [0C .. 200C];
 
-  SHORTCARD = [  0  .. 0FFH];
-  SHORTINT  = [-80H .. 07FH];
-
   CARDINAL = [    0  .. 0FFFFH];
   INTEGER  = [-8000H .. 07FFFH];
-
-  LONGCARD = [        0  .. 0FFFFFFFFH];
-  LONGINT  = [-80000000H .. 07FFFFFFFH];
 
   PROC = PROCEDURE;
 
@@ -55,7 +49,7 @@ CONST
 
   PROCEDURE HALT;
 
-  PROCEDURE HIGH (A : _Type_) : LONGCARD;
+  PROCEDURE HIGH (A : _Type_) : CARDINAL;
 
   PROCEDURE INC (V     : _Type_;
                  SEQ N : _Type_); (* N optional *)
@@ -66,7 +60,7 @@ CONST
   PROCEDURE LENGTH (S : ARRAY OF CHAR) : CARDINAL;
 
   PROCEDURE LEN (    V : _Type_;
-                 SEQ N : _Type_) : LONGCARD; (* N optional *)
+                 SEQ N : _Type_) : CARDINAL; (* N optional *)
 
   PROCEDURE MAX (: _Type_) : _Type_;
 
@@ -78,7 +72,7 @@ CONST
 
   PROCEDURE ORD (X : _Type_) : CARDINAL;
 
-  PROCEDURE SIZE (: _Type_) : LONGCARD;
+  PROCEDURE SIZE (: _Type_) : CARDINAL;
 
   PROCEDURE VAL (  : _Type_;
                  X : _Type_) : _Type_;
