@@ -549,7 +549,7 @@ package body Client is
   end Tree_View_Location_Handler;
 
 
-  procedure Focus_Lost_Handler (Data : System.Address) is --> UP: Not used
+  procedure Focus_Lost_Handler (Unused : System.Address) is
     Editor : Scintilla.Object;
   begin
     Scintilla.Create (Editor, Npp.Plugin.Edit_View);

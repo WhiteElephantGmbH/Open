@@ -63,28 +63,31 @@ package body Server is
   end Case_Updates;
 
 
-  function Updates_For (The_Filename : String;                  --> UP: not implemented
-                        First_Line   : Line_Number;             --> UP: not implemented
-                        Last_Line    : Line_Number;             --> UP: not implemented
-                        Content      : String) return Tokens is --> UP: not implemented
+  function Updates_For (The_Filename : String;                 
+                        First_Line   : Line_Number;            
+                        Last_Line    : Line_Number;            
+                        Content      : String) return Tokens is
+    pragma Unreferenced (The_Filename, First_Line, Last_Line, Content);
   begin
     return No_Tokens;
   end Updates_For;
 
 
-  function Referenced (The_Filename : String;                   --> UP: not implemented
-                       At_Column    : Column_Range;             --> UP: not implemented
-                       At_Line      : Line_Number;              --> UP: not implemented
-                       Content      : String) return Boolean is --> UP: not implemented
+  function Referenced (The_Filename : String;                   
+                       At_Column    : Column_Range;             
+                       At_Line      : Line_Number;              
+                       Content      : String) return Boolean is 
+    pragma Unreferenced (The_Filename, At_Column, At_Line, Content);
   begin
     return False;
   end Referenced;
 
 
-  function Usage (The_Filename : String;                      --> UP: not implemented
-                  At_Column    : Column_Range;                --> UP: not implemented
-                  At_Line      : Line_Number;                 --> UP: not implemented
-                  Content      : String) return References is --> UP: not implemented
+  function Usage (The_Filename : String;                      
+                  At_Column    : Column_Range;                
+                  At_Line      : Line_Number;                 
+                  Content      : String) return References is 
+    pragma Unreferenced (The_Filename, At_Column, At_Line, Content);
   begin
     return No_References;
   end Usage;

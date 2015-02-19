@@ -22,12 +22,12 @@ with Scintilla;
 
 package body Npp.Plugin is
 
-  function Is_Unicode return Win.BOOL 
+  function Is_Unicode return Win.BOOL
   with
-    Export        => True,
+    Export,
     Convention    => C,
     External_Name => "isUnicode";
-  pragma Warnings (Off, Is_Unicode); -- exported
+  pragma Unreferenced (Is_Unicode);
 
   type Info is record
     Npp_Handle              : Win.HWND;
@@ -41,34 +41,33 @@ package body Npp.Plugin is
 
   procedure Set_Info (Data : Info)
   with
-    Export         => True,
+    Export,
     Convention     => C,
     External_Name  => "setInfo";
-  pragma Warnings (Off, Set_Info); -- exported
+  pragma Unreferenced (Set_Info);
 
   function Get_Funcs_Array (Count : access Win.INT) return System.Address
   with
-    Export        => True,
+    Export,
     Convention    => C,
     External_Name => "getFuncsArray";
-  pragma Warnings (Off, Get_Funcs_Array); -- exported
+  pragma Unreferenced (Get_Funcs_Array);
 
   procedure Be_Notified (Notif : access Scintilla.Notification)
   with
-    Export        => True,
+    Export,
     Convention    => C,
     External_Name => "beNotified";
-  pragma Warnings (Off, Be_Notified); -- exported
+  pragma Unreferenced (Be_Notified);
 
-  function Message_Proc (Message : Win.UINT;
-                         Wpara   : Win.WPARAM;
-                         Lpara   : Win.LPARAM) return Win.LRESULT
+  function Message_Proc (Unused_Message : Win.UINT;
+                         Unused_Wpara   : Win.WPARAM;
+                         Unused_Lpara   : Win.LPARAM) return Win.LRESULT
   with
-    Export        => True,
+    Export,
     Convention    => C,
     External_Name => "messageProc";
-  pragma Warnings (Off, Message_Proc); -- exported
-
+  pragma Unreferenced (Message_Proc);
 
   Max_Functions : constant := 8;
 
@@ -409,9 +408,9 @@ package body Npp.Plugin is
   end Be_Notified;
 
 
-  function Message_Proc (Message : Win.UINT;                         --> UP: not used
-                         Wpara   : Win.WPARAM;                       --> UP: not used
-                         Lpara   : Win.LPARAM) return Win.LRESULT is --> UP: not used
+  function Message_Proc (Unused_Message : Win.UINT;
+                         Unused_Wpara   : Win.WPARAM;
+                         Unused_Lpara   : Win.LPARAM) return Win.LRESULT is
   begin
     return Win.OK;
   end Message_Proc;

@@ -29,7 +29,7 @@ project Elephant is
 
    package Compiler is
       for Default_Switches ("ada") use ("-O1", "-gnatQ", "-gnato", "-g", "-gnat12",
-                                        "-gnatwcehijkmopruFvz.c.n.p.t.w.x", "-gnatykmpM120");
+                                        "-gnatwcehijkmopruvz.c.n.p.t.w.x", "-gnatykmpM120");
    end Compiler;
 
    package Binder is

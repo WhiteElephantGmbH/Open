@@ -19,18 +19,18 @@ package body Win.Dll is
 
   The_Instance : HINSTANCE := System.Null_Address;
 
-  function Main (Hinst        : HINSTANCE;
-                 Fdw_Reason   : DWORD;
-                 Ppv_Reserved : LPVOID) return BOOL
+  function Main (Hinst               : HINSTANCE;
+                 Unused_Fdw_Reason   : DWORD;
+                 Unused_Ppv_Reserved : LPVOID) return BOOL
   with
-    Export         => Standard.True,
-    Convention     => Stdcall,
-    External_Name  => "DllMain";
-  pragma Warnings (Off, Main); -- exported
+    Export,
+    Convention    => Stdcall,
+    External_Name => "DllMain";
+  pragma Unreferenced (Main);
 
-  function Main (Hinst        : in HINSTANCE;
-                 Fdw_Reason   : in DWORD;                 --> UP: Not used
-                 Ppv_Reserved : in LPVOID) return BOOL is --> UP: Not used
+  function Main (Hinst               : in HINSTANCE;
+                 Unused_Fdw_Reason   : in DWORD;
+                 Unused_Ppv_Reserved : in LPVOID) return BOOL is
   begin
     The_Instance := Hinst;
     return TRUE;

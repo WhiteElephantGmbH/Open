@@ -26,7 +26,7 @@ BEGIN
       VALUE "OriginalName", "Npp_Elephant.dll\0"
       VALUE "ProductName", "Npp_Elephant\0"
       VALUE "ProductVersion", "2.3\0"
-      VALUE "Compiler", "GNAT Version 7.3.0\0"
+      VALUE "Compiler", "GNAT Version 7.3.1\0"
       VALUE "Developed By", "White Elephant GmbH"
     END
   END

@@ -21,7 +21,7 @@ BEGIN
       VALUE "OriginalName", "eTpu_Server.Exe\0"
       VALUE "ProductName", "eTpu_Server\0"
       VALUE "ProductVersion", "2.3\0"
-      VALUE "Compiler", "GNAT Version 7.3.0\0"
+      VALUE "Compiler", "GNAT Version 7.3.1\0"
     END
   END
   BLOCK "VarFileInfo"
