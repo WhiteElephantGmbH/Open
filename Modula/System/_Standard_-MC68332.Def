@@ -1,0 +1,81 @@
+DEFINITION MODULE Standard;
+
+(*****************************************************************************
+ *        (c) 2008 .. 2015 by Soudronic AG, Bergdietikon, Switzerland        *
+ *   Developed by White Elephant GmbH, Switzerland (www.white-elephant.ch)   *
+ *****************************************************************************)
+
+TYPE
+  BOOLEAN = (FALSE, TRUE);
+
+  BITSET_ = SET OF [0..15];
+
+  CHAR = [0C .. 200C];
+
+  CARDINAL_ = [    0  .. 0FFFFH];
+  INTEGER_  = [-8000H .. 07FFFH];
+
+  PROC = PROCEDURE;
+
+  _Type_;
+
+
+CONST
+  NIL = 0;
+
+
+  PROCEDURE ABS (X : _Type_) : _Type_;
+
+  PROCEDURE ASH (X : _Type_;
+                 N : INTEGER_) : _Type_;
+
+  PROCEDURE ASSERT (    X : _Type_;
+                    SEQ N : _Type_); (* n optional *)
+
+  PROCEDURE CAP (X : CHAR) : CHAR;
+
+  PROCEDURE CHR (X : _Type_) : CHAR;
+
+  PROCEDURE COPY (X : _Type_;
+                  V : _Type_);
+
+  PROCEDURE DEC (    V : _Type_;
+                 SEQ N : _Type_); (* N optional *)
+
+  PROCEDURE DISPOSE (V : _Type_);
+
+  PROCEDURE EXCL (V : _Type_;
+                  N : _Type_);
+
+  PROCEDURE HALT;
+
+  PROCEDURE HIGH (A : _Type_) : CARDINAL_;
+
+  PROCEDURE INC (V     : _Type_;
+                 SEQ N : _Type_); (* N optional *)
+
+  PROCEDURE INCL (V : _Type_;
+                  N : _Type_);
+
+  PROCEDURE LENGTH (S : ARRAY OF CHAR) : CARDINAL_;
+
+  PROCEDURE LEN (    V : _Type_;
+                 SEQ N : _Type_) : CARDINAL_; (* N optional *)
+
+  PROCEDURE MAX (: _Type_) : _Type_;
+
+  PROCEDURE MIN (: _Type_) : _Type_;
+
+  PROCEDURE NEW (V : _Type_);
+
+  PROCEDURE ODD (X : _Type_) : BOOLEAN;
+
+  PROCEDURE ORD (X : _Type_) : CARDINAL_;
+
+  PROCEDURE SIZE (: _Type_) : CARDINAL_;
+
+  PROCEDURE VAL (  : _Type_;
+                 X : _Type_) : _Type_;
+
+END Standard.
+
