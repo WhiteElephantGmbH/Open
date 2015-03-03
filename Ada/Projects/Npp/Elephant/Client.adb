@@ -363,8 +363,7 @@ package body Client is
   end Image_Of;
 
 
-  procedure Show_References (No_References_Message : String;
-                             Expand                : Boolean := False) is
+  procedure Show_References (Expand : Boolean := False) is
 
     The_File_Index : Natural := 0;
 
@@ -376,9 +375,8 @@ package body Client is
 
   begin
     Npp.Tree_View.Clear;
-    if The_References.all = Server.No_References then
-      Show_Error (No_References_Message);
-    else
+    Show (The_References.Message);
+    if The_References.Locations'length /= 0 then
       for Index in The_References.Locations'range loop
         declare
           The_Location : Server.File_Reference renames The_References.Locations(Index);
@@ -445,7 +443,7 @@ package body Client is
                                               At_Line      => Line_Number(Scintilla.Current_Line(Editor)),
                                               At_Column    => Column_Range(Scintilla.Current_Column(Editor)),
                                               Content      => Buffer_Content (Editor)));
-    Show_References ("Not used", Expand => True);
+    Show_References (Expand => True);
   exception
   when Item: others =>
     Log.Write ("Show_Usage", Item);
@@ -462,7 +460,7 @@ package body Client is
       Dispose (The_References);
     end if;
     The_References := new Server.References'(Server.Unused);
-    Show_References ("No unused declarations");
+    Show_References;
   end Show_Unused;
 
 

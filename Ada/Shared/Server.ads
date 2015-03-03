@@ -76,18 +76,20 @@ package Server is
   type File_References is array (Line_Counter range <>) of File_Reference;
   pragma Pack (File_References);
 
-  type References (Files_Count     : Strings.Element_Count;
+  type References (Message_Length  : Natural;
+                   Files_Count     : Strings.Element_Count;
                    Files_Length    : Strings.Data_Length;
                    Images_Count    : Strings.Element_Count;
                    Images_Length   : Strings.Data_Length;
                    Reference_Count : Line_Counter) is record
+    Message     : aliased String (1..Message_Length);              
     Filenames   : aliased Strings.Item(Count => Files_Count, Length => Files_Length);
     Line_Images : aliased Strings.Item(Count => Images_Count, Length => Images_Length);
     Locations   : aliased File_References(1..Reference_Count);
   end record;
   pragma Pack (References);
 
-  No_References : constant References := (0, 0, 0, 0, 0, others => <>);
+  No_References : constant References := (0, 0, 0, 0, 0, 0, "", others => <>);
 
   type Token_Kind is (Is_Attribute,
                       Is_Comment,
