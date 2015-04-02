@@ -8,12 +8,12 @@ DEFINITION MODULE Standard;
 TYPE
   BOOLEAN = (FALSE, TRUE);
 
-  BITSET_ = SET OF [0..15];
+  BITSET = SET OF [0..15];
 
   CHAR = [0C .. 200C];
 
-  CARDINAL_ = [    0  .. 0FFFFH];
-  INTEGER_  = [-8000H .. 07FFFH];
+  CARDINAL = [    0  .. 0FFFFH];
+  INTEGER  = [-8000H .. 07FFFH];
 
   PROC = PROCEDURE;
 
