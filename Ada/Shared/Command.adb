@@ -260,6 +260,4 @@ package body Command is
     Log.Write ("!!! Command.Execute", Item);
   end Execute;
 
-begin
-  Log.Open;
 end Command;
