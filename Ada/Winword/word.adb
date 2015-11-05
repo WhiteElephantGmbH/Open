@@ -106,14 +106,14 @@ package body Word is
 
    procedure Run_Macro(Macro_Name: in String) is
       BSTR_Name: constant GNATCOM.Types.BSTR:=GNATCOM.BSTR.To_BSTR(Macro_Name);
-      Ret: GNATCOM.Types.VARIANT;
+      Ret: GNATCOM.Types.VARIANT with Unreferenced;
    begin
       Ret:=Run(App, BSTR_Name);
    end Run_Macro;
 
    procedure Run_Macro(Inst: in Winword_Instance; Macro_Name: in String)is
       BSTR_Name: constant GNATCOM.Types.BSTR:=GNATCOM.BSTR.To_BSTR(Macro_Name);
-      Ret: GNATCOM.Types.VARIANT;
+      Ret: GNATCOM.Types.VARIANT with Unreferenced;
    begin
       Ret:=Run(Inst.app, BSTR_Name);
    end Run_Macro;
@@ -159,7 +159,7 @@ package body Word is
    --------------------
 
    function Is_Running return Boolean is
-      Run: Integer;
+      Run: Integer with Unreferenced;
    begin
       Run := Integer(Get_Visible(App));
       return True;
@@ -169,7 +169,7 @@ package body Word is
    end Is_Running;
 
    function Is_Running(Inst: in Winword_Instance) return Boolean is
-      Run: Integer;
+      Run: Integer with Unreferenced;
    begin
       Run := Integer(Get_Visible(Inst.app));
       return True;

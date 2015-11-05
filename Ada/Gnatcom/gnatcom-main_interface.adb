@@ -122,7 +122,7 @@ package body GNATCOM.Main_Interface is
    begin
       if Address (This) /= System.Null_Address then
          declare
-            Result : Interfaces.C.unsigned_long;
+            Result : Interfaces.C.unsigned_long with Unreferenced;
          begin
             Result := Pointer (This).Vtbl.AddRef (Pointer (This));
          end;
@@ -267,7 +267,7 @@ package body GNATCOM.Main_Interface is
                     ppv          => This.Interface_Address'unchecked_access));
 
       declare
-         Result : Interfaces.C.unsigned_long;
+         Result : Interfaces.C.unsigned_long with Unreferenced;
       begin
          Result := Factory.Vtbl.Release (Factory);
       end;
@@ -452,7 +452,7 @@ package body GNATCOM.Main_Interface is
    begin
       if Address (This) /= System.Null_Address then
          declare
-            Result : Interfaces.C.unsigned_long;
+            Result : Interfaces.C.unsigned_long with Unreferenced;
          begin
             Result := Pointer (This).Vtbl.Release (Pointer (This));
          end;
@@ -616,7 +616,7 @@ package body GNATCOM.Main_Interface is
                     Key_Local'unchecked_access));
 
       declare
-         Result : Interfaces.C.unsigned_long;
+         Result : Interfaces.C.unsigned_long with Unreferenced;
       begin
          Result := Factory.Vtbl.Release (Factory);
       end;

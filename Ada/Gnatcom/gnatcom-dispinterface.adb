@@ -294,7 +294,7 @@ package body GNATCOM.Dispinterface is
       Free       : in Boolean            := True;
       LCID       : in Interfaces.C.long  := 0)
    is
-      Result : GNATCOM.Types.VARIANT;
+      Result : GNATCOM.Types.VARIANT with Unreferenced;
    begin
       Result := Invoke (This,
                         DISPID,
@@ -348,7 +348,7 @@ package body GNATCOM.Dispinterface is
       DISPID : in Interfaces.C.long;
       LCID   : in Interfaces.C.long  := 0)
    is
-      Result : GNATCOM.Types.VARIANT;
+      Result : GNATCOM.Types.VARIANT with Unreferenced;
    begin
       Result := Invoke (This, DISPID, LCID);
    end Invoke;
@@ -516,7 +516,7 @@ package body GNATCOM.Dispinterface is
       Free   : in Boolean               := True;
       LCID   : in Interfaces.C.long     := 0)
    is
-      Result : GNATCOM.Types.VARIANT;
+      Result : GNATCOM.Types.VARIANT with Unreferenced;
    begin
       Result := Invoke (This,
                         DISPID,
@@ -548,7 +548,7 @@ package body GNATCOM.Dispinterface is
       Free        : in Boolean               := True;
       LCID        : in Interfaces.C.long     := 0)
    is
-      Result : GNATCOM.Types.VARIANT;
+      Result : GNATCOM.Types.VARIANT with Unreferenced;
    begin
       Result := Invoke (This,
                         DISPID,
@@ -580,7 +580,7 @@ package body GNATCOM.Dispinterface is
       Free         : in Boolean               := True;
       LCID         : in Interfaces.C.long     := 0)
    is
-      Result     : GNATCOM.Types.VARIANT;
+      Result     : GNATCOM.Types.VARIANT with Unreferenced;
       Parameters : Parameter_Array (1 .. Index_Values'size + 1);
    begin
       Parameters (1) := Value;
@@ -614,7 +614,7 @@ package body GNATCOM.Dispinterface is
       Free       : in Boolean            := True;
       LCID       : in Interfaces.C.long  := 0)
    is
-      Result : GNATCOM.Types.VARIANT;
+      Result : GNATCOM.Types.VARIANT with Unreferenced;
    begin
       Result := Invoke (This,
                         DISPID,
@@ -642,7 +642,7 @@ package body GNATCOM.Dispinterface is
       Value  : in GNATCOM.Types.VARIANT;
       LCID   : in Interfaces.C.long     := 0)
    is
-      Result : GNATCOM.Types.VARIANT;
+      Result : GNATCOM.Types.VARIANT with Unreferenced;
    begin
       Result := Invoke (This,
                         DISPID,
@@ -670,7 +670,7 @@ package body GNATCOM.Dispinterface is
       Parameters : in Parameter_Array;
       LCID       : in Interfaces.C.long  := 0)
    is
-      Result : GNATCOM.Types.VARIANT;
+      Result : GNATCOM.Types.VARIANT with Unreferenced;
    begin
       Result := Invoke (This,
                         DISPID,

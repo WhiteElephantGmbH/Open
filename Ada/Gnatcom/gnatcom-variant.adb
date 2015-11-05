@@ -310,7 +310,7 @@ package body GNATCOM.VARIANT is
       use type GNATCOM.Types.VARTYPE;
 
       Temp_Var : GNATCOM.Types.VARIANT := From;
-      Do_Copy : Boolean := Copy;
+      Do_Copy : Boolean := Copy with Unreferenced; --!!!<WE>
    begin
       if From.vt /= GNATCOM.Types.VT_BSTR then
          Do_Copy := False;
@@ -318,7 +318,7 @@ package body GNATCOM.VARIANT is
 
       Change_Type (Temp_Var, GNATCOM.Types.VT_BSTR);
 
-      if Copy then
+      if Copy then --!!!<WE> Do_Copy ?
          return SysAllocString (Temp_Var.u.bstrVal);
       else
          return Temp_Var.u.bstrVal;
@@ -377,7 +377,7 @@ package body GNATCOM.VARIANT is
    is
       Temp_Var      : GNATCOM.Types.VARIANT := From;
       Com_Interface : GNATCOM.Types.Pointer_To_IDispatch;
-      Ref           : Interfaces.C.unsigned_long;
+      Ref           : Interfaces.C.unsigned_long with Unreferenced;
    begin
       Change_Type (Temp_Var, GNATCOM.Types.VT_DISPATCH);
       Com_Interface := Temp_Var.u.pdispVal;
@@ -399,7 +399,7 @@ package body GNATCOM.VARIANT is
    is
       Temp_Var      : GNATCOM.Types.VARIANT := From;
       Com_Interface : GNATCOM.Types.Pointer_To_IUnknown;
-      Ref           : Interfaces.C.unsigned_long;
+      Ref           : Interfaces.C.unsigned_long with Unreferenced;
    begin
       Change_Type (Temp_Var, GNATCOM.Types.VT_DISPATCH);
       Com_Interface := Temp_Var.u.punkVal;
@@ -562,7 +562,7 @@ package body GNATCOM.VARIANT is
       AddRef : Boolean := True)
       return GNATCOM.Types.VARIANT
    is
-      Ref       : Interfaces.C.unsigned_long;
+      Ref       : Interfaces.C.unsigned_long with Unreferenced;
       New_Variant : GNATCOM.Types.VARIANT;
    begin
       Initialize (New_Variant);
@@ -581,7 +581,7 @@ package body GNATCOM.VARIANT is
       AddRef : Boolean := True)
       return GNATCOM.Types.VARIANT
    is
-      Ref       : Interfaces.C.unsigned_long;
+      Ref       : Interfaces.C.unsigned_long with Unreferenced;
       New_Variant : GNATCOM.Types.VARIANT;
    begin
       Initialize (New_Variant);
