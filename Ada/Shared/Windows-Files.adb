@@ -1,5 +1,5 @@
 -- *********************************************************************************************************************
--- *                       (c) 2002 .. 2015 by White Elephant GmbH, Schaffhausen, Switzerland                          *
+-- *                       (c) 2002 .. 2016 by White Elephant GmbH, Schaffhausen, Switzerland                          *
 -- *                                               www.white-elephant.ch                                               *
 -- *                                                                                                                   *
 -- *    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General     *
@@ -20,10 +20,12 @@ with Ada.Unchecked_Conversion;
 with Ada.Strings.Fixed;
 with Interfaces.C;
 with Windows; pragma Elaborate_All (Windows);
+with Win32.Windef;
 with Win32.Winerror;
 with Win32.Winnls;
 with Win32.Winnetwk;
 with Win32.Winreg;
+with System;
 
 package body Windows.Files is
 
