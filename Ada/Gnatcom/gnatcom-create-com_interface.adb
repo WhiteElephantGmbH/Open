@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -42,33 +41,45 @@ package body GNATCOM.Create.COM_Interface is
 
    procedure Free_Interface (Pointer : in System.Address);
 
-   function InterlockedIncrement
-     (lpAddend : access Interfaces.C.long) return Interfaces.C.long;
-   pragma Import (StdCall, InterlockedIncrement, "InterlockedIncrement");
-   --  Win32 API for protected increment of a long
+   function sync_add_and_fetch (Ref : access Interfaces.C.long;
+                                Add : Integer) return Interfaces.C.long;
+   pragma Import (Intrinsic, sync_add_and_fetch,
+                  "__sync_add_and_fetch_4");
 
-   function InterlockedDecrement
-     (lpAddend : access Interfaces.C.long) return Interfaces.C.long;
-   pragma Import (StdCall, InterlockedDecrement, "InterlockedDecrement");
-   --  Win32 API for protected decrement of a long
+   function InterlockedIncrement (Ref : access Interfaces.C.long)
+                                  return Interfaces.C.long is
+   begin
+      return sync_add_and_fetch (Ref, 1);
+   end InterlockedIncrement;
 
+   function InterlockedDecrement (Ref : access Interfaces.C.long)
+                                  return Interfaces.C.long is
+   begin
+      return sync_add_and_fetch (Ref, -1);
+   end InterlockedDecrement;
+
+   ------------
    -- AddRef --
+   ------------
 
    function AddRef (This : access COM_Interface_Type)
                    return Interfaces.C.unsigned_long
    is
       Result : Interfaces.C.long;
+      pragma Warnings (Off, Result);
    begin
       --  Object wide reference increment
-      Result := InterlockedIncrement (This.CoClass.Ref_Count'access);
+      Result := InterlockedIncrement (This.CoClass.Ref_Count'Access);
 
       --  Interface reference increment
-      Result := InterlockedIncrement (This.Ref_Count'access);
+      Result := InterlockedIncrement (This.Ref_Count'Access);
 
       return Interfaces.C.unsigned_long (This.Ref_Count);
    end AddRef;
 
+   --------------------
    -- QueryInterface --
+   --------------------
 
    function QueryInterface
      (This      : access COM_Interface_Type;
@@ -80,6 +91,7 @@ package body GNATCOM.Create.COM_Interface is
 
       New_Interface : aliased Pointer_To_COM_Interface_Type;
       Result        :         Interfaces.C.long;
+      pragma Warnings (Off, Result);
    begin
       --  GNATCOM implements COM objects using a technique often
       --  called "tear-off" interfaces. Interfaces are created
@@ -93,13 +105,13 @@ package body GNATCOM.Create.COM_Interface is
       if riid.all = GNATCOM.Types.IID_IUnknown then
          --  Add a ref count to the Interface
          Result := InterlockedIncrement
-           (This.CoClass.IUnknown.Ref_Count'access);
+           (This.CoClass.IUnknown.Ref_Count'Access);
 
          --  Add an Object wide ref count
-         Result := InterlockedIncrement (This.CoClass.Ref_Count'access);
+         Result := InterlockedIncrement (This.CoClass.Ref_Count'Access);
 
          --  Set return interface to the "official" IUnknown
-         ppvObject.all := This.CoClass.IUnknown.all'address;
+         ppvObject.all := This.CoClass.IUnknown.all'Address;
 
          return S_OK;
       end if;
@@ -107,7 +119,7 @@ package body GNATCOM.Create.COM_Interface is
       --  Loop through IID map in object to see if it supports the
       --  requested IID in riid
       for N in
-        This.CoClass.IID_Map.all'first .. This.CoClass.IID_Map.all'last
+        This.CoClass.IID_Map.all'First .. This.CoClass.IID_Map.all'Last
       loop
          if riid.all = This.CoClass.IID_Map (N).IID then
 
@@ -128,10 +140,10 @@ package body GNATCOM.Create.COM_Interface is
             --  the COM_Interface_Type already has a ref count
             --  built in, so we need not add a ref count to the
             --  interface also here.
-            Result := InterlockedIncrement (This.CoClass.Ref_Count'access);
+            Result := InterlockedIncrement (This.CoClass.Ref_Count'Access);
 
             --  Set return to the new interface
-            ppvObject.all := New_Interface.all'address;
+            ppvObject.all := New_Interface.all'Address;
 
             return S_OK;
          end if;
@@ -143,13 +155,15 @@ package body GNATCOM.Create.COM_Interface is
       --  See if there is a user provided QueryInterface by
       --  dispatching on the QueryInterface method of the Object
       --  for any custom handling of interfaces.
-      return QueryInterface (CoClass_Type'class (This.CoClass.all),
+      return QueryInterface (This.CoClass.all,
                              This,
                              riid,
                              ppvObject);
    end QueryInterface;
 
+   --------------------
    -- QueryInterface --
+   --------------------
 
    function QueryInterface
      (Dispatch  : in     CoClass_Type;
@@ -170,7 +184,9 @@ package body GNATCOM.Create.COM_Interface is
       return E_NOINTERFACE;
    end QueryInterface;
 
+   -------------
    -- Release --
+   -------------
 
    function Release (This : access COM_Interface_Type)
                     return Interfaces.C.unsigned_long
@@ -178,26 +194,30 @@ package body GNATCOM.Create.COM_Interface is
       use type Interfaces.C.long;
 
       Result : Interfaces.C.long;
+      pragma Warnings (Off, Result);
    begin
 
       --  Reduce the Object wide reference count
-      Result := InterlockedDecrement (This.CoClass.Ref_Count'access);
+      Result := InterlockedDecrement (This.CoClass.Ref_Count'Access);
 
       --  Reduce the Interface ref count and check to see if this
       --  is the last release
-      if InterlockedDecrement (This.Ref_Count'access) /= 0 then
+      if InterlockedDecrement (This.Ref_Count'Access) /= 0 then
          return Interfaces.C.unsigned_long (This.Ref_Count);
       else
          --  Last reference to the interface released, so free interface
-         Free_Interface (This.all'address);
+         Free_Interface (This.all'Address);
          return 0;
       end if;
    end Release;
 
+   -------------
    -- Release --
+   -------------
 
    procedure Release (This : access COM_Interface_Type) is
       Result : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Result);
    begin
       --  The results of a release are in general bogus as
       --  any time proxies are introduced, the actual result
@@ -209,11 +229,13 @@ package body GNATCOM.Create.COM_Interface is
       Result := Release (This);
    end Release;
 
+   -----------------
    -- Free_Object --
+   -----------------
 
    procedure Free_Object (Pointer : in out Pointer_To_CoClass) is
       procedure Free_CoClass is
-         new Ada.Unchecked_Deallocation (CoClass_Type'class,
+         new Ada.Unchecked_Deallocation (CoClass_Type'Class,
                                          Pointer_To_CoClass);
       procedure Free is
          new Ada.Unchecked_Deallocation (COM_Interface_Type,
@@ -226,7 +248,9 @@ package body GNATCOM.Create.COM_Interface is
       Free_CoClass (Pointer);
    end Free_Object;
 
+   --------------------
    -- Free_Interface --
+   --------------------
 
    procedure Free_Interface (Pointer : in System.Address) is
       use type Interfaces.C.long;
@@ -238,18 +262,19 @@ package body GNATCOM.Create.COM_Interface is
          new Ada.Unchecked_Deallocation (COM_Interface_Type,
                                          Pointer_To_COM_Interface_Type);
 
-      Com_Interface : Pointer_To_COM_Interface_Type;
-      CoClass       : Pointer_To_CoClass;
-      Result        : Interfaces.C.long;
+      P_Interface : Pointer_To_COM_Interface_Type;
+      CoClass   : Pointer_To_CoClass;
+      Result    : Interfaces.C.long;
+      pragma Warnings (Off, Result);
    begin
-      Com_Interface := To_Pointer_To_COM_Interface_Type (Pointer);
-      CoClass   := Com_Interface.CoClass;
+      P_Interface := To_Pointer_To_COM_Interface_Type (Pointer);
+      CoClass   := P_Interface.CoClass;
 
       --  If this is the official IUnknown, don't deallocate
       --  it may be needed again. It is deallocated when
       --  the object is deallocated.
-      if Com_Interface.CoClass.IUnknown /= Com_Interface then
-         Free (Com_Interface);
+      if P_Interface.CoClass.IUnknown /= P_Interface then
+         Free (P_Interface);
       end if;
 
       if CoClass.Ref_Count < 1 then
@@ -260,7 +285,7 @@ package body GNATCOM.Create.COM_Interface is
          --  Reduce the global component count since the object has
          --  been deallocated.
          Result := InterlockedDecrement
-           (GNATCOM.Create.Component_Count'access);
+           (GNATCOM.Create.Component_Count'Access);
       end if;
 
       --  Initiate a check to see if the COM objects host container
@@ -268,7 +293,9 @@ package body GNATCOM.Create.COM_Interface is
       GNATCOM.Create.Can_Close;
    end Free_Interface;
 
+   -------------------
    -- Create_Object --
+   -------------------
 
    function Create_Object (Class_Object : Pointer_To_CoClass)
                           return Pointer_To_COM_Interface_Type

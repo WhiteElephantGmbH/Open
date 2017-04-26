@@ -18,7 +18,7 @@ package body GNATOCX.IParseDisplayName_Interface is
                      Pointer : in     Pointer_To_IParseDisplayName)
    is
    begin
-      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.Iinterface.To_Pointer_To_IUnknown
               (Pointer.all'Address));
    end Attach;
 
@@ -41,4 +41,3 @@ package body GNATOCX.IParseDisplayName_Interface is
    end ParseDisplayName;
 
 end GNATOCX.IParseDisplayName_Interface;
-

@@ -6,9 +6,8 @@
 --                                                                          --
 --                                S p e c                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -48,7 +47,7 @@ package GNATCOM.Initialize is
    --  Initialize_COM may also be called at the start of any task, but
    --  pointers to interfaces from other tasks may not be used nor may
    --  pointers from that task be used by others. The GIT (see
-   --  GNATCOM.Interface for more information) may be used to get around
+   --  GNATCOM.Iinterface for more information) may be used to get around
    --  this restriction.
 
    procedure Initialize_COM_Multi_Threaded;

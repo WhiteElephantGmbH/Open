@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.ISequentialStream_Interface is
 
    type ISequentialStream_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out ISequentialStream_Type);
 
@@ -26,4 +26,3 @@ package GNATOCX.ISequentialStream_Interface is
       pcbWritten : GNATCOM.Types.Pointer_To_unsigned_long);
 
 end GNATOCX.ISequentialStream_Interface;
-

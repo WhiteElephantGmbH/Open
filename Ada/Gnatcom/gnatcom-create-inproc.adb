@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -57,7 +56,9 @@ package body GNATCOM.Create.Inproc is
      return Interfaces.C.int;
    pragma Export (StdCall, DllMain, "DllMain");
 
+   ---------------------
    -- DllCanUnloadNow --
+   ---------------------
 
    function DllCanUnloadNow return GNATCOM.Types.HRESULT is
       use type Interfaces.C.long;
@@ -72,7 +73,9 @@ package body GNATCOM.Create.Inproc is
       end if;
    end DllCanUnloadNow;
 
+   -----------------------
    -- DllGetClassObject --
+   -----------------------
 
    function DllGetClassObject
      (clsid : in     GNATCOM.Types.Pointer_To_GUID;
@@ -92,6 +95,7 @@ package body GNATCOM.Create.Inproc is
          pFactory : GNATCOM.Create.Factory.Pointer_To_IClassFactory := null;
          hr       : GNATCOM.Types.HRESULT;
          refcount : Interfaces.C.unsigned_long;
+         pragma Warnings (Off, refcount);
       begin
          for N in
            Factory_Map.all'First .. (Factory_Map.all'Last)
@@ -114,7 +118,9 @@ package body GNATCOM.Create.Inproc is
       end;
    end DllGetClassObject;
 
+   -----------------------
    -- DllRegisterServer --
+   -----------------------
 
    function DllRegisterServer return GNATCOM.Types.HRESULT is
       use Ada.Strings.Unbounded;
@@ -149,7 +155,9 @@ package body GNATCOM.Create.Inproc is
       return S_OK;
    end DllRegisterServer;
 
+   -------------------------
    -- DllUnregisterServer --
+   -------------------------
 
    function DllUnregisterServer return GNATCOM.Types.HRESULT is
       use Ada.Strings.Unbounded;
@@ -170,14 +178,18 @@ package body GNATCOM.Create.Inproc is
       return S_OK;
    end DllUnregisterServer;
 
+   -----------------
    -- Init_Object --
+   -----------------
 
    procedure Init_Object (LIBID : in GNATCOM.Types.GUID) is
    begin
       TypeLibary_LIBID  := LIBID;
    end Init_Object;
 
+   -------------
    -- DllMain --
+   -------------
 
    function DllMain
      (hinstDLL    : Interfaces.C.long;

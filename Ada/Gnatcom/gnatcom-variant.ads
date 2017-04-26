@@ -6,9 +6,8 @@
 --                                                                          --
 --                                S p e c                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -63,6 +62,9 @@ package GNATCOM.VARIANT is
    procedure Change_Type (This : in out GNATCOM.Types.VARIANT;
                           VT   : in     GNATCOM.Types.VARTYPE);
    --  Converts the type and contents of the VARIANT to the type VT
+
+   function Is_NULL (This : GNATCOM.Types.VARIANT) return Boolean;
+   --  Returns true if the variant contains NULL
 
    function To_VARIANT (From : String)
      return GNATCOM.Types.VARIANT;

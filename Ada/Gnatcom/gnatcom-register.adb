@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -73,9 +72,9 @@ package body GNATCOM.Register is
    pragma Import (StdCall, RegDeleteKey, "RegDeleteKeyA");
 
    function GetModuleFileName
-     (hInst        : Interfaces.C.long;
-      lpszFileName : Interfaces.C.char_array;
-      cbFileName   : Interfaces.C.int)
+     (hInst        : in     Interfaces.C.long;
+      lpszFileName : access Interfaces.C.char;
+      cbFileName   : in     Interfaces.C.int)
      return Interfaces.C.int;
    pragma Import (StdCall, GetModuleFileName, "GetModuleFileNameA");
 
@@ -101,7 +100,9 @@ package body GNATCOM.Register is
      return GNATCOM.Types.HRESULT;
    pragma Import (Stdcall, UnregisterTypeLib, "UnRegisterTypeLib");
 
+   --------------
    -- Register --
+   --------------
 
    procedure Register (KeyName, Name, Value : in String;
                        Root_Key             : in Interfaces.C.long :=
@@ -126,7 +127,9 @@ package body GNATCOM.Register is
                         Value'Length + 1));         -- 1 added for C Null
    end Register;
 
+   ----------------------------
    -- Register_Inproc_Server --
+   ----------------------------
 
    procedure Register_Inproc_Server
      (hInstance    : in Interfaces.C.long;
@@ -139,11 +142,12 @@ package body GNATCOM.Register is
       use type Interfaces.C.int;
 
       MAX_PATH   : constant := 1024;
-      ServerPath : aliased Interfaces.C.char_array (1 .. MAX_PATH)
-        := (others => Interfaces.C.nul);
-      Class_ID  : String := GNATCOM.GUID.To_String (CLSID);
+      ServerPath : aliased Interfaces.C.char_array (1 .. MAX_PATH);
+      Class_ID  : constant String := GNATCOM.GUID.To_String (CLSID);
    begin
-      if GetModuleFileName (hInstance, ServerPath, MAX_PATH) < 0 then
+      if
+        GetModuleFileName (hInstance, ServerPath (1)'Access, MAX_PATH) < 0
+      then
          raise FILE_NAME_ERROR;
       end if;
 
@@ -175,7 +179,9 @@ package body GNATCOM.Register is
       Register ("AppID\" & Class_ID, "DllSurrogate", "");
    end Register_Inproc_Server;
 
+   ---------------------------
    -- Register_Local_Server --
+   ---------------------------
 
    procedure Register_Local_Server
      (hInstance    : in Interfaces.C.long;
@@ -187,11 +193,12 @@ package body GNATCOM.Register is
       use type Interfaces.C.int;
 
       MAX_PATH   : constant := 1024;
-      ServerPath : aliased Interfaces.C.char_array (1 .. MAX_PATH)
-        := (others => Interfaces.C.nul);
-      Class_ID  : String := GNATCOM.GUID.To_String (CLSID);
+      ServerPath : aliased Interfaces.C.char_array (1 .. MAX_PATH);
+      Class_ID  : constant String := GNATCOM.GUID.To_String (CLSID);
    begin
-      if GetModuleFileName (hInstance, ServerPath, MAX_PATH) < 0 then
+      if
+        GetModuleFileName (hInstance, ServerPath (1)'Access, MAX_PATH) < 0
+      then
          raise FILE_NAME_ERROR;
       end if;
 
@@ -219,7 +226,9 @@ package body GNATCOM.Register is
       Register ("AppID\" & Class_ID, "", Description);
    end Register_Local_Server;
 
+   ----------------------------
    -- Register_Remote_Server --
+   ----------------------------
 
    procedure Register_Remote_Server
      (CLSID          : in GNATCOM.Types.GUID;
@@ -228,7 +237,7 @@ package body GNATCOM.Register is
       Description    : in String;
       Remote_Machine : in String)
    is
-      Class_ID  : String := GNATCOM.GUID.To_String (CLSID);
+      Class_ID  : constant String := GNATCOM.GUID.To_String (CLSID);
    begin
       Register ("CLSID\" & Class_ID, "", "Beep Class");
       Register ("CLSID\" & Class_ID, "AppID", Class_ID);
@@ -253,16 +262,19 @@ package body GNATCOM.Register is
       Register ("AppID\" & Class_ID, "RemoteServerName", Remote_Machine);
    end Register_Remote_Server;
 
+   ---------------------------
    -- Register_Type_Library --
+   ---------------------------
 
    procedure Register_Type_Library (hInstance : in Interfaces.C.long) is
       use type Interfaces.C.int;
 
       MAX_PATH   : constant := 1024;
-      ServerPath : aliased Interfaces.C.char_array (1 .. MAX_PATH)
-        := (others => Interfaces.C.nul);
+      ServerPath : aliased Interfaces.C.char_array (1 .. MAX_PATH);
    begin
-      if GetModuleFileName (hInstance, ServerPath, MAX_PATH) < 0 then
+      if
+        GetModuleFileName (hInstance, ServerPath (1)'Access, MAX_PATH) < 0
+      then
          raise FILE_NAME_ERROR;
       end if;
 
@@ -270,7 +282,9 @@ package body GNATCOM.Register is
 
    end Register_Type_Library;
 
+   ---------------------------
    -- Register_Type_Library --
+   ---------------------------
 
    procedure Register_Type_Library
      (Path  : in GNATCOM.Types.BSTR;
@@ -278,6 +292,7 @@ package body GNATCOM.Register is
    is
       TypeLib    : aliased GNATCOM.Types.Pointer_To_ITypeLib;
       Refcount   : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Refcount);
    begin
       Error_Check (LoadTypeLib (Path, TypeLib'Access));
       Error_Check (RegisterTypeLib (TypeLib, Path, null));
@@ -289,7 +304,9 @@ package body GNATCOM.Register is
       end if;
    end Register_Type_Library;
 
+   ----------------
    -- Unregister --
+   ----------------
 
    procedure Unregister (KeyName  : in String;
                          Root_Key : in Interfaces.C.long := HKEY_CLASSES_ROOT)
@@ -300,14 +317,16 @@ package body GNATCOM.Register is
                        Interfaces.C.To_C (KeyName)));
    end Unregister;
 
+   -----------------------
    -- Unregister_Server --
+   -----------------------
 
    procedure Unregister_Server
      (CLSID   : in GNATCOM.Types.GUID;
       Name    : in String;
       Version : in String)
    is
-      Class_ID  : String := GNATCOM.GUID.To_String (CLSID);
+      Class_ID  : constant String := GNATCOM.GUID.To_String (CLSID);
    begin
       Unregister ("CLSID\" & Class_ID & "\InProcServer32");
       Unregister ("CLSID\" & Class_ID & "\LocalServer32");
@@ -322,7 +341,9 @@ package body GNATCOM.Register is
       Unregister ("AppID\" & Class_ID);
    end Unregister_Server;
 
+   -----------------------------
    -- Unregister_Type_Library --
+   -----------------------------
 
    procedure Unregister_Type_Library (LIBID : in GNATCOM.Types.GUID) is
       New_LIBID : aliased GNATCOM.Types.GUID := LIBID;
@@ -334,13 +355,15 @@ package body GNATCOM.Register is
                                       SYS_WIN32));
    end Unregister_Type_Library;
 
+   -----------------
    -- Error_Check --
+   -----------------
 
    procedure Error_Check (Result : in GNATCOM.Types.HRESULT) is
    begin
       if GNATCOM.Errors.FAILED (Result) then
          declare
-            Message : String := GNATCOM.Errors.To_String (Result);
+            Message : constant String := GNATCOM.Errors.To_String (Result);
          begin
             case Result is
                when TYPE_E_IOERROR =>

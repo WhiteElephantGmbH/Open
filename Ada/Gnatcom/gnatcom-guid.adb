@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -63,7 +62,9 @@ package body GNATCOM.GUID is
      return GNATCOM.Types.HRESULT;
    pragma Import (StdCall, CoCreateGuid, "CoCreateGuid");
 
+   -----------------
    -- Create_GUID --
+   -----------------
 
    function Create_GUID return GNATCOM.Types.GUID is
       use type GNATCOM.Types.HRESULT;
@@ -71,14 +72,16 @@ package body GNATCOM.GUID is
 
       New_GUID    : aliased GNATCOM.Types.GUID;
    begin
-      if FAILED (CoCreateGuid (New_GUID'unchecked_access)) then
+      if FAILED (CoCreateGuid (New_GUID'Unchecked_Access)) then
          raise GUID_Error;
       end if;
 
       return New_GUID;
    end Create_GUID;
 
+   -------------
    -- To_GUID --
+   -------------
 
    function To_GUID (From : String) return GNATCOM.Types.GUID is
       use type GNATCOM.Types.HRESULT;
@@ -91,8 +94,8 @@ package body GNATCOM.GUID is
         C.To_C (Ada.Characters.Handling.To_Wide_String (From));
       ID        : aliased GNATCOM.Types.GUID;
    begin
-      if FAILED (CLSIDFromString (To_LPWSTR (ID_String'address),
-                                  ID'unchecked_access))
+      if FAILED (CLSIDFromString (To_LPWSTR (ID_String'Address),
+                                  ID'Unchecked_Access))
       then
          raise GUID_Error;
       end if;
@@ -100,7 +103,9 @@ package body GNATCOM.GUID is
       return ID;
    end To_GUID;
 
+   ---------------
    -- To_String --
+   ---------------
 
    function To_String (From : GNATCOM.Types.GUID) return String is
       use type GNATCOM.Types.HRESULT;
@@ -110,13 +115,14 @@ package body GNATCOM.GUID is
       Ref_GUID    : aliased GNATCOM.Types.GUID := From;
       GUID_String : aliased GNATCOM.Types.LPWSTR;
    begin
-      if SUCCEEDED (StringFromCLSID (Ref_GUID'unchecked_access,
-                                     GUID_String'unchecked_access))
+      if SUCCEEDED (StringFromCLSID (Ref_GUID'Unchecked_Access,
+                                     GUID_String'Unchecked_Access))
       then
          declare
-            Ada_GUID_String : constant String := GNATCOM.Types.To_Ada (GUID_String);
+            Ada_GUID_String : constant String :=
+              GNATCOM.Types.To_Ada (GUID_String);
          begin
-            CoTaskMemFree (GUID_String.all'address);
+            CoTaskMemFree (GUID_String.all'Address);
             return Ada_GUID_String;
          end;
       else

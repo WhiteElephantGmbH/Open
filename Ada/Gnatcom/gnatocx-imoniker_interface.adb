@@ -18,7 +18,7 @@ package body GNATOCX.IMoniker_Interface is
                      Pointer : in     Pointer_To_IMoniker)
    is
    begin
-      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.Iinterface.To_Pointer_To_IUnknown
               (Pointer.all'Address));
    end Attach;
 
@@ -311,4 +311,3 @@ package body GNATOCX.IMoniker_Interface is
    end IsSystemMoniker;
 
 end GNATOCX.IMoniker_Interface;
-

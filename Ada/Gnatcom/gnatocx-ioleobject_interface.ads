@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IOleObject_Interface is
 
    type IOleObject_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IOleObject_Type);
 
@@ -114,4 +114,3 @@ package GNATOCX.IOleObject_Interface is
       pLogpal : Pointer_To_LOGPALETTE);
 
 end GNATOCX.IOleObject_Interface;
-

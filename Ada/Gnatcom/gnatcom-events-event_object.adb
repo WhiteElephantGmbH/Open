@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -97,7 +96,9 @@ package body GNATCOM.Events.Event_Object is
       end record;
    type Event_Class_Pointer is access all Event_Class;
 
+   ------------
    -- Create --
+   ------------
 
    function Create
      (Invoke       : Invoke_Function;
@@ -124,7 +125,9 @@ package body GNATCOM.Events.Event_Object is
       return Event_Interface;
    end Create;
 
+   ------------------
    -- Event_Invoke --
+   ------------------
 
    function Event_Invoke
      (This         : access GNATCOM.Create.COM_Interface.COM_Interface_Type;
@@ -144,7 +147,8 @@ package body GNATCOM.Events.Event_Object is
       pragma Warnings (Off, pexcepinfo);
       pragma Warnings (Off, puArgErr);
 
-      Object  : Event_Class_Pointer := Event_Class_Pointer (This.CoClass);
+      Object  : constant Event_Class_Pointer :=
+        Event_Class_Pointer (This.CoClass);
    begin
       Object.Event_Invoke (dispidMember,
                            wFlags,
@@ -153,7 +157,9 @@ package body GNATCOM.Events.Event_Object is
       return GNATCOM.S_OK;
    end Event_Invoke;
 
+   ----------------------------
    -- Event_GetTypeInfoCount --
+   ----------------------------
 
    function Event_GetTypeInfoCount
      (This    : access GNATCOM.Create.COM_Interface.COM_Interface_Type;
@@ -166,7 +172,9 @@ package body GNATCOM.Events.Event_Object is
       return E_NOTIMPL;
    end Event_GetTypeInfoCount;
 
+   -----------------------
    -- Event_GetTypeInfo --
+   -----------------------
 
    function Event_GetTypeInfo
      (This    : access GNATCOM.Create.COM_Interface.COM_Interface_Type;
@@ -183,7 +191,9 @@ package body GNATCOM.Events.Event_Object is
       return E_NOTIMPL;
    end Event_GetTypeInfo;
 
+   -------------------------
    -- Event_GetIDsOfNames --
+   -------------------------
 
    function Event_GetIDsOfNames
      (This      : access GNATCOM.Create.COM_Interface.COM_Interface_Type;

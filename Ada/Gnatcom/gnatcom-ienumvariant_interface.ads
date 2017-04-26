@@ -6,9 +6,8 @@
 --                                                                          --
 --                                S p e c                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -37,7 +36,7 @@
 
 with Ada.Unchecked_Conversion;
 
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 with GNATCOM.Types;
 
 package GNATCOM.IEnumVARIANT_Interface is
@@ -46,7 +45,7 @@ package GNATCOM.IEnumVARIANT_Interface is
      array (Natural range <>) of aliased GNATCOM.Types.VARIANT;
 
    type IEnumVARIANT_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    function To_Pointer_To_IEnumVARIANT is
       new Ada.Unchecked_Conversion

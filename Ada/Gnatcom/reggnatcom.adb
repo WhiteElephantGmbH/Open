@@ -4,9 +4,8 @@
 --                                                                          --
 --                          R E G G N A T C O M                             --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -45,9 +44,9 @@ procedure RegGNATCOM is
    FILE_NAME_ERROR : exception;
 
    function GetModuleFileName
-     (hInst        : Interfaces.C.long;
-      lpszFileName : Interfaces.C.char_array;
-      cbFileName   : Interfaces.C.int)
+     (hInst        : in     Interfaces.C.long;
+      lpszFileName : access Interfaces.C.char;
+      cbFileName   : in     Interfaces.C.int)
      return Interfaces.C.int;
    pragma Import (StdCall, GetModuleFileName, "GetModuleFileNameA");
 
@@ -61,22 +60,25 @@ procedure RegGNATCOM is
    pragma Import (C, Retrieve_hInstance, "rts_get_hInstance");
 
    MAX_PATH   : constant := 1024;
-   ServerPath : aliased Interfaces.C.char_array (1 .. MAX_PATH)
-     := (others => Interfaces.C.nul);
-   KeyName    : String :=
+   ServerPath : aliased Interfaces.C.char_array (1 .. MAX_PATH);
+   KeyName    : constant String :=
      "SOFTWARE\Ada Core Technologies\GNAT\Standard Libraries";
-   Name       : String := "GNATCOM";
+   Name       : constant String := "GNATCOM";
 
 begin
-   if GetModuleFileName (Retrieve_hInstance, ServerPath, MAX_PATH) < 0 then
+   if
+     GetModuleFileName (Retrieve_hInstance,
+                        ServerPath (ServerPath'First)'Access,
+                        MAX_PATH) < 0
+   then
       raise FILE_NAME_ERROR;
    end if;
 
    GetShortPathName (ServerPath, ServerPath, MAX_PATH);
 
    declare
-      Tmp : String := Interfaces.C.To_Ada (ServerPath);
-      Value : String := Tmp (1 .. Index (Tmp, "\", Backward) - 1);
+      Tmp   : constant String := Interfaces.C.To_Ada (ServerPath);
+      Value : constant String := Tmp (1 .. Index (Tmp, "\", Backward) - 1);
    begin
       Register (KeyName, Name, Value, HKEY_LOCAL_MACHINE);
       Put_Line ("Registered GNATCOM at location : " & Value);

@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IMoniker_Interface is
 
    type IMoniker_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IMoniker_Type);
 
@@ -118,4 +118,3 @@ package GNATOCX.IMoniker_Interface is
       pdwMksys : GNATCOM.Types.Pointer_To_unsigned_long);
 
 end GNATOCX.IMoniker_Interface;
-

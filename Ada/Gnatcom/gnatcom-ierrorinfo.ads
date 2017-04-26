@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -35,7 +34,7 @@
 
 with Ada.Strings.Unbounded;
 with GNATCOM.Types;
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATCOM.IErrorInfo is
 
@@ -60,7 +59,7 @@ package GNATCOM.IErrorInfo is
    --  those not creating IErrorInfos
 
    function Supports_IErrorInfo
-     (Object : in GNATCOM.Interface.Interface_Type'Class)
+     (Object : in GNATCOM.Iinterface.Interface_Type'Class)
      return Boolean;
    --  Checks to see if IErrorInfos will be generated for this interface
    --  on the object. It does a Query for ISupportErrorInfo and then

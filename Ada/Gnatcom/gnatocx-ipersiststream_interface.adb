@@ -18,7 +18,7 @@ package body GNATOCX.IPersistStream_Interface is
                      Pointer : in     Pointer_To_IPersistStream)
    is
    begin
-      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.Iinterface.To_Pointer_To_IUnknown
               (Pointer.all'Address));
    end Attach;
 
@@ -83,4 +83,3 @@ package body GNATOCX.IPersistStream_Interface is
    end GetSizeMax;
 
 end GNATOCX.IPersistStream_Interface;
-

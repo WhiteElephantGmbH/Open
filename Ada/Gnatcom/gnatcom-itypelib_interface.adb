@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -44,24 +43,29 @@ package body GNATCOM.ITypeLib_Interface is
      return GNATCOM.Types.HRESULT;
    pragma Import (StdCall, LoadTypeLib, "LoadTypeLib");
 
+   ----------
    -- Open --
+   ----------
 
    procedure Open (This        : in out ITypeLib_Type;
                    Source_Name : in     String)
    is
-      Name  : constant GNATCOM.Types.BSTR := GNATCOM.BSTR.To_BSTR (Source_Name);
+      Name  : constant GNATCOM.Types.BSTR :=
+        GNATCOM.BSTR.To_BSTR (Source_Name);
       pTLib : aliased GNATCOM.Types.Pointer_To_ITypeLib;
    begin
       Error_Check
         (LoadTypeLib (Name,
-                      pTLib'access));
+                      pTLib'Access));
 
       GNATCOM.BSTR.Free (Name);
 
       Attach (This, pTLib);
    end Open;
 
+   ------------
    -- Attach --
+   ------------
 
    procedure Attach
      (This    : in out ITypeLib_Type;
@@ -69,10 +73,12 @@ package body GNATCOM.ITypeLib_Interface is
    is
    begin
       Attach (This,
-              GNATCOM.Main_Interface.To_Pointer_To_IUnknown (Pointer.all'address));
+              GNATCOM.Iinterface.To_Pointer_To_IUnknown (Pointer.all'Address));
    end Attach;
 
+   --------------
    -- FindName --
+   --------------
 
    procedure FindName
      (This      : ITypeLib_Type;
@@ -97,7 +103,9 @@ package body GNATCOM.ITypeLib_Interface is
       end if;
    end FindName;
 
+   ----------------------
    -- GetDocumentation --
+   ----------------------
 
    procedure GetDocumentation
      (This           : ITypeLib_Type;
@@ -117,7 +125,9 @@ package body GNATCOM.ITypeLib_Interface is
                                                pBstrHelpFile));
    end GetDocumentation;
 
+   ----------------
    -- GetLibAttr --
+   ----------------
 
    function GetLibAttr
      (This : ITypeLib_Type)
@@ -127,11 +137,13 @@ package body GNATCOM.ITypeLib_Interface is
    begin
       Error_Check
         (Pointer (This).Vtbl.GetLibAttr (Pointer (This),
-                                         pTLibAttr'unchecked_access));
+                                         pTLibAttr'Unchecked_Access));
       return pTLibAttr;
    end GetLibAttr;
 
+   -----------------
    -- GetTypeComp --
+   -----------------
 
    function GetTypeComp
      (This : ITypeLib_Type)
@@ -141,11 +153,13 @@ package body GNATCOM.ITypeLib_Interface is
    begin
       Error_Check
         (Pointer (This).Vtbl.GetTypeComp (Pointer (This),
-                                          pTComp'unchecked_access));
+                                          pTComp'Unchecked_Access));
       return pTComp;
    end GetTypeComp;
 
+   -----------------
    -- GetTypeInfo --
+   -----------------
 
    function GetTypeInfo
      (This  : ITypeLib_Type;
@@ -157,11 +171,13 @@ package body GNATCOM.ITypeLib_Interface is
       Error_Check
         (Pointer (This).Vtbl.GetTypeInfo (Pointer (This),
                                           index,
-                                          pTInfo'unchecked_access));
+                                          pTInfo'Unchecked_Access));
       return pTInfo;
    end GetTypeInfo;
 
+   ----------------------
    -- GetTypeInfoCount --
+   ----------------------
 
    function GetTypeInfoCount
      (This : ITypeLib_Type)
@@ -172,7 +188,9 @@ package body GNATCOM.ITypeLib_Interface is
         (Pointer (This).Vtbl.GetTypeInfoCount (Pointer (This)));
    end GetTypeInfoCount;
 
+   -----------------------
    -- GetTypeInfoOfGuid --
+   -----------------------
 
    function GetTypeInfoOfGuid
      (This : ITypeLib_Type;
@@ -184,11 +202,13 @@ package body GNATCOM.ITypeLib_Interface is
       Error_Check
         (Pointer (This).Vtbl.GetTypeInfoOfGuid (Pointer (This),
                                                 guid,
-                                                pTInfo'unchecked_access));
+                                                pTInfo'Unchecked_Access));
       return pTInfo;
    end GetTypeInfoOfGuid;
 
+   ---------------------
    -- GetTypeInfoType --
+   ---------------------
 
    function GetTypeInfoType
      (This  : ITypeLib_Type;
@@ -200,18 +220,22 @@ package body GNATCOM.ITypeLib_Interface is
       Error_Check
         (Pointer (This).Vtbl.GetTypeInfoType (Pointer (This),
                                               index,
-                                              TKind'unchecked_access));
+                                              TKind'Unchecked_Access));
       return TKind;
    end GetTypeInfoType;
 
+   ----------------
    -- Initialize --
+   ----------------
 
    procedure Initialize (This : in out ITypeLib_Type) is
    begin
       Set_IID (This, GNATCOM.Types.IID_ITypeLib);
    end Initialize;
 
+   ------------
    -- IsName --
+   ------------
 
    function IsName
      (This      : ITypeLib_Type;
@@ -226,7 +250,7 @@ package body GNATCOM.ITypeLib_Interface is
         (Pointer (This).Vtbl.IsName (Pointer (This),
                                      szNameBuf,
                                      lHashVal,
-                                     fName'unchecked_access));
+                                     fName'Unchecked_Access));
 
       if Clear then
          GNATCOM.BSTR.Free (szNameBuf);
@@ -235,7 +259,9 @@ package body GNATCOM.ITypeLib_Interface is
       return fName;
    end IsName;
 
+   -------------
    -- Pointer --
+   -------------
 
    function Pointer
      (This : ITypeLib_Type)
@@ -245,7 +271,9 @@ package body GNATCOM.ITypeLib_Interface is
       return To_Pointer_To_ITypeLib (Address (This));
    end Pointer;
 
+   ---------------------
    -- ReleaseTLibAttr --
+   ---------------------
 
    procedure ReleaseTLibAttr
      (This      : ITypeLib_Type;

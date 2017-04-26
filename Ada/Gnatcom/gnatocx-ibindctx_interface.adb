@@ -18,7 +18,7 @@ package body GNATOCX.IBindCtx_Interface is
                      Pointer : in     Pointer_To_IBindCtx)
    is
    begin
-      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.Iinterface.To_Pointer_To_IUnknown
               (Pointer.all'Address));
    end Attach;
 
@@ -145,4 +145,3 @@ package body GNATOCX.IBindCtx_Interface is
    end RevokeObjectParam;
 
 end GNATOCX.IBindCtx_Interface;
-

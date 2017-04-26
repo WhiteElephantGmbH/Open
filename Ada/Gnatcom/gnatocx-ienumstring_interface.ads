@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IEnumString_Interface is
 
    type IEnumString_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IEnumString_Type);
 
@@ -31,4 +31,3 @@ package GNATOCX.IEnumString_Interface is
       ppenum : Pointer_To_Pointer_To_IEnumString);
 
 end GNATOCX.IEnumString_Interface;
-

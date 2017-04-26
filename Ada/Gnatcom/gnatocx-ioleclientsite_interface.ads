@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IOleClientSite_Interface is
 
    type IOleClientSite_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IOleClientSite_Type);
 
@@ -37,4 +37,3 @@ package GNATOCX.IOleClientSite_Interface is
      (This : IOleClientSite_Type);
 
 end GNATOCX.IOleClientSite_Interface;
-

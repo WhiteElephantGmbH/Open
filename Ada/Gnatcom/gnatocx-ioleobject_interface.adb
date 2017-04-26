@@ -18,7 +18,7 @@ package body GNATOCX.IOleObject_Interface is
                      Pointer : in     Pointer_To_IOleObject)
    is
    begin
-      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.Iinterface.To_Pointer_To_IUnknown
               (Pointer.all'Address));
    end Attach;
 
@@ -60,8 +60,8 @@ package body GNATOCX.IOleObject_Interface is
           szContainerObj));
 
       if Free then
-         GNATCOM.Interface.Free (szContainerApp);
-         GNATCOM.Interface.Free (szContainerObj);
+         GNATCOM.Iinterface.Free (szContainerApp);
+         GNATCOM.Iinterface.Free (szContainerObj);
       end if;
    end SetHostNames;
 
@@ -310,4 +310,3 @@ package body GNATOCX.IOleObject_Interface is
    end SetColorScheme;
 
 end GNATOCX.IOleObject_Interface;
-

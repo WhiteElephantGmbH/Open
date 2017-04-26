@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -53,7 +52,7 @@ package body GNATCOM.IErrorInfo is
    --  Element Name          : IErrorInfo
    --  Element Type          : Interface
 
-   IID_IErrorInfo : aliased GNATCOM.Types.GUID :=
+   IID_IErrorInfo : aliased constant GNATCOM.Types.GUID :=
      GNATCOM.GUID.To_GUID ("{1CF2B120-547D-101B-8E65-08002B2BD119}");
 
    type af_IErrorInfo_QueryInterface is access
@@ -211,7 +210,7 @@ package body GNATCOM.IErrorInfo is
    --  Element Name          : ISupportErrorInfo
    --  Element Type          : Interface
 
-   IID_ISupportErrorInfo : aliased GNATCOM.Types.GUID :=
+   IID_ISupportErrorInfo : aliased constant GNATCOM.Types.GUID :=
      GNATCOM.GUID.To_GUID ("{DF0B3D60-548F-101B-8E65-08002B2BD119}");
 
    type af_ISupportErrorInfo_QueryInterface is access
@@ -261,7 +260,9 @@ package body GNATCOM.IErrorInfo is
       new Ada.Unchecked_Conversion
      (GNATCOM.Types.Pointer_To_Void, Pointer_To_ISupportErrorInfo);
 
+   -----------------------
    -- Create_IErrorInfo --
+   -----------------------
 
    procedure Create_IErrorInfo
      (Description     : in String;
@@ -270,12 +271,12 @@ package body GNATCOM.IErrorInfo is
       Help_Context    : in GNATCOM.Types.DWORD := 0;
       Help_File_Path  : in String              := "")
    is
-      use GNATCOM.Interface;
+      use GNATCOM.Iinterface;
       use GNATCOM.BSTR;
 
       pcerrinfo        : aliased Pointer_To_ICreateErrorInfo;
-      CError_Interface : GNATCOM.Interface.Interface_Type;
-      Error_Interface  : GNATCOM.Interface.Interface_Type;
+      CError_Interface : GNATCOM.Iinterface.Interface_Type;
+      Error_Interface  : GNATCOM.Iinterface.Interface_Type;
 
       function CreateErrorInfo
         (pperrinfo : access Pointer_To_ICreateErrorInfo)
@@ -288,10 +289,12 @@ package body GNATCOM.IErrorInfo is
       pragma Import (StdCall, SetErrorInfo, "SetErrorInfo");
 
       Local_GUID       : aliased GNATCOM.Types.GUID := Associated_GUID;
-      BSTR_Source      : GNATCOM.Types.BSTR := To_BSTR (Source_PROGID);
-      BSTR_Description : GNATCOM.Types.BSTR := To_BSTR (Description);
-      BSTR_Path        : GNATCOM.Types.BSTR := To_BSTR (Help_File_Path);
-
+      BSTR_Source      : constant GNATCOM.Types.BSTR :=
+        To_BSTR (Source_PROGID);
+      BSTR_Description : constant GNATCOM.Types.BSTR :=
+        To_BSTR (Description);
+      BSTR_Path        : constant GNATCOM.Types.BSTR :=
+        To_BSTR (Help_File_Path);
    begin
       GNATCOM.Errors.Error_Check (CreateErrorInfo (pcerrinfo'Access));
 
@@ -324,7 +327,9 @@ package body GNATCOM.IErrorInfo is
       SetErrorInfo (perrinfo => Pointer (Error_Interface));
    end Create_IErrorInfo;
 
+   --------------------
    -- Get_IErrorInfo --
+   --------------------
 
    function Get_IErrorInfo return String is
       use Ada.Strings.Unbounded;
@@ -338,7 +343,9 @@ package body GNATCOM.IErrorInfo is
       return To_String (Desc);
    end Get_IErrorInfo;
 
+   --------------------
    -- Get_IErrorInfo --
+   --------------------
 
    procedure Get_IErrorInfo
      (Description     : out Ada.Strings.Unbounded.Unbounded_String;
@@ -348,7 +355,7 @@ package body GNATCOM.IErrorInfo is
       Help_File_Path  : out Ada.Strings.Unbounded.Unbounded_String)
    is
       use Ada.Strings.Unbounded;
-      use GNATCOM.Interface;
+      use GNATCOM.Iinterface;
       use GNATCOM.BSTR;
 
       function GetErrorInfo
@@ -358,7 +365,7 @@ package body GNATCOM.IErrorInfo is
       pragma Import (StdCall, GetErrorInfo, "GetErrorInfo");
 
       pErrorInfo       : aliased Pointer_To_IErrorInfo;
-      Error_Interface  : GNATCOM.Interface.Interface_Type;
+      Error_Interface  : GNATCOM.Iinterface.Interface_Type;
 
       Assoc_GUID       : aliased GNATCOM.Types.GUID;
       BSTR_Source      : aliased GNATCOM.Types.BSTR;
@@ -405,15 +412,17 @@ package body GNATCOM.IErrorInfo is
       end if;
    end Get_IErrorInfo;
 
+   -------------------------
    -- Supports_IErrorInfo --
+   -------------------------
 
    function Supports_IErrorInfo
-     (Object : in GNATCOM.Interface.Interface_Type'Class)
+     (Object : in GNATCOM.Iinterface.Interface_Type'Class)
       return Boolean
    is
-      use GNATCOM.Interface;
+      use GNATCOM.Iinterface;
 
-      Support    : GNATCOM.Interface.Interface_Type;
+      Support    : GNATCOM.Iinterface.Interface_Type;
       pSupport   : Pointer_To_ISupportErrorInfo;
       Local_GUID : aliased GNATCOM.Types.GUID := IID (Object);
    begin

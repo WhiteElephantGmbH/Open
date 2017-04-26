@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -33,7 +32,6 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with Interfaces.C;
 with System;
 
 package body GNATCOM.Utility is
@@ -61,14 +59,14 @@ package body GNATCOM.Utility is
 
    function GetMessage
      (lpMsg         : Pointer_To_MSG;
-      hwnd          : Interfaces.C.long;
+      hwnd          : System.Address;
       wMsgFilterMin : Interfaces.C.unsigned;
       wMsgFilterMax : Interfaces.C.unsigned)
      return Interfaces.C.long;
    pragma Import (StdCall, GetMessage, "GetMessageA");
 
-   function DispatchMessage
-     (lpMsg : Pointer_To_MSG) return Interfaces.C.long;
+   procedure DispatchMessage
+     (lpMsg : Pointer_To_MSG);
    pragma Import (StdCall, DispatchMessage, "DispatchMessageA");
 
    function GetCurrentThreadId
@@ -83,13 +81,15 @@ package body GNATCOM.Utility is
    pragma Import (StdCall, PostThreadMessage, "PostThreadMessageA");
 
    procedure MessageBox
-     (hwnd    : in Interfaces.C.long       := 0;
+     (hwnd    : in System.Address := System.Null_Address;
       Message : in Interfaces.C.char_array;
       Title   : in Interfaces.C.char_array;
       uType   : in Interfaces.C.unsigned   := 0);
    pragma Import (StdCall, MessageBox, "MessageBoxA");
 
+   ---------------------------
    -- Get_Current_Thread_ID --
+   ---------------------------
 
    function Get_Current_Thread_ID return Interfaces.C.unsigned_long
    is
@@ -97,21 +97,24 @@ package body GNATCOM.Utility is
       return GetCurrentThreadId;
    end Get_Current_Thread_ID;
 
+   ------------------
    -- Message_Loop --
+   ------------------
 
    procedure Message_Loop is
       use type Interfaces.C.long;
 
-      lResult : Interfaces.C.long;
       tMSG    : aliased MSG;
-      pMSG    : Pointer_To_MSG := tMSG'Unchecked_Access;
    begin
-      while (GetMessage (pMSG, 0, 0, 0) /= 0) loop
-         lResult := DispatchMessage (pMSG);
+      while GetMessage (tMSG'Unchecked_Access,
+                        System.Null_Address, 0, 0) /= 0 loop
+         DispatchMessage (tMSG'Unchecked_Access);
       end loop;
    end Message_Loop;
 
+   ---------------
    -- Post_Quit --
+   ---------------
 
    procedure Post_Quit (Thread_ID : Interfaces.C.unsigned_long)
    is
@@ -119,18 +122,24 @@ package body GNATCOM.Utility is
       PostThreadMessage (Thread_ID, WM_QUIT);
    end Post_Quit;
 
+   ---------------
    -- Post_Quit --
+   ---------------
 
    procedure Post_Quit is
    begin
       Post_Quit (GetCurrentThreadId);
    end Post_Quit;
 
+   -----------------
    -- Message_Box --
+   -----------------
 
    procedure Message_Box (Title, Message : String) is
-      BoxTitle    : Interfaces.C.char_array := Interfaces.C.To_C (Title);
-      BoxMessage  : Interfaces.C.char_array := Interfaces.C.To_C (Message);
+      BoxTitle    : constant Interfaces.C.char_array :=
+        Interfaces.C.To_C (Title);
+      BoxMessage  : constant Interfaces.C.char_array :=
+        Interfaces.C.To_C (Message);
    begin
       MessageBox (Message => BoxMessage,
                   Title   => BoxTitle);

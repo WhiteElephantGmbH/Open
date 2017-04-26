@@ -1,5 +1,5 @@
-with GNATCOM.Errors;
 
+with GNATCOM.Errors;
 package body GNATOCX.IAdviseSink_Interface is
 
    procedure Initialize (This : in out IAdviseSink_Type) is
@@ -18,7 +18,7 @@ package body GNATOCX.IAdviseSink_Interface is
                      Pointer : in     Pointer_To_IAdviseSink)
    is
    begin
-      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.Iinterface.To_Pointer_To_IUnknown
               (Pointer.all'Address));
    end Attach;
 
@@ -83,4 +83,3 @@ package body GNATOCX.IAdviseSink_Interface is
    end RemoteOnClose;
 
 end GNATOCX.IAdviseSink_Interface;
-

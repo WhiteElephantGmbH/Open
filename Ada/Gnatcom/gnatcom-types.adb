@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -39,12 +38,14 @@ with Interfaces.C.Pointers;
 package body GNATCOM.Types is
 
    package wchar_array_pointer is new Interfaces.C.Pointers
-     (Index              => Interfaces.C.size_t,
-      Element            => Interfaces.C.wchar_t,
-      Element_Array      => Interfaces.C.wchar_array,
-      Default_Terminator => Interfaces.C.wide_nul);
+     (index              => Interfaces.C.size_t,
+      element            => Interfaces.C.wchar_t,
+      element_array      => Interfaces.C.wchar_array,
+      default_terminator => Interfaces.C.wide_nul);
 
+   --------------------
    -- To_wchar_array --
+   --------------------
 
    function To_C (From : access Interfaces.C.wchar_t)
      return Interfaces.C.wchar_array
@@ -55,7 +56,9 @@ package body GNATCOM.Types is
       return WC_Array;
    end To_C;
 
+   ------------
    -- To_Ada --
+   ------------
 
    function To_Ada (From : access Interfaces.C.wchar_t) return String is
    begin

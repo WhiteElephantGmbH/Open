@@ -1,4 +1,4 @@
-with GNATCOM.Main_Interface;
+with GNATCOM.IInterface;
 
 with GNATCOM.Errors;
 
@@ -20,7 +20,7 @@ package body winword.Documents_Interface is
                      Pointer : in     Pointer_To_Documents)
    is
    begin
-      Attach (This, GNATCOM.Main_Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.IInterface.To_Pointer_To_IUnknown
               (Pointer.all'address));
    end Attach;
 
@@ -298,7 +298,7 @@ package body winword.Documents_Interface is
           FileName));
 
       if Free then
-               GNATCOM.Main_Interface.Free (FileName);
+               GNATCOM.IInterface.Free (FileName);
 
       end if;
 
@@ -319,7 +319,7 @@ package body winword.Documents_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (FileName);
+               GNATCOM.IInterface.Free (FileName);
 
       end if;
 

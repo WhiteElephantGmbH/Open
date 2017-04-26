@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -66,24 +65,30 @@ package body GNATCOM.Create.IDispatch is
      return GNATCOM.Types.HRESULT;
    pragma Import (StdCall, DispInvoke, "DispInvoke");
 
+   ------------
    -- Adjust --
+   ------------
 
    procedure Adjust (This : in out IDispatch_Type) is
       use type GNATCOM.Types.Pointer_To_ITypeInfo;
 
       Result : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Result);
    begin
       if This.Type_Information /= null then
          Result := This.Type_Information.Vtbl.AddRef (This.Type_Information);
       end if;
    end Adjust;
 
+   --------------
    -- Finalize --
+   --------------
 
    procedure Finalize (This : in out IDispatch_Type) is
       use type GNATCOM.Types.Pointer_To_ITypeInfo;
 
       Result : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Result);
    begin
       if This.Type_Information /= null then
          Result := This.Type_Information.Vtbl.Release (This.Type_Information);
@@ -91,7 +96,9 @@ package body GNATCOM.Create.IDispatch is
       end if;
    end Finalize;
 
+   -------------------
    -- GetIDsOfNames --
+   -------------------
 
    function GetIDsOfNames
      (Data      : access IDispatch_Type;
@@ -107,7 +114,9 @@ package body GNATCOM.Create.IDispatch is
                                 rgdispid);
    end GetIDsOfNames;
 
+   -----------------
    -- GetTypeInfo --
+   -----------------
 
    function GetTypeInfo
      (Data    : access IDispatch_Type;
@@ -120,6 +129,7 @@ package body GNATCOM.Create.IDispatch is
       use type GNATCOM.Types.Pointer_To_ITypeInfo;
 
       Result  : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Result);
    begin
       if itinfo /= 0 then
          return GNATCOM.DISP_E_BADINDEX;
@@ -134,7 +144,9 @@ package body GNATCOM.Create.IDispatch is
       return GNATCOM.S_OK;
    end GetTypeInfo;
 
+   ----------------------
    -- GetTypeInfoCount --
+   ----------------------
 
    function GetTypeInfoCount (pctinfo : GNATCOM.Types.Pointer_To_unsigned)
      return GNATCOM.Types.HRESULT
@@ -144,13 +156,16 @@ package body GNATCOM.Create.IDispatch is
       return GNATCOM.S_OK;
    end GetTypeInfoCount;
 
+   ----------------
    -- Initialize --
+   ----------------
 
    procedure Initialize (This : in out IDispatch_Type) is
       use type GNATCOM.Types.Pointer_To_ITypeInfo;
 
-      Result : Interfaces.C.unsigned_long;
       Lib    : aliased GNATCOM.Types.Pointer_To_ITypeLib;
+      Result : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Result);
    begin
       if This.Type_Information = null then
          GNATCOM.Errors.Error_Check (LoadRegTypeLib
@@ -167,7 +182,9 @@ package body GNATCOM.Create.IDispatch is
       end if;
    end Initialize;
 
+   ------------
    -- Invoke --
+   ------------
 
    function Invoke
      (This         : access GNATCOM.Create.COM_Interface.COM_Interface_Type;

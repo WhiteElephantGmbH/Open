@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -48,7 +47,9 @@ package body GNATCOM.BSTR is
                            return GNATCOM.Types.BSTR;
    pragma Import (StdCall, SysAllocString, "SysAllocString");
 
+   --------------
    -- Is_Empty --
+   --------------
 
    function Is_Empty (This : GNATCOM.Types.BSTR) return Boolean is
       use type GNATCOM.Types.BSTR;
@@ -66,14 +67,18 @@ package body GNATCOM.BSTR is
 
    end Is_Empty;
 
+   ----------
    -- Free --
+   ----------
 
    procedure Free (This : in GNATCOM.Types.BSTR) is
    begin
       SysFreeString (This);
    end Free;
 
+   -------------
    -- To_BSTR --
+   -------------
 
    function To_BSTR (From : String) return GNATCOM.Types.BSTR
    is
@@ -91,7 +96,9 @@ package body GNATCOM.BSTR is
       return To_BSTR_From_Wide (Ada.Characters.Handling.To_Wide_String (From));
    end To_BSTR;
 
+   -----------------------
    -- To_BSTR_From_Wide --
+   -----------------------
 
    function To_BSTR_From_Wide (From : Wide_String) return GNATCOM.Types.BSTR
    is
@@ -109,7 +116,9 @@ package body GNATCOM.BSTR is
       return To_BSTR_From_Wide_C (Interfaces.C.To_C (From));
    end To_BSTR_From_Wide;
 
+   --------------------
    -- To_BSTR_From_C --
+   --------------------
 
    function To_BSTR_From_C (From : Interfaces.C.char_array)
      return GNATCOM.Types.BSTR
@@ -118,7 +127,9 @@ package body GNATCOM.BSTR is
       return To_BSTR (Interfaces.C.To_Ada (From));
    end To_BSTR_From_C;
 
+   -------------------------
    -- TO_BSTR_From_Wide_C --
+   -------------------------
 
    function To_BSTR_From_Wide_C (From : Interfaces.C.wchar_array)
                                 return GNATCOM.Types.BSTR
@@ -137,7 +148,9 @@ package body GNATCOM.BSTR is
 
    end To_BSTR_From_Wide_C;
 
+   ------------
    -- To_Ada --
+   ------------
 
    function To_Ada (From : GNATCOM.Types.BSTR;
                     Free : Boolean            := True)
@@ -161,7 +174,9 @@ package body GNATCOM.BSTR is
       end;
    end To_Ada;
 
+   -----------------
    -- To_Ada_Wide --
+   -----------------
 
    function To_Ada_Wide (From : GNATCOM.Types.BSTR;
                          Free : Boolean            := True)
@@ -184,7 +199,9 @@ package body GNATCOM.BSTR is
       end;
    end To_Ada_Wide;
 
+   ----------
    -- To_C --
+   ----------
 
    function To_C (From : GNATCOM.Types.BSTR;
                   Free : Boolean            := True)
@@ -194,7 +211,9 @@ package body GNATCOM.BSTR is
       return Interfaces.C.To_C (To_Ada (From, Free));
    end To_C;
 
+   ---------------
    -- To_C_Wide --
+   ---------------
 
    function To_C_Wide (From : GNATCOM.Types.BSTR;
                        Free : Boolean            := True)
@@ -204,7 +223,9 @@ package body GNATCOM.BSTR is
       return Interfaces.C.To_C (To_Ada_Wide (From, Free));
    end To_C_Wide;
 
+   ------------
    -- Length --
+   ------------
 
    function Length (Source : GNATCOM.Types.BSTR)
      return Natural

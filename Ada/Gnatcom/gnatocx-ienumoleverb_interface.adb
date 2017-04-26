@@ -18,7 +18,7 @@ package body GNATOCX.IEnumOLEVERB_Interface is
                      Pointer : in     Pointer_To_IEnumOLEVERB)
    is
    begin
-      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.Iinterface.To_Pointer_To_IUnknown
               (Pointer.all'Address));
    end Attach;
 
@@ -73,4 +73,3 @@ package body GNATOCX.IEnumOLEVERB_Interface is
    end Clone;
 
 end GNATOCX.IEnumOLEVERB_Interface;
-

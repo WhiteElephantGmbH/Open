@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IOleContainer_Interface is
 
    type IOleContainer_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IOleContainer_Type);
 
@@ -30,4 +30,3 @@ package GNATOCX.IOleContainer_Interface is
       fLock : Interfaces.C.long);
 
 end GNATOCX.IOleContainer_Interface;
-

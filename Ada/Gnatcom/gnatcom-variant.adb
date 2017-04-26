@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2014 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -92,7 +91,9 @@ package body GNATCOM.VARIANT is
      return Interfaces.C.int;
    pragma Import (StdCall, SystemTimeToVariantTime, "SystemTimeToVariantTime");
 
+   -----------------
    -- Change_Type --
+   -----------------
 
    procedure Change_Type (This : in out GNATCOM.Types.VARIANT;
                           VT   : in     GNATCOM.Types.VARTYPE)
@@ -100,29 +101,50 @@ package body GNATCOM.VARIANT is
       use type Interfaces.C.unsigned_short;
    begin
       if This.vt /= VT then
-         Error_Check (VariantChangeType (pvargDest => This'address,
-                                         pvarSrc  => This'address,
+         Error_Check (VariantChangeType (pvargDest => This'Address,
+                                         pvarSrc  => This'Address,
                                          wFlags    => 0,
                                          vt        => VT));
       end if;
    end Change_Type;
 
+   -------------
+   -- Is_NULL --
+   -------------
+
+   function Is_NULL (This : GNATCOM.Types.VARIANT) return Boolean
+   is
+      use type Interfaces.C.unsigned_short;
+   begin
+      if This.vt = GNATCOM.Types.VT_NULL then
+         return True;
+      end if;
+
+      return False;
+   end Is_NULL;
+
+   -----------
    -- Clear --
+   -----------
 
    procedure Clear (This : in out GNATCOM.Types.VARIANT) is
    begin
-      Error_Check (VariantClear (This'address));
+      Error_Check (VariantClear (This'Address));
    end Clear;
 
+   ----------
    -- Free --
+   ----------
 
    procedure Free (This : in GNATCOM.Types.VARIANT) is
       Temp : GNATCOM.Types.VARIANT := This;
    begin
-      Error_Check (VariantClear (Temp'address));
+      Error_Check (VariantClear (Temp'Address));
    end Free;
 
+   ----------
    -- Copy --
+   ----------
 
    function Copy (From : GNATCOM.Types.VARIANT)
      return GNATCOM.Types.VARIANT
@@ -131,12 +153,14 @@ package body GNATCOM.VARIANT is
       New_Variant : GNATCOM.Types.VARIANT;
    begin
       Initialize (New_Variant);
-      Error_Check (VariantCopy (pvargDest => New_Variant'address,
-                                pvargSrc  => Temp_Var'address));
+      Error_Check (VariantCopy (pvargDest => New_Variant'Address,
+                                pvargSrc  => Temp_Var'Address));
       return New_Variant;
    end Copy;
 
+   -----------------
    -- Error_Check --
+   -----------------
 
    procedure Error_Check (Result : in GNATCOM.Types.HRESULT) is
    begin
@@ -158,14 +182,18 @@ package body GNATCOM.VARIANT is
       end if;
    end Error_Check;
 
+   ----------------
    -- Initialize --
+   ----------------
 
    procedure Initialize (This : in out GNATCOM.Types.VARIANT) is
    begin
-      VariantInit (This'address);
+      VariantInit (This'Address);
    end Initialize;
 
+   ------------
    -- To_Ada --
+   ------------
 
    function To_Ada
      (From  : GNATCOM.Types.VARIANT;
@@ -190,7 +218,9 @@ package body GNATCOM.VARIANT is
       return GNATCOM.BSTR.To_Ada (Temp_Var.u.bstrVal, Do_Clear);
    end To_Ada;
 
+   -----------------
    -- To_Ada_Wide --
+   -----------------
 
    function To_Ada_Wide
      (From  : GNATCOM.Types.VARIANT;
@@ -215,7 +245,9 @@ package body GNATCOM.VARIANT is
       return GNATCOM.BSTR.To_Ada_Wide (Temp_Var.u.bstrVal, Do_Clear);
    end To_Ada_Wide;
 
+   ------------
    -- To_Ada --
+   ------------
 
    function To_Ada
      (From  : GNATCOM.Types.VARIANT)
@@ -230,7 +262,9 @@ package body GNATCOM.VARIANT is
       return Result;
    end To_Ada;
 
+   ------------
    -- To_Ada --
+   ------------
 
    function To_Ada
      (From  : GNATCOM.Types.VARIANT)
@@ -245,7 +279,9 @@ package body GNATCOM.VARIANT is
       return Result;
    end To_Ada;
 
+   ------------
    -- To_Ada --
+   ------------
 
    function To_Ada
      (From  : GNATCOM.Types.VARIANT)
@@ -261,7 +297,7 @@ package body GNATCOM.VARIANT is
    begin
       Change_Type (Temp_Var, GNATCOM.Types.VT_DATE);
 
-      if VariantTimeToSystemTime (Temp_Var.u.date, C_Time'access) /= 0 then
+      if VariantTimeToSystemTime (Temp_Var.u.date, C_Time'Access) /= 0 then
          Ada_Time := Time_Of (Year_Number (C_Time.wYear),
                               Month_Number (C_Time.wMonth),
                               Day_Number (C_Time.wDay),
@@ -278,7 +314,9 @@ package body GNATCOM.VARIANT is
 
    end To_Ada;
 
+   ------------
    -- To_Ada --
+   ------------
 
    function To_Ada
      (From  : GNATCOM.Types.VARIANT)
@@ -300,7 +338,9 @@ package body GNATCOM.VARIANT is
       return Result;
    end To_Ada;
 
+   -------------
    -- To_BSTR --
+   -------------
 
    function To_BSTR
      (From : GNATCOM.Types.VARIANT;
@@ -310,7 +350,7 @@ package body GNATCOM.VARIANT is
       use type GNATCOM.Types.VARTYPE;
 
       Temp_Var : GNATCOM.Types.VARIANT := From;
-      Do_Copy : Boolean := Copy with Unreferenced; --!!!<WE>
+      Do_Copy  : Boolean := Copy;
    begin
       if From.vt /= GNATCOM.Types.VT_BSTR then
          Do_Copy := False;
@@ -318,7 +358,7 @@ package body GNATCOM.VARIANT is
 
       Change_Type (Temp_Var, GNATCOM.Types.VT_BSTR);
 
-      if Copy then --!!!<WE> Do_Copy ?
+      if Do_Copy then
          return SysAllocString (Temp_Var.u.bstrVal);
       else
          return Temp_Var.u.bstrVal;
@@ -326,7 +366,9 @@ package body GNATCOM.VARIANT is
 
    end To_BSTR;
 
+   ----------
    -- To_C --
+   ----------
 
    function To_C
      (From  : GNATCOM.Types.VARIANT;
@@ -347,7 +389,9 @@ package body GNATCOM.VARIANT is
       return GNATCOM.BSTR.To_C (Temp_Var.u.bstrVal, Do_Clear);
    end To_C;
 
+   ---------------
    -- To_C_Wide --
+   ---------------
 
    function To_C_Wide
      (From  : GNATCOM.Types.VARIANT;
@@ -368,51 +412,59 @@ package body GNATCOM.VARIANT is
       return GNATCOM.BSTR.To_C_Wide (Temp_Var.u.bstrVal, Do_Clear);
    end To_C_Wide;
 
+   -----------------------------
    -- To_Pointer_To_IDispatch --
+   -----------------------------
 
    function To_Pointer_To_IDispatch
      (From  : GNATCOM.Types.VARIANT;
       Clear : Boolean                   := True)
       return GNATCOM.Types.Pointer_To_IDispatch
    is
-      Temp_Var      : GNATCOM.Types.VARIANT := From;
-      Com_Interface : GNATCOM.Types.Pointer_To_IDispatch;
-      Ref           : Interfaces.C.unsigned_long with Unreferenced;
+      Temp_Var  : GNATCOM.Types.VARIANT := From;
+      P_Interface : GNATCOM.Types.Pointer_To_IDispatch;
+      Ref       : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Ref);
    begin
       Change_Type (Temp_Var, GNATCOM.Types.VT_DISPATCH);
-      Com_Interface := Temp_Var.u.pdispVal;
-      Ref := Com_Interface.Vtbl.AddRef (Com_Interface);
+      P_Interface := Temp_Var.u.pdispVal;
+      Ref := P_Interface.Vtbl.AddRef (P_Interface);
 
       if Clear then
          VARIANT.Clear (Temp_Var);
       end if;
 
-      return Com_Interface;
+      return P_Interface;
    end To_Pointer_To_IDispatch;
 
+   ----------------------------
    -- To_Pointer_To_IUnknown --
+   ----------------------------
 
    function To_Pointer_To_IUnknown
      (From  : GNATCOM.Types.VARIANT;
       Clear : Boolean                   := True)
       return GNATCOM.Types.Pointer_To_IUnknown
    is
-      Temp_Var      : GNATCOM.Types.VARIANT := From;
-      Com_Interface : GNATCOM.Types.Pointer_To_IUnknown;
-      Ref           : Interfaces.C.unsigned_long with Unreferenced;
+      Temp_Var  : GNATCOM.Types.VARIANT := From;
+      P_Interface : GNATCOM.Types.Pointer_To_IUnknown;
+      Ref       : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Ref);
    begin
       Change_Type (Temp_Var, GNATCOM.Types.VT_DISPATCH);
-      Com_Interface := Temp_Var.u.punkVal;
-      Ref := Com_Interface.Vtbl.AddRef (Com_Interface);
+      P_Interface := Temp_Var.u.punkVal;
+      Ref := P_Interface.Vtbl.AddRef (P_Interface);
 
       if Clear then
          VARIANT.Clear (Temp_Var);
       end if;
 
-      return Com_Interface;
+      return P_Interface;
    end To_Pointer_To_IUnknown;
 
+   -----------------------------
    -- To_Pointer_To_SAFEARRAY --
+   -----------------------------
 
    function To_Pointer_To_SAFEARRAY (From  : GNATCOM.Types.VARIANT)
      return GNATCOM.Types.Pointer_To_SAFEARRAY
@@ -426,7 +478,9 @@ package body GNATCOM.VARIANT is
       return From.u.parray;
    end To_Pointer_To_SAFEARRAY;
 
+   ----------------
    -- To_VARIANT --
+   ----------------
 
    function To_VARIANT
      (From : String)
@@ -440,7 +494,9 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT;
 
+   ----------------
    -- To_VARIANT --
+   ----------------
 
    function To_VARIANT
      (From : Integer;
@@ -455,7 +511,9 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT;
 
+   ----------------
    -- To_VARIANT --
+   ----------------
 
    function To_VARIANT
      (From : Float)
@@ -469,7 +527,9 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT;
 
+   ----------------
    -- To_VARIANT --
+   ----------------
 
    function To_VARIANT
      (From : Boolean)
@@ -487,7 +547,9 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT;
 
+   ----------------
    -- To_VARIANT --
+   ----------------
 
    function To_VARIANT
      (From : Ada.Calendar.Time)
@@ -510,22 +572,22 @@ package body GNATCOM.VARIANT is
 
       Seconds := Ada.Calendar.Seconds (From);
 
-      Temp := Seconds / (60*60);
+      Temp := Seconds / (60 * 60);
       C_Time.wHour   :=
-        Interfaces.C.short (Float'floor (Float (Temp)));
+        Interfaces.C.short (Float'Floor (Float (Temp)));
 
       Temp := (Seconds - (Ada.Calendar.Day_Duration
-                          (C_Time.wHour) * (60*60))) / 60;
+                          (C_Time.wHour) * (60 * 60))) / 60;
       C_Time.wMinute :=
-        Interfaces.C.short (Float'floor (Float (Temp)));
+        Interfaces.C.short (Float'Floor (Float (Temp)));
 
       Temp := Seconds -
         ((Ada.Calendar.Day_Duration (C_Time.wHour) * (60 * 60)) +
          (Ada.Calendar.Day_Duration (C_Time.wMinute) * 60));
       C_Time.wSecond :=
-        Interfaces.C.short (Float'floor (Float (Temp)));
+        Interfaces.C.short (Float'Floor (Float (Temp)));
 
-      if SystemTimeToVariantTime (C_Time, V_Time'access) /= 0 then
+      if SystemTimeToVariantTime (C_Time, V_Time'Access) /= 0 then
          Initialize (New_Variant);
          New_Variant.vt := GNATCOM.Types.VT_DATE;
          New_Variant.u.date := V_Time;
@@ -536,7 +598,9 @@ package body GNATCOM.VARIANT is
 
    end To_VARIANT;
 
+   ----------------
    -- To_VARIANT --
+   ----------------
 
    function To_VARIANT
      (From : GNATCOM.Types.BSTR;
@@ -555,14 +619,18 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT;
 
+   ----------------
    -- To_VARIANT --
+   ----------------
 
    function To_VARIANT
      (From   : GNATCOM.Types.Pointer_To_IUnknown;
       AddRef : Boolean := True)
       return GNATCOM.Types.VARIANT
    is
-      Ref       : Interfaces.C.unsigned_long with Unreferenced;
+      Ref         : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Ref);
+
       New_Variant : GNATCOM.Types.VARIANT;
    begin
       Initialize (New_Variant);
@@ -574,14 +642,18 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT;
 
+   ----------------
    -- To_VARIANT --
+   ----------------
 
    function To_VARIANT
      (From   : GNATCOM.Types.Pointer_To_IDispatch;
       AddRef : Boolean := True)
       return GNATCOM.Types.VARIANT
    is
-      Ref       : Interfaces.C.unsigned_long with Unreferenced;
+      Ref         : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Ref);
+
       New_Variant : GNATCOM.Types.VARIANT;
    begin
       Initialize (New_Variant);
@@ -593,7 +665,9 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT;
 
+   ----------------
    -- To_VARIANT --
+   ----------------
 
    function To_VARIANT (From : GNATCOM.Types.Pointer_To_SAFEARRAY;
                         VT   : GNATCOM.Types.VARTYPE)
@@ -609,7 +683,9 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT;
 
+   ----------------------
    -- To_VARIANT_BYREF --
+   ----------------------
 
    function To_VARIANT_BYREF (From : System.Address;
                               VT   : GNATCOM.Types.VARTYPE)
@@ -626,25 +702,31 @@ package body GNATCOM.VARIANT is
       return RefVar;
    end To_VARIANT_BYREF;
 
+   ----------------------
    -- To_VARIANT_BYREF --
+   ----------------------
 
    function To_VARIANT_BYREF (From : access GNATCOM.Types.BSTR)
      return GNATCOM.Types.VARIANT
    is
    begin
-      return To_VARIANT_BYREF (From.all'address, GNATCOM.Types.VT_BSTR);
+      return To_VARIANT_BYREF (From.all'Address, GNATCOM.Types.VT_BSTR);
    end To_VARIANT_BYREF;
 
+   ----------------------
    -- To_VARIANT_BYREF --
+   ----------------------
 
    function To_VARIANT_BYREF (From : access GNATCOM.Types.VARIANT)
      return GNATCOM.Types.VARIANT
    is
    begin
-      return To_VARIANT_BYREF (From.all'address, GNATCOM.Types.VT_VARIANT);
+      return To_VARIANT_BYREF (From.all'Address, GNATCOM.Types.VT_VARIANT);
    end To_VARIANT_BYREF;
 
+   -----------------------
    -- To_VARIANT_From_C --
+   -----------------------
 
    function To_VARIANT_From_C
      (From : Interfaces.C.char_array)
@@ -658,7 +740,9 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT_From_C;
 
+   --------------------------
    -- To_VARIANT_From_Wide --
+   --------------------------
 
    function To_VARIANT_From_Wide
      (From : Wide_String)
@@ -672,7 +756,9 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT_From_Wide;
 
+   ----------------------------
    -- To_VARIANT_From_Wide_C --
+   ----------------------------
 
    function To_VARIANT_From_Wide_C
      (From : Interfaces.C.wchar_array)
@@ -686,7 +772,9 @@ package body GNATCOM.VARIANT is
       return New_Variant;
    end To_VARIANT_From_Wide_C;
 
+   -------------
    -- Get_UDT --
+   -------------
 
    function Get_UDT (From  : GNATCOM.Types.VARIANT) return Pointer_To_Element
    is
@@ -711,7 +799,9 @@ package body GNATCOM.VARIANT is
       return Result.pvRecord;
    end Get_UDT;
 
+   -------------
    -- Put_UDT --
+   -------------
 
    function Put_UDT
      (UDT       : access Element;
@@ -743,16 +833,18 @@ package body GNATCOM.VARIANT is
    begin
       GNATCOM.Errors.Error_Check
         (LoadRegTypeLib
-         (GUID'access, Ver_Maj, Ver_Min, 0, Type_Lib'access));
+         (GUID'Access, Ver_Maj, Ver_Min, 0, Type_Lib'Access));
 
       Attach (Lib, Type_Lib);
 
-      Attach (Type_Info, GetTypeInfoOfGuid (Lib, TGUID'unchecked_access));
+      Attach (Type_Info, GetTypeInfoOfGuid (Lib, TGUID'Unchecked_Access));
 
       return Put_UDT_BI (UDT, Pointer (Type_Info));
    end Put_UDT;
 
+   ----------------------
    -- Put_UDT_By_Index --
+   ----------------------
 
    function Put_UDT_By_Index
      (UDT     : access Element;
@@ -783,7 +875,7 @@ package body GNATCOM.VARIANT is
    begin
       GNATCOM.Errors.Error_Check
         (LoadRegTypeLib
-         (GUID'access, Ver_Maj, Ver_Min, 0, Type_Lib'access));
+         (GUID'Access, Ver_Maj, Ver_Min, 0, Type_Lib'Access));
 
       Attach (Lib, Type_Lib);
 
@@ -792,7 +884,9 @@ package body GNATCOM.VARIANT is
       return Put_UDT_BI (UDT, Pointer (Type_Info));
    end Put_UDT_By_Index;
 
+   --------------------------
    -- Put_UDT_By_Type_Info --
+   --------------------------
 
    function Put_UDT_By_Type_Info
      (UDT       : access Element;
@@ -822,7 +916,7 @@ package body GNATCOM.VARIANT is
       New_Variant : GNATCOM.Types.VARIANT;
    begin
       GNATCOM.Errors.Error_Check
-        (GetRecordInfoFromTypeInfo (Type_Info, Record_Info'access));
+        (GetRecordInfoFromTypeInfo (Type_Info, Record_Info'Access));
 
       Initialize (New_Variant);
       New_Variant.vt := GNATCOM.Types.VT_RECORD;

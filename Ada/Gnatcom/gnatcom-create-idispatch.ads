@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -97,6 +96,13 @@ package GNATCOM.Create.IDispatch is
       pexcepinfo   : in     GNATCOM.Types.Pointer_To_EXCEPINFO;
       puArgErr     : in     GNATCOM.Types.Pointer_To_unsigned)
      return GNATCOM.Types.HRESULT;
-   pragma Convention (StdCall, Invoke);
+   --  pragma Convention (StdCall, Invoke);
+   --  ^ This commented-out pragma is of no known use in any
+   --    component or sample of GNATCOM and GWindows.
+   --    Probably it was originally left by mistake when
+   --    DispInvoke's profile (see Invoke's body) was copied to Invoke's
+   --    specification.
+   --    It causes the following error on GNAT GPL 2013:
+   --       dispatching subprogram at line 89 cannot use Stdcall convention
 
 end GNATCOM.Create.IDispatch;

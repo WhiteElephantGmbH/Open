@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IRunningObjectTable_Interface is
 
    type IRunningObjectTable_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IRunningObjectTable_Type);
 
@@ -48,4 +48,3 @@ package GNATOCX.IRunningObjectTable_Interface is
       ppenumMoniker : Pointer_To_Pointer_To_IEnumMoniker);
 
 end GNATOCX.IRunningObjectTable_Interface;
-

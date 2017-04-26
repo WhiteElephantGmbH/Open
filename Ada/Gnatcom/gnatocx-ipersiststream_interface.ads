@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IPersistStream_Interface is
 
    type IPersistStream_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IPersistStream_Type);
 
@@ -34,4 +34,3 @@ package GNATOCX.IPersistStream_Interface is
       pcbSize : Pointer_To_uULARGE_INTEGER);
 
 end GNATOCX.IPersistStream_Interface;
-

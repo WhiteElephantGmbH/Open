@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -61,6 +60,7 @@ package body GNATCOM.Create.Factory is
       return Interfaces.C.unsigned_long
    is
       Result : Interfaces.C.long;
+      pragma Warnings (Off, Result);
    begin
       --  Add a ref count to the interface, which in this case
       --  is also the object
@@ -83,7 +83,10 @@ package body GNATCOM.Create.Factory is
       Object   : GNATCOM.Create.COM_Interface.Pointer_To_COM_Interface_Type;
       hr       : GNATCOM.Types.HRESULT;
       Result   : Interfaces.C.long;
+      pragma Warnings (Off, Result);
+
       Refcount : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, Refcount);
    begin
       if pUnkOuter /= null then
          return CLASS_E_NOAGGREGATION;
@@ -124,6 +127,7 @@ package body GNATCOM.Create.Factory is
       pragma Warnings (Off, This);
 
       Result : Interfaces.C.long;
+      pragma Warnings (Off, Result);
    begin
       if fLock /= 0 then
          Result := InterlockedIncrement
@@ -151,6 +155,7 @@ package body GNATCOM.Create.Factory is
       use type GNATCOM.Types.GUID;
 
       Result : Interfaces.C.long;
+      pragma Warnings (Off, Result);
    begin
       if riid.all = GNATCOM.Types.IID_IUnknown then
          ppvObject.all := This.all'Address;

@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IAdviseSink_Interface is
 
    type IAdviseSink_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IAdviseSink_Type);
 
@@ -34,4 +34,3 @@ package GNATOCX.IAdviseSink_Interface is
      (This : IAdviseSink_Type);
 
 end GNATOCX.IAdviseSink_Interface;
-

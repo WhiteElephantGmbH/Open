@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IPersist_Interface is
 
    type IPersist_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IPersist_Type);
 
@@ -18,4 +18,3 @@ package GNATOCX.IPersist_Interface is
       pClassID : GNATCOM.Types.Pointer_To_GUID);
 
 end GNATOCX.IPersist_Interface;
-

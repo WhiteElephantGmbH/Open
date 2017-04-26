@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -61,17 +60,29 @@ package body GNATCOM.Initialize is
    RPC_E_CHANGED_MODE : constant := 16#80010106#;
    --  Attempt to re-initilalize in wrong mode
 
-   procedure InterlockedIncrement
-     (lpAddend : access Interfaces.C.long);
-   pragma Import (StdCall, InterlockedIncrement, "InterlockedIncrement");
+   function sync_fetch_and_add (Ref : access Integer;
+                                Add : Integer) return Integer;
+   pragma Import (Intrinsic, sync_fetch_and_add,
+                  "__sync_fetch_and_add_4");
 
-   procedure InterlockedDecrement
-     (lpAddend : access Interfaces.C.long);
-   pragma Import (StdCall, InterlockedDecrement, "InterlockedDecrement");
+   procedure InterlockedIncrement (Ref : access Integer) is
+      Old : Integer;
+      pragma Unreferenced (Old);
+   begin
+      Old := sync_fetch_and_add (Ref, 1);
+   end InterlockedIncrement;
+
+   procedure InterlockedDecrement (Ref : access Integer) is
+      Old : Integer;
+      pragma Unreferenced (Old);
+   begin
+      Old := sync_fetch_and_add (Ref, -1);
+   end InterlockedDecrement;
 
    -- Initialize_COM --
 
    procedure Initialize_COM is
+      use Interfaces.C;
    begin
       if CoInitialize = RPC_E_CHANGED_MODE then
          raise CHANGED_MODE_ERROR;
@@ -82,6 +93,7 @@ package body GNATCOM.Initialize is
    -- Initialize_COM_Multi_Threaded --
 
    procedure Initialize_COM_Multi_Threaded is
+      use Interfaces.C;
    begin
       if CoInitializeEx = RPC_E_CHANGED_MODE then
          raise CHANGED_MODE_ERROR;
@@ -92,6 +104,7 @@ package body GNATCOM.Initialize is
    -- Uninitialize_COM --
 
    procedure Uninitialize_COM is
+      use Interfaces.C;
    begin
       CoUninitialize;
       InterlockedDecrement (Initialize_Count'Access);

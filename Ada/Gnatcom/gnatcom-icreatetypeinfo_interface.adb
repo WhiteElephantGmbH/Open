@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -53,7 +52,7 @@ package body GNATCOM.ICreateTypeInfo_Interface is
                      Pointer : in     GNATCOM.Types.Pointer_To_ICreateTypeInfo)
    is
    begin
-      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.Iinterface.To_Pointer_To_IUnknown
               (Pointer.all'Address));
    end Attach;
 
@@ -341,7 +340,7 @@ package body GNATCOM.ICreateTypeInfo_Interface is
           bstrMops));
 
       if Free then
-               GNATCOM.Interface.Free (bstrMops);
+               GNATCOM.Iinterface.Free (bstrMops);
 
       end if;
 

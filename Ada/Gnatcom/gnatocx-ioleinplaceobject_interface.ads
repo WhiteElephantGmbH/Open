@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IOleInPlaceObject_Interface is
 
    type IOleInPlaceObject_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IOleInPlaceObject_Type);
 
@@ -36,4 +36,3 @@ package GNATOCX.IOleInPlaceObject_Interface is
      (This : IOleInPlaceObject_Type);
 
 end GNATOCX.IOleInPlaceObject_Interface;
-

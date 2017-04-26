@@ -6,9 +6,8 @@
 --                                                                          --
 --                                S p e c                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -42,14 +41,14 @@ package GNATCOM.Types is
 
    package C renames Interfaces.C;
 
-   Size_Of_Pointers : constant := 32;
-
    type HRESULT is new Interfaces.C.unsigned_long;
    type Pointer_To_HRESULT is access all HRESULT;
    subtype SCODE is HRESULT;
    type Pointer_To_SCODE is access all SCODE;
    --  HRESULTs are used to return the success or failure of Interface
    --  methods and COM APIs. See GNATCOM.Errors
+
+   Size_Of_Pointers : constant := Standard'Address_Size;
 
    type Void is null record;
    subtype Pointer_To_Void is System.Address;
@@ -62,6 +61,7 @@ package GNATCOM.Types is
    subtype LPSTR is Pointer_To_char;
    type Pointer_To_LPSTR is access all LPSTR;
    subtype LPWSTR is Pointer_To_wchar_t;
+   pragma No_Strict_Aliasing (LPWSTR);
    type Pointer_To_LPWSTR is access all LPWSTR;
    --  C style strings
 
@@ -78,7 +78,7 @@ package GNATCOM.Types is
          Lo : Interfaces.C.unsigned_long;
          Hi : Interfaces.C.long;
       end record;
-   for CURRENCY'size use Size_Of_Currency;
+   for CURRENCY'Size use Size_Of_Currency;
    type Pointer_To_CURRENCY is access all CURRENCY;
    --  Automation CURRENCY type. It is an 8 byte, two's complement integer
    --  scaled by 10,000 to give a fixed-point number with 15 digits to the
@@ -106,7 +106,7 @@ package GNATCOM.Types is
       Lo : Interfaces.C.int;
       Hi : Interfaces.C.int;
    end record;
-   for LONGLONG'size use Size_Of_LONGLONG;
+   for LONGLONG'Size use Size_Of_LONGLONG;
    pragma Convention (C_Pass_By_Copy, LONGLONG);
    type Pointer_To_LONGLONG is access all LONGLONG;
 
@@ -119,7 +119,7 @@ package GNATCOM.Types is
       Lo : Interfaces.C.unsigned;
       Hi : Interfaces.C.unsigned;
    end record;
-   for DWORDLONG'size use Size_Of_DWORDLONG;
+   for DWORDLONG'Size use Size_Of_DWORDLONG;
    pragma Convention (C_Pass_By_Copy, DWORDLONG);
    type Pointer_To_DWORDLONG is access all DWORDLONG;
 
@@ -143,7 +143,7 @@ package GNATCOM.Types is
    pragma Convention (C_Pass_By_Copy, DECIMAL);
    type Pointer_To_DECIMAL is access all DECIMAL;
 
-   Size_Of_BLOB : constant := 64;
+   Size_Of_BLOB : constant := 2 * Standard'Address_Size;
 
    type BLOB is
       record
@@ -151,7 +151,7 @@ package GNATCOM.Types is
          pBlobData : Pointer_To_BYTE;
       end record;
    pragma Convention (C_Pass_By_Copy, BLOB);
-   for BLOB'size use Size_Of_BLOB;
+   for BLOB'Size use Size_Of_BLOB;
    type Pointer_To_BLOB is access all BLOB;
    --  Automation type - (B)inary (L)arge (OB)ject
 
@@ -170,7 +170,7 @@ package GNATCOM.Types is
          cbElements : Interfaces.C.unsigned_long;
          cLocks     : Interfaces.C.unsigned_long;
          pvData     : Pointer_To_Void;
-         rgsabound  : Pointer_To_SAFEARRAYBOUND;
+         rgsabound  : SAFEARRAYBOUND;
       end record;
    pragma Convention (C_Pass_By_Copy, SAFEARRAY);
    type Pointer_To_SAFEARRAY is access all SAFEARRAY;
@@ -189,7 +189,7 @@ package GNATCOM.Types is
          Data4 : GUID_Data4_Array;
       end record;
    pragma Convention (C_Pass_By_Copy, GUID);
-   for GUID'size use Size_Of_GUID;
+   for GUID'Size use Size_Of_GUID;
 
    type Pointer_To_GUID is access all GUID;
    --  GUID - Globaly Unique Identifier
@@ -198,10 +198,10 @@ package GNATCOM.Types is
 
    GUID_NULL : aliased GUID :=
      (0, 0, 0,
-       (C.unsigned_char'val (0), C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0)));
+       (C.unsigned_char'Val (0), C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0)));
 
    subtype BSTR is Pointer_To_wchar_t;
    type Pointer_To_BSTR is access all BSTR;
@@ -237,29 +237,37 @@ package GNATCOM.Types is
    type Pointer_To_unsigned_long is access all Interfaces.C.unsigned_long;
    type Pointer_To_unsigned_short is access all Interfaces.C.unsigned_short;
    type Pointer_To_IUnknown is access all IUnknown;
+   pragma No_Strict_Aliasing (Pointer_To_IUnknown);
    type Pointer_To_IDispatch is access all IDispatch;
+   pragma No_Strict_Aliasing (Pointer_To_IDispatch);
    type Pointer_To_Pointer_To_IUnknown is access all Pointer_To_IUnknown;
    type Pointer_To_Pointer_To_IDispatch is access all Pointer_To_IDispatch;
    type Pointer_To_VARIANT is access all VARIANT;
    type Pointer_To_ITypeLib is access all ITypeLib;
    type Pointer_To_Pointer_To_ITypeLib is access all Pointer_To_ITypeLib;
    type Pointer_To_ITypeInfo is access all ITypeInfo;
+   pragma No_Strict_Aliasing (Pointer_To_ITypeInfo);
    type Pointer_To_Pointer_To_ITypeInfo is access all Pointer_To_ITypeInfo;
    type Pointer_To_ITypeComp is access all ITypeComp;
    type Pointer_To_Pointer_To_ITypeComp is access all Pointer_To_ITypeComp;
    type Pointer_To_ICreateTypeLib is access all ICreateTypeLib;
+   pragma No_Strict_Aliasing (Pointer_To_ICreateTypeLib);
    type Pointer_To_Pointer_To_ICreateTypeLib is
      access all Pointer_To_ICreateTypeLib;
    type Pointer_To_ICreateTypeInfo is access all ICreateTypeInfo;
+   pragma No_Strict_Aliasing (Pointer_To_ICreateTypeInfo);
    type Pointer_To_Pointer_To_ICreateTypeInfo is
      access all Pointer_To_ICreateTypeInfo;
    type Pointer_To_IClassFactory is access all IClassFactory;
    type Pointer_To_IClassFactory2 is access all IClassFactory2;
+   pragma No_Strict_Aliasing (Pointer_To_IClassFactory2);
    type Pointer_To_IConnectionPointContainer is
      access all IConnectionPointContainer;
    type Pointer_To_Pointer_To_IConnectionPointContainer is
-     access all Pointer_To_IConnectionPointContainer;
+      access all Pointer_To_IConnectionPointContainer;
+   pragma No_Strict_Aliasing (Pointer_To_IConnectionPointContainer);
    type Pointer_To_IConnectionPoint is access all IConnectionPoint;
+   pragma No_Strict_Aliasing (Pointer_To_IConnectionPoint);
    type Pointer_To_Pointer_To_IConnectionPoint is
      access all Pointer_To_IConnectionPoint;
    type Pointer_To_IEnumConnectionPoints is access all IEnumConnectionPoints;
@@ -269,8 +277,10 @@ package GNATCOM.Types is
    type Pointer_To_Pointer_To_IEnumConnections is
      access all Pointer_To_IEnumConnections;
    type Pointer_To_IEnumVARIANT is access all IEnumVARIANT;
+   pragma No_Strict_Aliasing (Pointer_To_IEnumVARIANT);
    type Pointer_To_Pointer_To_IEnumVARIANT is access all IEnumVARIANT;
    type Pointer_To_IGlobalInterfaceTable is access all IGlobalInterfaceTable;
+   pragma No_Strict_Aliasing (Pointer_To_IGlobalInterfaceTable);
    --  Pointer types used by COM
 
    VT_EMPTY           : constant := 0;
@@ -416,12 +426,13 @@ package GNATCOM.Types is
                pintVal   : Pointer_To_int;
             when 41 =>
                puintVal  : Pointer_To_unsigned;
+               puintVal2 : Pointer_To_unsigned;
          end case;
       end record;
    pragma Convention (C_Pass_By_Copy, Variant_Union);
    pragma Unchecked_Union (Variant_Union);
 
-   Size_Of_VARIANT : constant := 128;
+   Size_Of_VARIANT : constant := 64 + 2 * Standard'Address_Size;
 
    type VARIANT is
       record
@@ -431,7 +442,7 @@ package GNATCOM.Types is
          wReserved3 : Interfaces.C.unsigned_short;
          u          : Variant_Union;
       end record;
-   for VARIANT'size use Size_Of_VARIANT;
+   for VARIANT'Size use Size_Of_VARIANT;
    pragma Convention (C_Pass_By_Copy, VARIANT);
    --  The automation type VARIANT is used to create a variable that
    --  can contain any of the OLEAUTOMATION types. The value of vt
@@ -439,23 +450,22 @@ package GNATCOM.Types is
    --  Variants should be manipulated using the Variant APIs or with
    --  GNATCOM.Variant
 
-   type Pointer_To_VARIANT_Constant is access all VARIANT;
-
-   VARIANT_MISSING : aliased VARIANT :=
+   VARIANT_MISSING : aliased constant VARIANT :=
      (VT_ERROR, 0, 0, 0, u => (Which => 8, scode => DISP_E_PARAMNOTFOUND));
-   PVARIANT_MISSING : Pointer_To_VARIANT_Constant := VARIANT_MISSING'access;
+   PVARIANT_MISSING : Pointer_To_VARIANT :=
+      VARIANT_MISSING'Unrestricted_Access;
 
-   VARIANT_TRUE : aliased VARIANT :=
+   VARIANT_TRUE : aliased constant VARIANT :=
      (VT_BOOL, 0, 0, 0, u => (Which => 6, boolVal => VARIANT_BOOL_TRUE));
-   PVARIANT_TRUE : Pointer_To_VARIANT_Constant := VARIANT_TRUE'access;
+   PVARIANT_TRUE : Pointer_To_VARIANT := VARIANT_TRUE'Unrestricted_Access;
 
-   VARIANT_FALSE : aliased VARIANT :=
+   VARIANT_FALSE : aliased constant VARIANT :=
      (VT_BOOL, 0, 0, 0, u => (Which => 6, boolVal => VARIANT_BOOL_FALSE));
-   PVARIANT_FALSE : Pointer_To_VARIANT_Constant := VARIANT_FALSE'access;
+   PVARIANT_FALSE : Pointer_To_VARIANT := VARIANT_FALSE'Unrestricted_Access;
 
-   VARIANT_NULL : aliased VARIANT :=
+   VARIANT_NULL : aliased constant VARIANT :=
      (VT_NULL, 0, 0, 0, u => (Which => 1, lVal => 0));
-   PVARIANT_NULL : Pointer_To_VARIANT_Constant := VARIANT_NULL'access;
+   PVARIANT_NULL : Pointer_To_VARIANT := VARIANT_NULL'Unrestricted_Access;
 
    MAX_PARAMS : constant := 255;
 
@@ -470,12 +480,14 @@ package GNATCOM.Types is
      aliased GNATCOM.Types.VARIANT;
    pragma Convention (C, VARIANT_PARAM_ARRAY);
    type Pointer_To_VARIANT_PARAM_ARRAY is access all VARIANT_PARAM_ARRAY;
+   pragma No_Strict_Aliasing (Pointer_To_VARIANT_PARAM_ARRAY);
 
    type DISPID_PARAM_ARRAY is array
      (Interfaces.C.unsigned range 0 .. MAX_PARAMS) of
      aliased Interfaces.C.long;
    pragma Convention (C, DISPID_PARAM_ARRAY);
    type Pointer_To_DISPID_PARAM_ARRAY is access all DISPID_PARAM_ARRAY;
+   pragma No_Strict_Aliasing (Pointer_To_DISPID_PARAM_ARRAY);
 
    --  Parameter helper arrays
 
@@ -527,10 +539,10 @@ package GNATCOM.Types is
    --  {00000000-0000-0000-C000-000000000046}
    IID_IUnknown : aliased GUID :=
      (0, 0, 0,
-       (C.unsigned_char'val (192), C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (70)));
+       (C.unsigned_char'Val (192), C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (70)));
 
    type af_IUnknown_QueryInterface is access
      function (This   : access IUnknown;
@@ -568,10 +580,10 @@ package GNATCOM.Types is
    --  {00020400-0000-0000-C000-000000000046}
    IID_IDispatch : aliased GUID :=
      (132096, 0, 0,
-      (C.unsigned_char'val (192), C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (70)));
+      (C.unsigned_char'Val (192), C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (70)));
 
    type af_IDispatch_QueryInterface is access
      function (This   : access IDispatch;
@@ -910,10 +922,10 @@ package GNATCOM.Types is
    --  {00020402-0000-0000-C000-000000000046}
    IID_ITypeLib : aliased GUID :=
      (132098, 0, 0,
-      (C.unsigned_char'val (192), C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (70)));
+      (C.unsigned_char'Val (192), C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (70)));
 
    type af_ITypeLib_QueryInterface is access
      function (This   : access ITypeLib;
@@ -1004,6 +1016,7 @@ package GNATCOM.Types is
 
    type ITypeLibVtbl;
    type Pointer_To_ITypeLibVtbl is access all ITypeLibVtbl;
+   pragma No_Strict_Aliasing (Pointer_To_ITypeLib);
 
    type ITypeLib is
       record
@@ -1033,10 +1046,10 @@ package GNATCOM.Types is
    --  {00020401-0000-0000-C000-000000000046}
    IID_ITypeInfo : aliased GUID :=
      (132097, 0, 0,
-      (C.unsigned_char'val (192), C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (70)));
+      (C.unsigned_char'Val (192), C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (70)));
 
    type af_ITypeInfo_QueryInterface is access
      function (This   : access ITypeInfo;
@@ -1236,10 +1249,10 @@ package GNATCOM.Types is
    --  {00020403-0000-0000-C000-000000000046}
    IID_ITypeComp : aliased GUID :=
      (132099, 0, 0,
-      (C.unsigned_char'val (192), C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (0),
-       C.unsigned_char'val (0),   C.unsigned_char'val (70)));
+      (C.unsigned_char'Val (192), C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+       C.unsigned_char'Val (0),   C.unsigned_char'Val (70)));
 
    type af_ITypeComp_QueryInterface is access
      function (This   : access ITypeComp;
@@ -1301,10 +1314,10 @@ package GNATCOM.Types is
 
    IID_ICreateTypeInfo : GUID :=
      (16#00020405#, 16#0000#, 16#0000#,
-      (C.unsigned_char'val (16#C0#), C.unsigned_char'val (16#00#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#00#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#00#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#46#)));
+      (C.unsigned_char'Val (16#C0#), C.unsigned_char'Val (16#00#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#00#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#00#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#46#)));
 
    type af_ICreateTypeInfo_QueryInterface is access
      function (This   : access ICreateTypeInfo;
@@ -1521,10 +1534,10 @@ package GNATCOM.Types is
 
    IID_ICreateTypeLib : aliased GUID :=
      (16#00020406#, 16#0000#, 16#0000#,
-      (C.unsigned_char'val (16#C0#), C.unsigned_char'val (16#00#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#00#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#00#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#46#)));
+      (C.unsigned_char'Val (16#C0#), C.unsigned_char'Val (16#00#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#00#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#00#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#46#)));
 
    type af_ICreateTypeLib_QueryInterface is access
      function (This   : access ICreateTypeLib;
@@ -1636,10 +1649,10 @@ package GNATCOM.Types is
    --  {B196B28F-BAB4-101A-B69C-00AA00341D07}
    IID_IClassFactory2 : aliased GUID :=
      (16#B196B28F#, 16#BAB4#, 16#101A#,
-      (C.unsigned_char'val (16#B6#), C.unsigned_char'val (16#9C#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#AA#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#34#),
-       C.unsigned_char'val (16#1D#), C.unsigned_char'val (16#07#)));
+      (C.unsigned_char'Val (16#B6#), C.unsigned_char'Val (16#9C#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#AA#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#34#),
+       C.unsigned_char'Val (16#1D#), C.unsigned_char'Val (16#07#)));
 
    type af_IClassFactory2_QueryInterface is access
      function (This   : access IClassFactory2;
@@ -1719,10 +1732,10 @@ package GNATCOM.Types is
    --  {B196B28F-BAB4-101A-B69C-00AA00341D07}
    IID_IClassFactory : aliased GUID :=
      (16#00000001#, 16#0000#, 16#0000#,
-      (C.unsigned_char'val (16#C0#), C.unsigned_char'val (16#00#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#00#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#00#),
-       C.unsigned_char'val (16#00#), C.unsigned_char'val (16#46#)));
+      (C.unsigned_char'Val (16#C0#), C.unsigned_char'Val (16#00#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#00#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#00#),
+       C.unsigned_char'Val (16#00#), C.unsigned_char'Val (16#46#)));
 
    type af_IClassFactory_QueryInterface is access
      function (This   : access IClassFactory;
@@ -1776,10 +1789,10 @@ package GNATCOM.Types is
    --  {B196B284-BAB4-101A-B69C-00AA00341D07}
    IID_IConnectionPointContainer : aliased GUID :=
      (2979443332, 47796, 4122,
-      (C.unsigned_char'val (182), C.unsigned_char'val (156),
-       C.unsigned_char'val (0), C.unsigned_char'val (170),
-       C.unsigned_char'val (0), C.unsigned_char'val (52),
-       C.unsigned_char'val (29), C.unsigned_char'val (7)));
+      (C.unsigned_char'Val (182), C.unsigned_char'Val (156),
+       C.unsigned_char'Val (0), C.unsigned_char'Val (170),
+       C.unsigned_char'Val (0), C.unsigned_char'Val (52),
+       C.unsigned_char'Val (29), C.unsigned_char'Val (7)));
 
    type af_IConnectionPointContainer_QueryInterface is access
      function  (This   : access IConnectionPointContainer;
@@ -1840,10 +1853,10 @@ package GNATCOM.Types is
    --  {B196B285-BAB4-101A-B69C-00AA00341D07}
    IID_IEnumConnectionPoints : aliased GUID :=
      (2979443333, 47796, 4122,
-      (C.unsigned_char'val (182), C.unsigned_char'val (156),
-       C.unsigned_char'val (0), C.unsigned_char'val (170),
-       C.unsigned_char'val (0), C.unsigned_char'val (52),
-       C.unsigned_char'val (29), C.unsigned_char'val (7)));
+      (C.unsigned_char'Val (182), C.unsigned_char'Val (156),
+       C.unsigned_char'Val (0), C.unsigned_char'Val (170),
+       C.unsigned_char'Val (0), C.unsigned_char'Val (52),
+       C.unsigned_char'Val (29), C.unsigned_char'Val (7)));
 
    type af_IEnumConnectionPoints_QueryInterface is access
      function (This   : access IEnumConnectionPoints;
@@ -1912,10 +1925,10 @@ package GNATCOM.Types is
    --  {B196B286-BAB4-101A-B69C-00AA00341D07}
    IID_IConnectionPoint : aliased GUID :=
      (2979443334, 47796, 4122,
-      (C.unsigned_char'val (182), C.unsigned_char'val (156),
-       C.unsigned_char'val (0), C.unsigned_char'val (170),
-       C.unsigned_char'val (0), C.unsigned_char'val (52),
-       C.unsigned_char'val (29), C.unsigned_char'val (7)));
+      (C.unsigned_char'Val (182), C.unsigned_char'Val (156),
+       C.unsigned_char'Val (0), C.unsigned_char'Val (170),
+       C.unsigned_char'Val (0), C.unsigned_char'Val (52),
+       C.unsigned_char'Val (29), C.unsigned_char'Val (7)));
 
    type af_IConnectionPoint_QueryInterface is access
      function (This   : access IConnectionPoint;
@@ -2003,10 +2016,10 @@ package GNATCOM.Types is
    --  {B196B287-BAB4-101A-B69C-00AA00341D07}
    IID_IEnumConnections : aliased GUID :=
      (2979443335, 47796, 4122,
-      (C.unsigned_char'val (182), C.unsigned_char'val (156),
-       C.unsigned_char'val (0), C.unsigned_char'val (170),
-       C.unsigned_char'val (0), C.unsigned_char'val (52),
-       C.unsigned_char'val (29), C.unsigned_char'val (7)));
+      (C.unsigned_char'Val (182), C.unsigned_char'Val (156),
+       C.unsigned_char'Val (0), C.unsigned_char'Val (170),
+       C.unsigned_char'Val (0), C.unsigned_char'Val (52),
+       C.unsigned_char'Val (29), C.unsigned_char'Val (7)));
 
    type af_IEnumConnections_QueryInterface is access
      function (This   : access IEnumConnections;
@@ -2077,10 +2090,10 @@ package GNATCOM.Types is
 
    IID_IEnumVARIANT : aliased GUID :=
      (132100, 0, 0,
-       (C.unsigned_char'val (192), C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (70)));
+       (C.unsigned_char'Val (192), C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (70)));
 
    type af_IEnumVARIANT_QueryInterface is access
      function (This   : access IEnumVARIANT;
@@ -2150,20 +2163,20 @@ package GNATCOM.Types is
 
    CLSID_StdGlobalInterfaceTable : aliased GUID :=
      (803, 0, 0,
-       (C.unsigned_char'val (192), C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (70)));
+       (C.unsigned_char'Val (192), C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (70)));
 
    --  IGlobalInterfaceTable Interface
    --  {00000146-0000-0000-C000-000000000046}
 
    IID_IGlobalInterfaceTable : aliased GUID :=
      (326, 0, 0,
-       (C.unsigned_char'val (192), C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (0),
-        C.unsigned_char'val (0),   C.unsigned_char'val (70)));
+       (C.unsigned_char'Val (192), C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (0),
+        C.unsigned_char'Val (0),   C.unsigned_char'Val (70)));
 
    type af_IGlobalInterfaceTable_QueryInterface is access
      function (This   : access IGlobalInterfaceTable;

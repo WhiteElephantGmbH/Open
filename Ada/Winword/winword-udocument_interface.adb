@@ -1,4 +1,4 @@
-with GNATCOM.Main_Interface;
+with GNATCOM.IInterface;
 
 with GNATCOM.Errors;
 
@@ -20,7 +20,7 @@ package body winword.uDocument_Interface is
                      Pointer : in     Pointer_To_uDocument)
    is
    begin
-      Attach (This, GNATCOM.Main_Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.IInterface.To_Pointer_To_IUnknown
               (Pointer.all'address));
    end Attach;
 
@@ -1485,7 +1485,7 @@ package body winword.uDocument_Interface is
           P1));
 
       if Free then
-               GNATCOM.Main_Interface.Free (P1);
+               GNATCOM.IInterface.Free (P1);
 
       end if;
 
@@ -1503,7 +1503,7 @@ package body winword.uDocument_Interface is
           P1));
 
       if Free then
-               GNATCOM.Main_Interface.Free (P1);
+               GNATCOM.IInterface.Free (P1);
 
       end if;
 
@@ -1569,7 +1569,7 @@ package body winword.uDocument_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -1737,7 +1737,7 @@ package body winword.uDocument_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -2095,7 +2095,7 @@ package body winword.uDocument_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -2127,7 +2127,7 @@ package body winword.uDocument_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -2596,7 +2596,7 @@ package body winword.uDocument_Interface is
           Format));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Name);
+               GNATCOM.IInterface.Free (Name);
 
       end if;
 
@@ -2657,7 +2657,7 @@ package body winword.uDocument_Interface is
           Template));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Template);
+               GNATCOM.IInterface.Free (Template);
 
       end if;
 
@@ -2881,7 +2881,7 @@ package body winword.uDocument_Interface is
           Name));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Name);
+               GNATCOM.IInterface.Free (Name);
 
       end if;
 
@@ -3025,7 +3025,7 @@ package body winword.uDocument_Interface is
           Subject));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Address);
+               GNATCOM.IInterface.Free (Address);
 
       end if;
 
@@ -3043,7 +3043,7 @@ package body winword.uDocument_Interface is
           FileName));
 
       if Free then
-               GNATCOM.Main_Interface.Free (FileName);
+               GNATCOM.IInterface.Free (FileName);
 
       end if;
 
@@ -3152,22 +3152,22 @@ package body winword.uDocument_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (DateFormat);
-               GNATCOM.Main_Interface.Free (PageDesign);
-               GNATCOM.Main_Interface.Free (RecipientName);
-               GNATCOM.Main_Interface.Free (RecipientAddress);
-               GNATCOM.Main_Interface.Free (Salutation);
-               GNATCOM.Main_Interface.Free (RecipientReference);
-               GNATCOM.Main_Interface.Free (MailingInstructions);
-               GNATCOM.Main_Interface.Free (AttentionLine);
-               GNATCOM.Main_Interface.Free (Subject);
-               GNATCOM.Main_Interface.Free (CCList);
-               GNATCOM.Main_Interface.Free (ReturnAddress);
-               GNATCOM.Main_Interface.Free (SenderName);
-               GNATCOM.Main_Interface.Free (Closing);
-               GNATCOM.Main_Interface.Free (SenderCompany);
-               GNATCOM.Main_Interface.Free (SenderJobTitle);
-               GNATCOM.Main_Interface.Free (SenderInitials);
+               GNATCOM.IInterface.Free (DateFormat);
+               GNATCOM.IInterface.Free (PageDesign);
+               GNATCOM.IInterface.Free (RecipientName);
+               GNATCOM.IInterface.Free (RecipientAddress);
+               GNATCOM.IInterface.Free (Salutation);
+               GNATCOM.IInterface.Free (RecipientReference);
+               GNATCOM.IInterface.Free (MailingInstructions);
+               GNATCOM.IInterface.Free (AttentionLine);
+               GNATCOM.IInterface.Free (Subject);
+               GNATCOM.IInterface.Free (CCList);
+               GNATCOM.IInterface.Free (ReturnAddress);
+               GNATCOM.IInterface.Free (SenderName);
+               GNATCOM.IInterface.Free (Closing);
+               GNATCOM.IInterface.Free (SenderCompany);
+               GNATCOM.IInterface.Free (SenderJobTitle);
+               GNATCOM.IInterface.Free (SenderInitials);
 
       end if;
 
@@ -3216,7 +3216,7 @@ package body winword.uDocument_Interface is
           Name));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Name);
+               GNATCOM.IInterface.Free (Name);
 
       end if;
 
@@ -3587,7 +3587,7 @@ package body winword.uDocument_Interface is
           s));
 
       if Free then
-               GNATCOM.Main_Interface.Free (s);
+               GNATCOM.IInterface.Free (s);
 
       end if;
 
@@ -3775,7 +3775,7 @@ package body winword.uDocument_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -3888,7 +3888,7 @@ package body winword.uDocument_Interface is
           AddToRecentFiles));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Name);
+               GNATCOM.IInterface.Free (Name);
 
       end if;
 
@@ -3949,7 +3949,7 @@ package body winword.uDocument_Interface is
           AddToRecentFiles));
 
       if Free then
-               GNATCOM.Main_Interface.Free (FileName);
+               GNATCOM.IInterface.Free (FileName);
 
       end if;
 
@@ -4207,8 +4207,8 @@ package body winword.uDocument_Interface is
           PasswordEncryptionFileProperties));
 
       if Free then
-               GNATCOM.Main_Interface.Free (PasswordEncryptionProvider);
-               GNATCOM.Main_Interface.Free (PasswordEncryptionAlgorithm);
+               GNATCOM.IInterface.Free (PasswordEncryptionProvider);
+               GNATCOM.IInterface.Free (PasswordEncryptionAlgorithm);
 
       end if;
 

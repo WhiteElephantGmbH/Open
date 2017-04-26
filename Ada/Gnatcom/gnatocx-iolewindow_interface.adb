@@ -18,7 +18,7 @@ package body GNATOCX.IOleWindow_Interface is
                      Pointer : in     Pointer_To_IOleWindow)
    is
    begin
-      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.Iinterface.To_Pointer_To_IUnknown
               (Pointer.all'Address));
    end Attach;
 
@@ -47,4 +47,3 @@ package body GNATOCX.IOleWindow_Interface is
    end ContextSensitiveHelp;
 
 end GNATOCX.IOleWindow_Interface;
-

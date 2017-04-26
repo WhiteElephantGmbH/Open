@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -59,7 +58,9 @@ package body GNATCOM.Dispinterface is
    DISP_E_TYPEMISMATCH      : constant := 16#80020005#;
    DISP_E_EXCEPTION         : constant := 16#80020009#;
 
+   ------------
    -- Attach --
+   ------------
 
    procedure Attach
      (This : in out Dispinterface_Type;
@@ -67,10 +68,12 @@ package body GNATCOM.Dispinterface is
    is
    begin
       Attach (This,
-              GNATCOM.Main_Interface.To_Pointer_To_IUnknown (From.all'address));
+              GNATCOM.Iinterface.To_Pointer_To_IUnknown (From.all'Address));
    end Attach;
 
+   ------------
    -- Attach --
+   ------------
 
    procedure Attach
      (This : in out Dispinterface_Type;
@@ -80,7 +83,9 @@ package body GNATCOM.Dispinterface is
       Attach (This, GNATCOM.VARIANT.To_Pointer_To_IDispatch (From));
    end Attach;
 
+   -----------------------------------
    -- To_VARIANT_From_Dispinterface --
+   -----------------------------------
 
    function To_VARIANT_From_Dispinterface (From : Dispinterface_Type)
      return GNATCOM.Types.VARIANT
@@ -91,7 +96,9 @@ package body GNATCOM.Dispinterface is
         (To_Pointer_To_IDispatch (Address (From)));
    end To_VARIANT_From_Dispinterface;
 
+   ---------
    -- Get --
+   ---------
 
    function Get
      (This   : Dispinterface_Type;
@@ -102,6 +109,10 @@ package body GNATCOM.Dispinterface is
    begin
       return Get (This, Get_DISPID (This, Name), LCID);
    end Get;
+
+   ---------
+   -- Get --
+   ---------
 
    function Get
      (This   : Dispinterface_Type;
@@ -119,7 +130,9 @@ package body GNATCOM.Dispinterface is
                      LCID);
    end Get;
 
+   ---------
    -- Get --
+   ---------
 
    function Get
      (This        : Dispinterface_Type;
@@ -132,6 +145,10 @@ package body GNATCOM.Dispinterface is
    begin
       return Get (This, Get_DISPID (This, Name), Index_Value, Free, LCID);
    end Get;
+
+   ---------
+   -- Get --
+   ---------
 
    function Get
      (This        : Dispinterface_Type;
@@ -150,7 +167,9 @@ package body GNATCOM.Dispinterface is
                      LCID);
    end Get;
 
+   ---------
    -- Get --
+   ---------
 
    function Get
      (This         : Dispinterface_Type;
@@ -163,6 +182,10 @@ package body GNATCOM.Dispinterface is
    begin
       return Get (This, Get_DISPID (This, Name), Index_Values, Free, LCID);
    end Get;
+
+   ---------
+   -- Get --
+   ---------
 
    function Get
      (This         : Dispinterface_Type;
@@ -181,7 +204,9 @@ package body GNATCOM.Dispinterface is
                      LCID);
    end Get;
 
+   ----------------
    -- Get_DISPID --
+   ----------------
 
    function Get_DISPID
      (This    : Dispinterface_Type;
@@ -193,16 +218,18 @@ package body GNATCOM.Dispinterface is
    begin
       Error_Check
         (Pointer (This).Vtbl.GetIDsOfNames (Pointer (This),
-                                            GNATCOM.Types.GUID_NULL'access,
-                                            PName'unchecked_access,
+                                            GNATCOM.Types.GUID_NULL'Access,
+                                            PName'Unchecked_Access,
                                             1,
                                             0,
-                                            ID'unchecked_access));
+                                            ID'Unchecked_Access));
       GNATCOM.BSTR.Free (PName);
       return ID;
    end Get_DISPID;
 
+   -------------------
    -- Get_Type_Info --
+   -------------------
 
    function Get_Type_Info
      (This : Dispinterface_Type;
@@ -213,13 +240,15 @@ package body GNATCOM.Dispinterface is
    begin
       Error_Check
         (Pointer (This).Vtbl.GetTypeInfo (Pointer (This),
-                                          1,
+                                          0,
                                           LCID,
-                                          Info'unchecked_access));
+                                          Info'Unchecked_Access));
       return Info;
    end Get_Type_Info;
 
+   -------------------
    -- Has_Type_Info --
+   -------------------
 
    function Has_Type_Info (This : Dispinterface_Type) return Boolean is
       use type Interfaces.C.int;
@@ -228,7 +257,7 @@ package body GNATCOM.Dispinterface is
    begin
       Error_Check
         (Pointer (This).Vtbl.GetTypeInfoCount (Pointer (This),
-                                               Count'unchecked_access));
+                                               Count'Unchecked_Access));
       if Count > 0 then
          return True;
       else
@@ -236,14 +265,18 @@ package body GNATCOM.Dispinterface is
       end if;
    end Has_Type_Info;
 
+   ----------------
    -- Initialize --
+   ----------------
 
    procedure Initialize (This : in out Dispinterface_Type) is
    begin
       Set_IID (This, GNATCOM.Types.IID_IDispatch);
    end Initialize;
 
+   ------------
    -- Invoke --
+   ------------
 
    function Invoke
      (This       : Dispinterface_Type;
@@ -256,6 +289,10 @@ package body GNATCOM.Dispinterface is
    begin
       return Invoke (This, Get_DISPID (This, Name), Parameters, Free, LCID);
    end Invoke;
+
+   ------------
+   -- Invoke --
+   ------------
 
    function Invoke
      (This       : Dispinterface_Type;
@@ -274,7 +311,9 @@ package body GNATCOM.Dispinterface is
                      LCID);
    end Invoke;
 
+   ------------
    -- Invoke --
+   ------------
 
    procedure Invoke
      (This       : in Dispinterface_Type;
@@ -287,6 +326,10 @@ package body GNATCOM.Dispinterface is
       Invoke (This, Get_DISPID (This, Name), Parameters, Free, LCID);
    end Invoke;
 
+   ------------
+   -- Invoke --
+   ------------
+
    procedure Invoke
      (This       : in Dispinterface_Type;
       DISPID     : in Interfaces.C.long;
@@ -294,7 +337,8 @@ package body GNATCOM.Dispinterface is
       Free       : in Boolean            := True;
       LCID       : in Interfaces.C.long  := 0)
    is
-      Result : GNATCOM.Types.VARIANT with Unreferenced;
+      Result : GNATCOM.Types.VARIANT;
+      pragma Warnings (Off, Result);
    begin
       Result := Invoke (This,
                         DISPID,
@@ -304,7 +348,9 @@ package body GNATCOM.Dispinterface is
                         LCID);
    end Invoke;
 
+   ------------
    -- Invoke --
+   ------------
 
    function Invoke
      (This   : Dispinterface_Type;
@@ -315,6 +361,10 @@ package body GNATCOM.Dispinterface is
    begin
       return Invoke (This, Get_DISPID (This, Name), LCID);
    end Invoke;
+
+   ------------
+   -- Invoke --
+   ------------
 
    function Invoke
      (This   : Dispinterface_Type;
@@ -332,7 +382,9 @@ package body GNATCOM.Dispinterface is
                      LCID);
    end Invoke;
 
+   ------------
    -- Invoke --
+   ------------
 
    procedure Invoke
      (This   : in Dispinterface_Type;
@@ -343,17 +395,24 @@ package body GNATCOM.Dispinterface is
       Invoke (This, Get_DISPID (This, Name), LCID);
    end Invoke;
 
+   ------------
+   -- Invoke --
+   ------------
+
    procedure Invoke
      (This   : in Dispinterface_Type;
       DISPID : in Interfaces.C.long;
       LCID   : in Interfaces.C.long  := 0)
    is
-      Result : GNATCOM.Types.VARIANT with Unreferenced;
+      Result : GNATCOM.Types.VARIANT;
+      pragma Warnings (Off, Result);
    begin
       Result := Invoke (This, DISPID, LCID);
    end Invoke;
 
+   ------------
    -- Invoke --
+   ------------
 
    function Invoke
      (This       : Dispinterface_Type;
@@ -368,6 +427,10 @@ package body GNATCOM.Dispinterface is
       return Invoke
         (This, Get_DISPID (This, Name), wFlags, Parameters, Free, LCID);
    end Invoke;
+
+   ------------
+   -- Invoke --
+   ------------
 
    function Invoke
      (This       : Dispinterface_Type;
@@ -401,38 +464,39 @@ package body GNATCOM.Dispinterface is
       Result         : aliased GNATCOM.Types.VARIANT :=
         GNATCOM.Types.VARIANT_MISSING;
       Put_DISPID     : aliased Interfaces.C.long := DISPID_PROPERTYPUT;
-      PDispatch      : constant GNATCOM.Types.Pointer_To_IDispatch := Pointer (This);
+      PDispatch      : constant GNATCOM.Types.Pointer_To_IDispatch :=
+        Pointer (This);
    begin
-      if Parameters'length = 0 then
-         Pdispparams := No_Arguments'unchecked_access;
+      if Parameters'Length = 0 then
+         Pdispparams := No_Arguments'Unchecked_Access;
       else
          Params.rgvarg := To_Pointer_To_VARIANT_PARAM_ARRAY
-           (Parameters'address);
-         Params.cArgs := Parameters'length;
+           (Parameters'Address);
+         Params.cArgs := Parameters'Length;
          if wFlags = DISPATCH_PROPERTYPUT then
             Params.rgdispidNamedArgs := To_Pointer_To_DISPID_PARAM_ARRAY
-              (Put_DISPID'address);
+              (Put_DISPID'Address);
             Params.cNamedArgs := 1;
          else
             Params.rgdispidNamedArgs := null;
             Params.cNamedArgs := 0;
          end if;
 
-         Pdispparams := Params'unchecked_access;
+         Pdispparams := Params'Unchecked_Access;
       end if;
 
       HR := PDispatch.Vtbl.Invoke (PDispatch,
                                    DISPID,
-                                   GNATCOM.Types.GUID_NULL'access,
+                                   GNATCOM.Types.GUID_NULL'Access,
                                    LCID,
                                    wFlags,
                                    Pdispparams,
-                                   Result'unchecked_access,
-                                   Exception_Info'unchecked_access,
-                                   Argument_Error'unchecked_access);
+                                   Result'Unchecked_Access,
+                                   Exception_Info'Unchecked_Access,
+                                   Argument_Error'Unchecked_Access);
 
       if Free then
-         for N in Parameters'range loop
+         for N in Parameters'Range loop
             declare
                Temp : GNATCOM.Types.VARIANT := Parameters (N);
             begin
@@ -442,7 +506,7 @@ package body GNATCOM.Dispinterface is
       end if;
 
       if GNATCOM.Errors.FAILED (HR) then
-         if (Exception_Info.pfnDeferredFillIn /= System.Null_Address) then
+         if Exception_Info.pfnDeferredFillIn /= System.Null_Address then
             declare
                type DefferedFillIn_Type is
                  access procedure (pei : GNATCOM.Types.Pointer_To_EXCEPINFO);
@@ -452,9 +516,9 @@ package body GNATCOM.Dispinterface is
                                                 DefferedFillIn_Type);
 
                DefferedFillin : constant DefferedFillIn_Type :=
-                 To_Procedure (Exception_Info.pfnDeferredFillIn'address);
+                 To_Procedure (Exception_Info.pfnDeferredFillIn'Address);
             begin
-               DefferedFillin (Exception_Info'unchecked_access);
+               DefferedFillin (Exception_Info'Unchecked_Access);
             end;
          end if;
       end if;
@@ -462,19 +526,19 @@ package body GNATCOM.Dispinterface is
       case HR is
          when DISP_E_PARAMNOTFOUND =>
             Ada.Exceptions.Raise_Exception
-              (PARAMETER_ERROR'identity,
+              (PARAMETER_ERROR'Identity,
                "Parameter number" &
-               Interfaces.C.int'image (Argument_Error) &
+               Interfaces.C.int'Image (Argument_Error) &
                " not found");
          when DISP_E_TYPEMISMATCH =>
             Ada.Exceptions.Raise_Exception
-              (TYPE_MISMATCH_ERROR'identity,
+              (TYPE_MISMATCH_ERROR'Identity,
                "Type mismatch in" &
                "parameter number" &
-               Interfaces.C.int'image (Argument_Error));
+               Interfaces.C.int'Image (Argument_Error));
          when DISP_E_EXCEPTION =>
             Ada.Exceptions.Raise_Exception
-              (INVOKE_ERROR'identity,
+              (INVOKE_ERROR'Identity,
                "Exception " &
                GNATCOM.BSTR.To_Ada (Exception_Info.bstrSource) &
                " - " &
@@ -486,7 +550,9 @@ package body GNATCOM.Dispinterface is
       return Result;
    end Invoke;
 
+   -------------
    -- Pointer --
+   -------------
 
    function Pointer
      (This : Dispinterface_Type)
@@ -496,7 +562,9 @@ package body GNATCOM.Dispinterface is
       return To_Pointer_To_IDispatch (Address (This));
    end Pointer;
 
+   ---------
    -- Put --
+   ---------
 
    procedure Put
      (This   : in Dispinterface_Type;
@@ -509,6 +577,10 @@ package body GNATCOM.Dispinterface is
       Put (This, Get_DISPID (This, Name), Value, Free, LCID);
    end Put;
 
+   ---------
+   -- Put --
+   ---------
+
    procedure Put
      (This   : in Dispinterface_Type;
       DISPID : in Interfaces.C.long;
@@ -516,7 +588,8 @@ package body GNATCOM.Dispinterface is
       Free   : in Boolean               := True;
       LCID   : in Interfaces.C.long     := 0)
    is
-      Result : GNATCOM.Types.VARIANT with Unreferenced;
+      Result : GNATCOM.Types.VARIANT;
+      pragma Warnings (Off, Result);
    begin
       Result := Invoke (This,
                         DISPID,
@@ -526,7 +599,9 @@ package body GNATCOM.Dispinterface is
                         LCID);
    end Put;
 
+   ---------
    -- Put --
+   ---------
 
    procedure Put
      (This        : in Dispinterface_Type;
@@ -540,6 +615,10 @@ package body GNATCOM.Dispinterface is
       Put (This, Get_DISPID (This, Name), Value, Index_Value, Free, LCID);
    end Put;
 
+   ---------
+   -- Put --
+   ---------
+
    procedure Put
      (This        : in Dispinterface_Type;
       DISPID      : in Interfaces.C.long;
@@ -548,7 +627,8 @@ package body GNATCOM.Dispinterface is
       Free        : in Boolean               := True;
       LCID        : in Interfaces.C.long     := 0)
    is
-      Result : GNATCOM.Types.VARIANT with Unreferenced;
+      Result : GNATCOM.Types.VARIANT;
+      pragma Warnings (Off, Result);
    begin
       Result := Invoke (This,
                         DISPID,
@@ -558,7 +638,9 @@ package body GNATCOM.Dispinterface is
                         LCID);
    end Put;
 
+   ---------
    -- Put --
+   ---------
 
    procedure Put
      (This         : in Dispinterface_Type;
@@ -572,6 +654,10 @@ package body GNATCOM.Dispinterface is
       Put (This, Get_DISPID (This, Name), Value, Index_Values, Free, LCID);
    end Put;
 
+   ---------
+   -- Put --
+   ---------
+
    procedure Put
      (This         : in Dispinterface_Type;
       DISPID       : in Interfaces.C.long;
@@ -580,11 +666,13 @@ package body GNATCOM.Dispinterface is
       Free         : in Boolean               := True;
       LCID         : in Interfaces.C.long     := 0)
    is
-      Result     : GNATCOM.Types.VARIANT with Unreferenced;
-      Parameters : Parameter_Array (1 .. Index_Values'size + 1);
+      Result     : GNATCOM.Types.VARIANT;
+      pragma Warnings (Off, Result);
+
+      Parameters : Parameter_Array (1 .. Index_Values'Size + 1);
    begin
       Parameters (1) := Value;
-      Parameters (2 .. Parameters'last) := Index_Values;
+      Parameters (2 .. Parameters'Last) := Index_Values;
 
       Result := Invoke (This,
                         DISPID,
@@ -594,7 +682,9 @@ package body GNATCOM.Dispinterface is
                         LCID);
    end Put;
 
+   ---------
    -- Put --
+   ---------
 
    procedure Put
      (This       : in Dispinterface_Type;
@@ -607,6 +697,10 @@ package body GNATCOM.Dispinterface is
       Put (This, Get_DISPID (This, Name), Parameters, Free, LCID);
    end Put;
 
+   ---------
+   -- Put --
+   ---------
+
    procedure Put
      (This       : in Dispinterface_Type;
       DISPID     : in Interfaces.C.long;
@@ -614,7 +708,8 @@ package body GNATCOM.Dispinterface is
       Free       : in Boolean            := True;
       LCID       : in Interfaces.C.long  := 0)
    is
-      Result : GNATCOM.Types.VARIANT with Unreferenced;
+      Result : GNATCOM.Types.VARIANT;
+      pragma Warnings (Off, Result);
    begin
       Result := Invoke (This,
                         DISPID,
@@ -624,7 +719,9 @@ package body GNATCOM.Dispinterface is
                         LCID);
    end Put;
 
+   ------------
    -- PutRef --
+   ------------
 
    procedure PutRef
      (This   : in Dispinterface_Type;
@@ -636,13 +733,18 @@ package body GNATCOM.Dispinterface is
       PutRef (This, Get_DISPID (This, Name), Value, LCID);
    end PutRef;
 
+   ------------
+   -- PutRef --
+   ------------
+
    procedure PutRef
      (This   : in Dispinterface_Type;
       DISPID : in Interfaces.C.long;
       Value  : in GNATCOM.Types.VARIANT;
       LCID   : in Interfaces.C.long     := 0)
    is
-      Result : GNATCOM.Types.VARIANT with Unreferenced;
+      Result : GNATCOM.Types.VARIANT;
+      pragma Warnings (Off, Result);
    begin
       Result := Invoke (This,
                         DISPID,
@@ -652,7 +754,9 @@ package body GNATCOM.Dispinterface is
                         LCID);
    end PutRef;
 
+   ------------
    -- PutRef --
+   ------------
 
    procedure PutRef
      (This       : in Dispinterface_Type;
@@ -664,13 +768,18 @@ package body GNATCOM.Dispinterface is
       PutRef (This, Get_DISPID (This, Name), Parameters, LCID);
    end PutRef;
 
+   ------------
+   -- PutRef --
+   ------------
+
    procedure PutRef
      (This       : in Dispinterface_Type;
       DISPID     : in Interfaces.C.long;
       Parameters : in Parameter_Array;
       LCID       : in Interfaces.C.long  := 0)
    is
-      Result : GNATCOM.Types.VARIANT with Unreferenced;
+      Result : GNATCOM.Types.VARIANT;
+      pragma Warnings (Off, Result);
    begin
       Result := Invoke (This,
                         DISPID,
@@ -680,7 +789,9 @@ package body GNATCOM.Dispinterface is
                         LCID);
    end PutRef;
 
+   -----------------
    -- Error_Check --
+   -----------------
 
    procedure Error_Check (Result : in GNATCOM.Types.HRESULT) is
    begin
@@ -693,43 +804,43 @@ package body GNATCOM.Dispinterface is
             case Result is
                when DISP_E_UNKNOWNNAME =>
                   Ada.Exceptions.Raise_Exception
-                    (UNKNOWN_NAME_ERROR'identity,
+                    (UNKNOWN_NAME_ERROR'Identity,
                      Message);
                when DISP_E_UNKNOWNLCID =>
                   Ada.Exceptions.Raise_Exception
-                    (UNKNOWN_LCID_ERROR'identity,
+                    (UNKNOWN_LCID_ERROR'Identity,
                      Message);
                when DISP_E_BADINDEX =>
                   Ada.Exceptions.Raise_Exception
-                    (ELEMENT_NOT_FOUND_ERROR'identity,
+                    (ELEMENT_NOT_FOUND_ERROR'Identity,
                      Message);
                when TYPE_E_ELEMENTNOTFOUND =>
                   Ada.Exceptions.Raise_Exception
-                    (ELEMENT_NOT_FOUND_ERROR'identity,
+                    (ELEMENT_NOT_FOUND_ERROR'Identity,
                      Message);
                when DISP_E_PARAMNOTOPTIONAL =>
                   Ada.Exceptions.Raise_Exception
-                    (PARAMETER_ERROR'identity,
+                    (PARAMETER_ERROR'Identity,
                      Message);
                when DISP_E_BADPARAMCOUNT =>
                   Ada.Exceptions.Raise_Exception
-                    (PARAMETER_ERROR'identity,
+                    (PARAMETER_ERROR'Identity,
                      Message);
                when DISP_E_BADVARTYPE =>
                   Ada.Exceptions.Raise_Exception
-                    (TYPE_MISMATCH_ERROR'identity,
+                    (TYPE_MISMATCH_ERROR'Identity,
                      Message);
                when DISP_E_MEMBERNOTFOUND =>
                   Ada.Exceptions.Raise_Exception
-                    (UNKNOWN_NAME_ERROR'identity,
+                    (UNKNOWN_NAME_ERROR'Identity,
                      Message);
                when DISP_E_NONAMEDARGS =>
                   Ada.Exceptions.Raise_Exception
-                    (TYPE_MISMATCH_ERROR'identity,
+                    (TYPE_MISMATCH_ERROR'Identity,
                      Message);
                when DISP_E_OVERFLOW =>
                   Ada.Exceptions.Raise_Exception
-                    (TYPE_MISMATCH_ERROR'identity,
+                    (TYPE_MISMATCH_ERROR'Identity,
                      Message);
                when others =>
                   GNATCOM.Errors.Error_Check (Result);

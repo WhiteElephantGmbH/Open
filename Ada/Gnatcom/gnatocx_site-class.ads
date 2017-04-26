@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -32,9 +31,9 @@
 -- be located on the web at http://www.gnavi.org/gnatcom                    --
 --                                                                          --
 ------------------------------------------------------------------------------
-    
 
 with GNATOCX.IOleObject_Interface;
+with System;
 
 package GNATOCX_Site.Class is
 
@@ -674,12 +673,11 @@ package GNATOCX_Site.Class is
          6 => (IID_IOleWindow, IOleWindow_Vtbl'Address),
          7 => (IID_IOleInPlaceUIWindow, IOleInPlaceUIWindow_Vtbl'Address));
 
-
    type GNATOCXClass_Type is
      new GNATCOM.Create.COM_Interface.CoClass_Type (GUID_Map'Access) with
       record
          OleObject : GNATOCX.IOleObject_Interface.IOleObject_Type;
-         HWND      : Interfaces.C.long;
+         HWND      : System.Address;
       end record;
 
    type Pointer_To_GNATOCXClass_Type is
@@ -689,4 +687,3 @@ package GNATOCX_Site.Class is
      return GNATCOM.Create.COM_Interface.Pointer_To_COM_Interface_Type;
 
 end GNATOCX_Site.Class;
-

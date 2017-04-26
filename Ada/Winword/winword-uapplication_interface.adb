@@ -1,4 +1,4 @@
-with GNATCOM.Main_Interface;
+with GNATCOM.IInterface;
 
 with GNATCOM.Errors;
 
@@ -20,7 +20,7 @@ package body winword.uApplication_Interface is
                      Pointer : in     Pointer_To_uApplication)
    is
    begin
-      Attach (This, GNATCOM.Main_Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.IInterface.To_Pointer_To_IUnknown
               (Pointer.all'address));
    end Attach;
 
@@ -674,7 +674,7 @@ package body winword.uApplication_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -706,7 +706,7 @@ package body winword.uApplication_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -738,7 +738,7 @@ package body winword.uApplication_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -816,7 +816,7 @@ package body winword.uApplication_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Word);
+               GNATCOM.IInterface.Free (Word);
 
       end if;
 
@@ -863,7 +863,7 @@ package body winword.uApplication_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -909,7 +909,7 @@ package body winword.uApplication_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -989,7 +989,7 @@ package body winword.uApplication_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Command);
+               GNATCOM.IInterface.Free (Command);
 
       end if;
 
@@ -1041,7 +1041,7 @@ package body winword.uApplication_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -1113,7 +1113,7 @@ package body winword.uApplication_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -1383,7 +1383,7 @@ package body winword.uApplication_Interface is
           P1));
 
       if Free then
-               GNATCOM.Main_Interface.Free (P1);
+               GNATCOM.IInterface.Free (P1);
 
       end if;
 
@@ -1523,7 +1523,7 @@ package body winword.uApplication_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -1581,7 +1581,7 @@ package body winword.uApplication_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 
@@ -1741,7 +1741,7 @@ package body winword.uApplication_Interface is
           Name));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Name);
+               GNATCOM.IInterface.Free (Name);
 
       end if;
 
@@ -1761,8 +1761,8 @@ package body winword.uApplication_Interface is
           SubstituteFont));
 
       if Free then
-               GNATCOM.Main_Interface.Free (UnavailableFont);
-               GNATCOM.Main_Interface.Free (SubstituteFont);
+               GNATCOM.IInterface.Free (UnavailableFont);
+               GNATCOM.IInterface.Free (SubstituteFont);
 
       end if;
 
@@ -1799,7 +1799,7 @@ package body winword.uApplication_Interface is
           Command));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Command);
+               GNATCOM.IInterface.Free (Command);
 
       end if;
 
@@ -1822,8 +1822,8 @@ package body winword.uApplication_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (App);
-               GNATCOM.Main_Interface.Free (Topic);
+               GNATCOM.IInterface.Free (App);
+               GNATCOM.IInterface.Free (Topic);
 
       end if;
 
@@ -1846,8 +1846,8 @@ package body winword.uApplication_Interface is
           Data));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Item);
-               GNATCOM.Main_Interface.Free (Data);
+               GNATCOM.IInterface.Free (Item);
+               GNATCOM.IInterface.Free (Data);
 
       end if;
 
@@ -1870,7 +1870,7 @@ package body winword.uApplication_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Item);
+               GNATCOM.IInterface.Free (Item);
 
       end if;
 
@@ -1961,9 +1961,9 @@ package body winword.uApplication_Interface is
           Object));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Source);
-               GNATCOM.Main_Interface.Free (Destination);
-               GNATCOM.Main_Interface.Free (Name);
+               GNATCOM.IInterface.Free (Source);
+               GNATCOM.IInterface.Free (Destination);
+               GNATCOM.IInterface.Free (Name);
 
       end if;
 
@@ -1985,8 +1985,8 @@ package body winword.uApplication_Interface is
           Object));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Source);
-               GNATCOM.Main_Interface.Free (Name);
+               GNATCOM.IInterface.Free (Source);
+               GNATCOM.IInterface.Free (Name);
 
       end if;
 
@@ -2010,9 +2010,9 @@ package body winword.uApplication_Interface is
           Object));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Source);
-               GNATCOM.Main_Interface.Free (Name);
-               GNATCOM.Main_Interface.Free (NewName);
+               GNATCOM.IInterface.Free (Source);
+               GNATCOM.IInterface.Free (Name);
+               GNATCOM.IInterface.Free (NewName);
 
       end if;
 
@@ -2085,7 +2085,7 @@ package body winword.uApplication_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (String);
+               GNATCOM.IInterface.Free (String);
 
       end if;
 
@@ -2143,7 +2143,7 @@ package body winword.uApplication_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Word);
+               GNATCOM.IInterface.Free (Word);
 
       end if;
 
@@ -2214,7 +2214,7 @@ package body winword.uApplication_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Word);
+               GNATCOM.IInterface.Free (Word);
 
       end if;
 
@@ -2328,7 +2328,7 @@ package body winword.uApplication_Interface is
           Tolerance));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Name);
+               GNATCOM.IInterface.Free (Name);
 
       end if;
 
@@ -2372,9 +2372,9 @@ package body winword.uApplication_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Zone);
-               GNATCOM.Main_Interface.Free (Server);
-               GNATCOM.Main_Interface.Free (Volume);
+               GNATCOM.IInterface.Free (Zone);
+               GNATCOM.IInterface.Free (Server);
+               GNATCOM.IInterface.Free (Volume);
 
       end if;
 
@@ -2396,7 +2396,7 @@ package body winword.uApplication_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (String);
+               GNATCOM.IInterface.Free (String);
 
       end if;
 
@@ -2425,7 +2425,7 @@ package body winword.uApplication_Interface is
           Path));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Path);
+               GNATCOM.IInterface.Free (Path);
 
       end if;
 
@@ -2443,7 +2443,7 @@ package body winword.uApplication_Interface is
           MacroName));
 
       if Free then
-               GNATCOM.Main_Interface.Free (MacroName);
+               GNATCOM.IInterface.Free (MacroName);
 
       end if;
 
@@ -2802,7 +2802,7 @@ package body winword.uApplication_Interface is
           DocumentType));
 
       if Free then
-               GNATCOM.Main_Interface.Free (Name);
+               GNATCOM.IInterface.Free (Name);
 
       end if;
 
@@ -3132,7 +3132,7 @@ package body winword.uApplication_Interface is
           RetVal'unchecked_access));
 
       if Free then
-               GNATCOM.Main_Interface.Free (MacroName);
+               GNATCOM.IInterface.Free (MacroName);
 
       end if;
 
@@ -3274,7 +3274,7 @@ package body winword.uApplication_Interface is
           prop));
 
       if Free then
-               GNATCOM.Main_Interface.Free (prop);
+               GNATCOM.IInterface.Free (prop);
 
       end if;
 

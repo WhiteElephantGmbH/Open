@@ -18,7 +18,7 @@ package body GNATOCX.IRunningObjectTable_Interface is
                      Pointer : in     Pointer_To_IRunningObjectTable)
    is
    begin
-      Attach (This, GNATCOM.Interface.To_Pointer_To_IUnknown
+      Attach (This, GNATCOM.Iinterface.To_Pointer_To_IUnknown
               (Pointer.all'Address));
    end Attach;
 
@@ -119,4 +119,3 @@ package body GNATOCX.IRunningObjectTable_Interface is
    end EnumRunning;
 
 end GNATOCX.IRunningObjectTable_Interface;
-

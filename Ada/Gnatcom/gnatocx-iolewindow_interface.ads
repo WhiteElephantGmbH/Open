@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IOleWindow_Interface is
 
    type IOleWindow_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IOleWindow_Type);
 
@@ -22,4 +22,3 @@ package GNATOCX.IOleWindow_Interface is
       fEnterMode : Interfaces.C.long);
 
 end GNATOCX.IOleWindow_Interface;
-

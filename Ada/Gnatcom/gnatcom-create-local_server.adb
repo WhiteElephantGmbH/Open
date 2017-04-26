@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2005 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -40,7 +39,6 @@ with Ada.Unchecked_Conversion;
 with GNAT.IO; use GNAT.IO;
 
 with GNATCOM.Initialize;
-with GNATCOM.Create.Factory;
 with GNATCOM.Register;
 with GNATCOM.Errors;
 with GNATCOM.Utility;
@@ -81,7 +79,9 @@ package body GNATCOM.Create.Local_Server is
    procedure CoAddRefServerProcess;
    pragma Import (StdCall, CoAddRefServerProcess, "CoAddRefServerProcess");
 
+   ------------------
    -- Display_Help --
+   ------------------
 
    procedure Display_Help is
    begin
@@ -97,7 +97,9 @@ package body GNATCOM.Create.Local_Server is
       Put_Line ("servername -Embedding");
    end Display_Help;
 
+   -----------------
    -- Init_Object --
+   -----------------
 
    procedure Init_Object (LIBID : in GNATCOM.Types.GUID) is
       use type Interfaces.C.unsigned_long;
@@ -108,6 +110,7 @@ package body GNATCOM.Create.Local_Server is
          GNATCOM.Types.Pointer_To_IUnknown);
 
       refcount : Interfaces.C.unsigned_long;
+      pragma Warnings (Off, refcount);
    begin
       --  Check command line for RegServer/UnRegServer/Embedding
 
@@ -224,7 +227,9 @@ package body GNATCOM.Create.Local_Server is
       end if;
    end Init_Object;
 
+   -----------------
    -- Error_Check --
+   -----------------
 
    procedure Error_Check (Result : in GNATCOM.Types.HRESULT) is
    begin

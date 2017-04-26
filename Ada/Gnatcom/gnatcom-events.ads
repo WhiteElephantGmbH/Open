@@ -6,9 +6,8 @@
 --                                                                          --
 --                                S p e c                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -37,13 +36,13 @@ with Ada.Unchecked_Conversion;
 with Interfaces.C;
 with System;
 
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 with GNATCOM.Types;
 with GNATCOM.Create.COM_Interface;
 
 package GNATCOM.Events is
 
-   type IConnectionPoint_Type is new GNATCOM.Interface.Interface_Type with
+   type IConnectionPoint_Type is new GNATCOM.Iinterface.Interface_Type with
       record
          Cookie : aliased Interfaces.C.unsigned_long := 0;
       end record;
@@ -67,7 +66,7 @@ package GNATCOM.Events is
 
    procedure Set_Events
      (This            : in out IConnectionPoint_Type;
-      For_Object      : in     GNATCOM.Interface.Interface_Type'Class;
+      For_Object      : in     GNATCOM.Iinterface.Interface_Type'Class;
       Event_IID       : in     GNATCOM.Types.GUID;
       Event_Interface :
         access GNATCOM.Create.COM_Interface.COM_Interface_Type;
@@ -81,7 +80,7 @@ package GNATCOM.Events is
 
    procedure Set_Events
      (This            : in out IConnectionPoint_Type;
-      For_Object      : in     GNATCOM.Interface.Interface_Type'Class;
+      For_Object      : in     GNATCOM.Iinterface.Interface_Type'Class;
       Event_IID       : in     GNATCOM.Types.GUID;
       Event_Interface : in     System.Address);
    --  Sets up events for an object that supports Connection Points.
@@ -90,7 +89,7 @@ package GNATCOM.Events is
    --  Event_Interface
 
    type IConnectionPointContainer_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    function FindConnectionPoint
      (This      : IConnectionPointContainer_Type;

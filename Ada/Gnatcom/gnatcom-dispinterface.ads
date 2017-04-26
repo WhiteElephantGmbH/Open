@@ -6,9 +6,8 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -44,11 +43,11 @@ with System;
 with Interfaces.C;
 
 with GNATCOM.Types;
-with GNATCOM.Main_Interface;
+with GNATCOM.Iinterface;
 
 package GNATCOM.Dispinterface is
 
-   type Dispinterface_Type is new GNATCOM.Main_Interface.Interface_Type
+   type Dispinterface_Type is new GNATCOM.Iinterface.Interface_Type
      with null record;
 
    procedure Attach

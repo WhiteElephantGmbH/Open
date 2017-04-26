@@ -1,9 +1,9 @@
-with GNATCOM.Interface;
+with GNATCOM.Iinterface;
 
 package GNATOCX.IStream_Interface is
 
    type IStream_Type is
-     new GNATCOM.Interface.Interface_Type with null record;
+     new GNATCOM.Iinterface.Interface_Type with null record;
 
    procedure Initialize (This : in out IStream_Type);
 
@@ -71,4 +71,3 @@ package GNATOCX.IStream_Interface is
       ppstm : Pointer_To_Pointer_To_IStream);
 
 end GNATOCX.IStream_Interface;
-

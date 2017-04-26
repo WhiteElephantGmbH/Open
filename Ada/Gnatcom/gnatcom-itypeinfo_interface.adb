@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -47,7 +46,7 @@ package body GNATCOM.ITypeInfo_Interface is
    is
    begin
       Attach (This,
-              GNATCOM.Main_Interface.To_Pointer_To_IUnknown (Pointer.all'address));
+              GNATCOM.Iinterface.To_Pointer_To_IUnknown (Pointer.all'Address));
    end Attach;
 
    -- GetContainingTypeLib --
@@ -61,7 +60,7 @@ package body GNATCOM.ITypeInfo_Interface is
    begin
       Error_Check
         (Pointer (This).Vtbl.GetContainingTypeLib (Pointer (This),
-                                                   pTLib'unchecked_access,
+                                                   pTLib'Unchecked_Access,
                                                    pIndex));
       return pTLib;
    end GetContainingTypeLib;
@@ -118,7 +117,7 @@ package body GNATCOM.ITypeInfo_Interface is
       Error_Check
         (Pointer (This).Vtbl.GetFuncDesc (Pointer (This),
                                           index,
-                                          pFuncDesc'unchecked_access));
+                                          pFuncDesc'Unchecked_Access));
       return pFuncDesc;
    end GetFuncDesc;
 
@@ -135,7 +134,7 @@ package body GNATCOM.ITypeInfo_Interface is
         (Pointer (This).Vtbl.GetImplTypeFlags
          (Pointer (This),
           index,
-          pImplTypeFlags'unchecked_access));
+          pImplTypeFlags'Unchecked_Access));
 
       return Interfaces.C.unsigned (pImplTypeFlags);
    end GetImplTypeFlags;
@@ -152,7 +151,7 @@ package body GNATCOM.ITypeInfo_Interface is
       Error_Check
         (Pointer (This).Vtbl.GetMops (Pointer (This),
                                       memid,
-                                      BstrMops'unchecked_access));
+                                      BstrMops'Unchecked_Access));
 
          return BstrMops;
    end GetMops;
@@ -187,7 +186,7 @@ package body GNATCOM.ITypeInfo_Interface is
       Error_Check
         (Pointer (This).Vtbl.GetRefTypeInfo (Pointer (This),
                                              hreftype,
-                                             pTInfo'unchecked_access));
+                                             pTInfo'Unchecked_Access));
 
          return pTInfo;
    end GetRefTypeInfo;
@@ -204,7 +203,7 @@ package body GNATCOM.ITypeInfo_Interface is
       Error_Check
         (Pointer (This).Vtbl.GetRefTypeOfImplType (Pointer (This),
                                                    index,
-                                                   RefType'unchecked_access));
+                                                   RefType'Unchecked_Access));
 
       return RefType;
    end GetRefTypeOfImplType;
@@ -219,7 +218,7 @@ package body GNATCOM.ITypeInfo_Interface is
    begin
       Error_Check
         (Pointer (This).Vtbl.GetTypeAttr (Pointer (This),
-                                         pTypeAttr'unchecked_access));
+                                         pTypeAttr'Unchecked_Access));
 
       return pTypeAttr;
    end GetTypeAttr;
@@ -234,7 +233,7 @@ package body GNATCOM.ITypeInfo_Interface is
    begin
       Error_Check
         (Pointer (This).Vtbl.GetTypeComp (Pointer (This),
-                                          pTComp'unchecked_access));
+                                          pTComp'Unchecked_Access));
 
       return pTComp;
    end GetTypeComp;
@@ -251,7 +250,7 @@ package body GNATCOM.ITypeInfo_Interface is
       Error_Check
         (Pointer (This).Vtbl.GetVarDesc (Pointer (This),
                                          index,
-                                         pVarDesc'unchecked_access));
+                                         pVarDesc'Unchecked_Access));
 
       return pVarDesc;
    end GetVarDesc;
@@ -324,11 +323,11 @@ package body GNATCOM.ITypeInfo_Interface is
    begin
       Attach (Ref_Lib, GetContainingTypeLib
               (This,
-               Ref_Index'unchecked_access));
+               Ref_Index'Unchecked_Access));
 
       GetDocumentation (Ref_Lib,
                         Ref_Index,
-                        Name'unchecked_access,
+                        Name'Unchecked_Access,
                         null,
                         null,
                         null);
@@ -350,12 +349,12 @@ package body GNATCOM.ITypeInfo_Interface is
    begin
       Attach (Ref_Lib, GetContainingTypeLib
               (This,
-               Ref_Index'unchecked_access));
+               Ref_Index'Unchecked_Access));
 
       GetDocumentation (Ref_Lib,
                         Ref_Index,
                         null,
-                        Doc'unchecked_access,
+                        Doc'Unchecked_Access,
                         null,
                         null);
 
@@ -375,7 +374,7 @@ package body GNATCOM.ITypeInfo_Interface is
    begin
       Attach (Ref_Lib, GetContainingTypeLib
               (This,
-               Ref_Index'unchecked_access));
+               Ref_Index'Unchecked_Access));
 
       return GetTypeInfoType (Ref_Lib, Ref_Index);
    end GetTypeKind;
@@ -393,7 +392,7 @@ package body GNATCOM.ITypeInfo_Interface is
    begin
       GetDocumentation (This,
                         Desc.memid,
-                        Name'unchecked_access,
+                        Name'Unchecked_Access,
                         null,
                         null,
                         null);

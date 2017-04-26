@@ -6,9 +6,8 @@
 --                                                                          --
 --                                B o d y                                   --
 --                                                                          --
---                            $Revision: 1.1 $
 --                                                                          --
---                  Copyright (C) 1999-2004 David Botton                    --
+--                 Copyright (C) 1999 - 2006 David Botton                   --
 --                                                                          --
 -- This is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -33,10 +32,7 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with Ada.Unchecked_Conversion;
-
 with GNATCOM.Errors;
-with GNATCOM.Interface;
 
 package body GNATCOM.Events is
 
@@ -59,14 +55,14 @@ package body GNATCOM.Events is
      (This            : in out IConnectionPoint_Type;
       Event_Interface : in     System.Address)
    is
-      Sink : GNATCOM.Interface.Interface_Type;
+      Sink : GNATCOM.Iinterface.Interface_Type;
    begin
-      GNATCOM.Interface.Attach (Sink, Event_Interface);
-      GNATCOM.Interface.AddRef (Sink);
+      GNATCOM.Iinterface.Attach (Sink, Event_Interface);
+      GNATCOM.Iinterface.AddRef (Sink);
 
       Error_Check
         (Pointer (This).Vtbl.Advise (Pointer (This),
-                                     GNATCOM.Interface.Pointer (Sink),
+                                     GNATCOM.Iinterface.Pointer (Sink),
                                      This.Cookie'Unchecked_Access));
    end Advise;
 
@@ -126,7 +122,7 @@ package body GNATCOM.Events is
 
    procedure Set_Events
      (This            : in out IConnectionPoint_Type;
-      For_Object      : in     GNATCOM.Interface.Interface_Type'Class;
+      For_Object      : in     GNATCOM.Iinterface.Interface_Type'Class;
       Event_IID       : in     GNATCOM.Types.GUID;
       Event_Interface :
         access GNATCOM.Create.COM_Interface.COM_Interface_Type;
@@ -149,7 +145,7 @@ package body GNATCOM.Events is
 
    procedure Set_Events
      (This            : in out IConnectionPoint_Type;
-      For_Object      : in     GNATCOM.Interface.Interface_Type'Class;
+      For_Object      : in     GNATCOM.Iinterface.Interface_Type'Class;
       Event_IID       : in     GNATCOM.Types.GUID;
       Event_Interface : in     System.Address)
    is
