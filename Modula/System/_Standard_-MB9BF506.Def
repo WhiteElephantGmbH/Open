@@ -1,8 +1,8 @@
 DEFINITION MODULE Standard;
 
 (*****************************************************************************
- *        (c) 2008 .. 2015 by Soudronic AG, Bergdietikon, Switzerland        *
- *   Developed by White Elephant GmbH, Switzerland (www.white-elephant.ch)   *
+ *          (c) 2008 .. 2017 by White Elephant GmbH, Switzerland             *
+ *  Beckengässchen 1, 8200 Schaffhausen, Switzerland (www.white-elephant.ch) *
  *****************************************************************************)
 
 TYPE
