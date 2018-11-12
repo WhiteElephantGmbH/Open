@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---           Copyright (C) 2009-2012, Free Software Foundation, Inc.        --
+--           Copyright (C) 2009-2014, Free Software Foundation, Inc.        --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -40,7 +40,9 @@
 --  significantly.
 
 with Ada.Exceptions.Traceback;
+
 with System.Object_Reader;
+with System.Storage_Elements;
 
 package System.Dwarf_Lines is
 
@@ -58,6 +60,14 @@ package System.Dwarf_Lines is
    procedure Close (C : in out Dwarf_Context);
    --  Open and close files
 
+   procedure Set_Load_Address (C : in out Dwarf_Context; Addr : Address);
+   --  Set the load address of a file. This is used to rebase PIE (Position
+   --  Independant Executable) binaries.
+
+   function Is_Open (C : Dwarf_Context) return Boolean;
+   --  Returns True if the context is opened, this is required for non
+   --  exception mode.
+
    procedure Dump (C : in out Dwarf_Context);
    --  Dump each row found in the object's .debug_lines section to standard out
 
@@ -73,7 +83,6 @@ package System.Dwarf_Lines is
    --  result of a logic error or malformed DWARF information.
 
 private
-
    --  The following section numbers reference
 
    --    "DWARF Debugging Information Format, Version 3"
@@ -91,7 +100,7 @@ private
       Basic_Block    : Boolean;
       End_Sequence   : Boolean;
       Prologue_End   : Boolean;
-      Epilouge_Begin : Boolean;
+      Epilogue_Begin : Boolean;
       ISA            : SOR.uint32;
       Is_Row         : Boolean;
    end record;
@@ -118,9 +127,10 @@ private
    end record;
 
    type Dwarf_Context (In_Exception : Boolean := False) is record
-      Valid          : Boolean := False;
+      Valid : Boolean := False;
       --  True if DWARF context is properly initialized
 
+      Load_Slide     : System.Storage_Elements.Integer_Address := 0;
       Obj            : SOR.Object_File_Access;
       Prologue       : Line_Info_Prologue;
       Registers      : Line_Info_Registers;

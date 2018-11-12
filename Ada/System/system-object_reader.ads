@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---          Copyright (C) 2009-2012, Free Software Foundation, Inc.         --
+--          Copyright (C) 2009-2013, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -159,7 +159,7 @@ package System.Object_Reader is
 
    function Open
      (File_Name    : String;
-      In_Exception : Boolean := False) return Object_File'Class;
+      In_Exception : Boolean := False) return Object_File_Access;
    --  Open the object file and initialize the reader. In_Exception is true
    --  when the parsing is done as part of an exception handler decorator. In
    --  this mode we do not want to raise an exception.
@@ -223,6 +223,10 @@ package System.Object_Reader is
 
    function Format (Obj : Object_File'Class) return Object_Format;
    --  Return the object file format
+
+   function Get_Load_Address (Obj : Object_File) return uint64;
+   --  Return the load address defined in Obj. May raise Format_Error if not
+   --  implemented
 
    function Num_Sections (Obj : Object_File'Class) return uint32;
    --  Return the number of sections composing the object file

@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---                       Copyright (C) 2010, AdaCore                        --
+--                    Copyright (C) 2010-2014, AdaCore                      --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -31,8 +31,9 @@ with System.Multiprocessors.Spin_Locks;
 package System.Multiprocessors.Fair_Locks is
    pragma Preelaborate;
 
-   --  The locks implemented in this package are fair among CPUs and must not
-   --  be used to synchronize tasks assigned to the same CPU.
+   --  Note: The locks implemented in this package are fair among CPUs. Using
+   --  this package to synchronize tasks assigned to the same CPU may result
+   --  in a dead lock.
 
    ---------------
    -- Fair lock --
